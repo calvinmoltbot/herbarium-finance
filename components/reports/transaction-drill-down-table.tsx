@@ -3,7 +3,6 @@
 // Sprint 3: Transaction Drill-Down Table Component
 // Purpose: Display transaction list with UK formatting
 
-import React from 'react';
 import { format } from 'date-fns';
 import type { TransactionDetail } from '@/lib/reports-types';
 import { Badge } from '@/components/ui/badge';

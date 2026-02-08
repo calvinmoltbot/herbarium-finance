@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+// import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
@@ -11,18 +11,12 @@ import {
   TrendingUp, 
   Download, 
   Calendar, 
-  Filter,
   Table as TableIcon,
-  PieChart,
-  LineChart,
   RefreshCw
 } from 'lucide-react';
 import { 
-  FlexibleReportConfig, 
-  DateUtils,
-  CategoryBreakdownData,
-  MonthlyTrendData,
-  PeriodComparisonData 
+  FlexibleReportConfig,
+  DateUtils
 } from '@/lib/reports-data-engine';
 import { useReportData, usePeriodComparison } from '@/hooks/use-report-data';
 
@@ -31,7 +25,7 @@ interface FlexibleReportViewerProps {
   initialConfig?: Partial<FlexibleReportConfig>;
 }
 
-export function FlexibleReportViewer({ reportId, initialConfig }: FlexibleReportViewerProps) {
+export function FlexibleReportViewer({ initialConfig }: FlexibleReportViewerProps) {
   // Default configuration
   const [config, setConfig] = useState<FlexibleReportConfig>({
     name: 'Financial Report',
@@ -54,11 +48,10 @@ export function FlexibleReportViewer({ reportId, initialConfig }: FlexibleReport
 
   // Fetch data using our hooks
   const { 
-    categoryBreakdown, 
-    monthlyTrends, 
-    cashFlow, 
+    categoryBreakdown,
+    monthlyTrends,
     plStructure,
-    isLoading, 
+    isLoading,
     isError 
   } = useReportData(config);
 

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   DndContext,
   closestCenter,
@@ -212,7 +212,7 @@ export function SortableHierarchyList({
           <GripVertical className="h-full w-full" />
         </div>
         <p>No {type} hierarchies yet</p>
-        <p className="text-sm">Create your first hierarchy above or use "Setup Defaults"</p>
+        <p className="text-sm">{`Create your first hierarchy above or use "Setup Defaults"`}</p>
       </div>
     );
   }

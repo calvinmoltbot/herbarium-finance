@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Upload, FileText, ArrowLeft, CheckCircle, AlertCircle, Lightbulb } from 'lucide-react';
+import { Upload, ArrowLeft, CheckCircle, AlertCircle, Lightbulb } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -11,11 +11,11 @@ import { useCategorySuggestions } from '@/hooks/use-category-suggestions';
 import { useCategories } from '@/hooks/use-categories';
 import { useCommitImport } from '@/hooks/use-commit-import';
 import { createClient } from '@/supabase/client';
-import { EnhancedTransactionList } from '@/components/transactions';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
 import Link from 'next/link';
 import { format } from 'date-fns';
+import type { MatchingResult, TransactionMatch } from '@/lib/revolut-types';
 
 interface ImportedTransaction {
   id: string;
@@ -35,11 +35,11 @@ export default function BankUploadPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const [importedTransactions, setImportedTransactions] = useState<ImportedTransaction[]>([]);
-  const [importStats, setImportStats] = useState<any>(null);
+  const [importStats, setImportStats] = useState<MatchingResult | null>(null);
   const [currentStep, setCurrentStep] = useState<'upload' | 'processing' | 'review' | 'complete'>('upload');
 
   const { importCSV, isProcessing } = useRevolutImport();
-  const { getSuggestionsForTransaction, applyBulkSuggestions } = useCategorySuggestions();
+  const { getSuggestionsForTransaction } = useCategorySuggestions();
   const { data: categories = [] } = useCategories();
   const { mutate: commitImport, isPending: isCommitting } = useCommitImport();
   
@@ -114,7 +114,7 @@ export default function BankUploadPage() {
       const result = await importCSV(selectedFile);
       
       // Convert the matching result to our transaction format
-      const transactions: ImportedTransaction[] = result.matches?.map((match: any) => ({
+      const transactions: ImportedTransaction[] = result.matches?.map((match: TransactionMatch) => ({
         id: match.importedTransaction.id,
         description: match.importedTransaction.original_description,
         amount: match.importedTransaction.amount,
@@ -162,10 +162,6 @@ export default function BankUploadPage() {
         console.error('Error generating suggestions for transaction:', error);
       }
     }
-  };
-
-  const handleCompleteImport = () => {
-    setCurrentStep('complete');
   };
 
   const formatCurrency = (amount: number) => {
@@ -460,7 +456,7 @@ export default function BankUploadPage() {
                     <h4 className="font-medium text-blue-800">Important: Two-Step Process</h4>
                     <p className="text-blue-700 mt-1">
                       Your transactions have been analyzed but are not yet saved to the database.
-                      Click "Commit Transactions" above to permanently save them. This will replace your existing manual transactions.
+                      {`Click "Commit Transactions" above to permanently save them. This will replace your existing manual transactions.`}
                     </p>
                   </div>
                 </div>
@@ -474,7 +470,7 @@ export default function BankUploadPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {importedTransactions.map((transaction, index) => (
+                  {importedTransactions.map((transaction) => (
                     <div key={transaction.id} className="border rounded-lg p-4">
                       <div className="flex items-center justify-between">
                         <div className="flex-1">

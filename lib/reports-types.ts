@@ -195,7 +195,7 @@ export interface TransactionData {
   description: string;
   type: TransactionType;
   notes?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface CategoryData {
@@ -288,7 +288,7 @@ export interface ReportBuilderState {
 
 export interface ReportBuilderAction {
   type: ReportBuilderActionType;
-  payload?: any;
+  payload?: string | number | boolean | ReportSection | ReportFilters | ReportFormatting | ChartConfig | ReportData | Partial<ReportFilters> | Partial<ReportFormatting> | null;
 }
 
 export type ReportBuilderActionType = 
@@ -446,7 +446,7 @@ export interface TransactionDetail {
 }
 
 export interface TransactionMetadata {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface DrillDownFilters {

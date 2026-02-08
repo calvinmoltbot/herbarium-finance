@@ -83,7 +83,7 @@ export async function POST() {
     // Step 2: Group transactions by normalized description + category
     const groups = new Map<string, PatternGroup>();
 
-    for (const transaction of transactions as Transaction[]) {
+    for (const transaction of transactions as unknown as Transaction[]) {
       // Skip transactions with short or invalid descriptions
       if (!transaction.description || transaction.description.trim().length < 4) {
         continue;
@@ -152,7 +152,7 @@ export async function POST() {
         try {
           // Validate pattern is a valid regex
           new RegExp(pattern);
-        } catch (error) {
+        } catch {
           console.warn(`[Pattern Learning] Skipping invalid pattern: ${pattern}`);
           patternsSkipped++;
           continue;
@@ -241,7 +241,7 @@ export async function POST() {
     `);
 
     // Step 4: Get top patterns for response
-    const { data: topPatterns, error: topError } = await supabase
+    const { data: topPatterns } = await supabase
       .from('categorization_patterns')
       .select(`
         pattern,
@@ -253,9 +253,10 @@ export async function POST() {
       .order('match_count', { ascending: false })
       .limit(10);
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const formattedTopPatterns = (topPatterns || []).map((p: any) => ({
       pattern: p.pattern,
-      categoryName: p.category?.name || 'Unknown',
+      categoryName: (Array.isArray(p.category) ? p.category[0]?.name : p.category?.name) || 'Unknown',
       confidence: p.confidence_score,
       matchCount: p.match_count,
     }));

@@ -15,18 +15,18 @@ type ImportStep = 'upload' | 'preview' | 'importing' | 'complete';
 export default function ImportTransactionsPage() {
   const [currentStep, setCurrentStep] = useState<ImportStep>('upload');
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-  const [parsedData, setParsedData] = useState<any[]>([]);
-  const [importResults, setImportResults] = useState<any>(null);
+  const [parsedData, setParsedData] = useState<Record<string, string>[]>([]);
+  const [importResults, setImportResults] = useState<{ total: number; successful: number; duplicates: number; failed: number; strategy: string; errors: string[]; duplicateDetails?: { transaction: { date: string; supplier: string; description: string; amount: number }; reason: string; fingerprint: string }[] } | null>(null);
 
   const { importTransactions, isImporting } = useTransactionImport();
 
-  const handleFileUpload = (file: File, data: any[]) => {
+  const handleFileUpload = (file: File, data: Record<string, string>[]) => {
     setUploadedFile(file);
     setParsedData(data);
     setCurrentStep('preview');
   };
 
-  const handleImport = async (mappedData: any[], duplicateStrategy: string, transactionType: 'income' | 'expenditure') => {
+  const handleImport = async (mappedData: { date: string; supplier: string; description: string; amount: number; category: string; fingerprint: string }[], duplicateStrategy: string, transactionType: 'income' | 'expenditure') => {
     setCurrentStep('importing');
     try {
       const results = await importTransactions(mappedData, duplicateStrategy, transactionType);

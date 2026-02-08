@@ -5,11 +5,13 @@ import { useQuery } from "@tanstack/react-query";
 
 const supabase = createClient();
 
+type SupabaseQuery = ReturnType<ReturnType<typeof supabase.from>['select']>;
+
 export function useClientFetch<T>(
   key: string,
   table: string,
   cache?: number,
-  filters?: (query: any) => any
+  filters?: (query: SupabaseQuery) => SupabaseQuery
 ) {
   return useQuery<T[]>({
     queryKey: [key],

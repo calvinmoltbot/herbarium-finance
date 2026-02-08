@@ -21,11 +21,12 @@ import {
   StickyNote
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import type { LucideIcon } from 'lucide-react';
 
 interface NavigationItem {
   name: string;
   href?: string;
-  icon: any;
+  icon: LucideIcon;
   children?: NavigationItem[];
 }
 

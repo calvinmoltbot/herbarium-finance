@@ -3,7 +3,6 @@
 // Sprint 3: Transaction Drill-Down Filters Component
 // Purpose: Filter controls for drilling down into transactions
 
-import React from 'react';
 import { Search, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -193,7 +192,7 @@ export function TransactionDrillDownFilters({
           <span className="font-medium">Active filters:</span>
           {filters.searchText && (
             <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded">
-              Search: "{filters.searchText}"
+              Search: {`"${filters.searchText}"`}
             </span>
           )}
           {filters.amountRange?.min !== undefined && (

@@ -1,14 +1,11 @@
 // Transaction Matching Engine
 // Intelligently matches imported Revolut transactions with existing manual entries
 
-import { 
-  RevolutTransaction, 
-  TransactionMatch, 
-  MatchConfidence, 
+import {
+  TransactionMatch,
+  MatchConfidence,
   MatchStatus,
-  ImportedTransaction,
-  isIncomeTransaction,
-  getTransactionDescription
+  ImportedTransaction
 } from './revolut-types';
 
 interface ExistingTransaction {

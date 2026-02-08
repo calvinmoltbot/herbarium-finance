@@ -11,24 +11,23 @@ export function useClientMutate(
 ) {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: async (payload: { id: number }) => {
-      let response: any;
+  return useMutation<unknown, Error, { id: number; [key: string]: unknown }, { currentData: unknown }>({
+    mutationFn: async (payload: { id: number; [key: string]: unknown }) => {
+      let response: { data: unknown; error: { message: string } | null };
 
-      if (action === "insert")
+      if (action === "insert") {
         response = await supabase.from(table).insert(payload);
-
-      if (action === "update")
+      } else if (action === "update") {
         response = await supabase
           .from(table)
           .update(payload)
           .match({ id: payload.id });
-
-      if (action === "delete")
+      } else {
         response = await supabase
           .from(table)
           .delete()
           .match({ id: payload.id });
+      }
 
       if (response.error) throw response.error;
       return response.data;
@@ -36,12 +35,12 @@ export function useClientMutate(
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [table], exact: false });
     },
-    onMutate: async (newData: object) => {
+    onMutate: async (newData) => {
       await queryClient.cancelQueries({ queryKey: [table] });
       const currentData = queryClient.getQueryData([table]);
-      queryClient.setQueryData([table], (dataBeforeMutate: any) => [
+      queryClient.setQueryData([table], (dataBeforeMutate: unknown[]) => [
         ...dataBeforeMutate,
-        { id: Date.now(), ...newData },
+        { ...newData, id: Date.now() },
       ]);
 
       return { currentData };

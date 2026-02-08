@@ -167,6 +167,7 @@ export class ReportDataEngine {
       }
 
       // If grouping by hierarchy, fetch hierarchy data separately
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let hierarchyData: any[] = [];
       if (groupBy === 'hierarchy') {
         const categoryIds = [...new Set(transactions.map(t => t.category_id))];
@@ -189,8 +190,9 @@ export class ReportDataEngine {
         }
       }
 
-      // Process and aggregate data
-      const aggregated = this.aggregateCategoryData(transactions, groupBy, hierarchyData);
+      // Process and aggregate data - cast needed because Supabase returns joins as arrays
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const aggregated = this.aggregateCategoryData(transactions as any, groupBy, hierarchyData);
       return this.calculatePercentages(aggregated);
     } catch (error) {
       console.error('Error in getCategoryBreakdown:', error);
@@ -290,7 +292,8 @@ export class ReportDataEngine {
       throw error;
     }
 
-    return this.processPLStructure(data || [], dateRange);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return this.processPLStructure((data || []) as any, dateRange);
   }
 
   // Get Hierarchical P&L Data (Enhanced for Standard P&L Report)
@@ -348,7 +351,8 @@ export class ReportDataEngine {
         throw uncategorizedError;
       }
 
-      return this.processHierarchicalPLData(hierarchies || [], dateRange, uncategorizedTransactions || []);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return this.processHierarchicalPLData((hierarchies || []) as any, dateRange, uncategorizedTransactions || []);
     } catch (error) {
       console.error('Error in getHierarchicalPLData:', error);
       throw error;
@@ -356,7 +360,7 @@ export class ReportDataEngine {
   }
 
   // Private helper methods
-  private aggregateCategoryData(transactions: any[], groupBy: string, hierarchyData: any[] = []): CategoryBreakdownData[] {
+  private aggregateCategoryData(transactions: { category_id: string; amount: string | number; categories: { id: string; name: string; type: string } }[], groupBy: string, hierarchyData: { category_id: string; category_hierarchies: { id: string; name: string; type: string } }[] = []): CategoryBreakdownData[] {
     const aggregated = new Map<string, CategoryBreakdownData>();
 
     // Create a map of category to hierarchy for quick lookup
@@ -387,7 +391,7 @@ export class ReportDataEngine {
       }
 
       const item = aggregated.get(key)!;
-      item.total_amount += parseFloat(transaction.amount);
+      item.total_amount += parseFloat(String(transaction.amount));
       item.transaction_count += 1;
     });
 
@@ -467,7 +471,7 @@ export class ReportDataEngine {
     });
   }
 
-  private aggregateMonthlyData(transactions: any[]): MonthlyTrendData[] {
+  private aggregateMonthlyData(transactions: { amount: string | number; type: string; transaction_date: string }[]): MonthlyTrendData[] {
     const monthly = new Map<string, MonthlyTrendData>();
 
     transactions.forEach(transaction => {
@@ -487,7 +491,7 @@ export class ReportDataEngine {
       }
 
       const item = monthly.get(monthKey)!;
-      const amount = parseFloat(transaction.amount);
+      const amount = parseFloat(String(transaction.amount));
 
       switch (transaction.type) {
         case 'income':
@@ -510,7 +514,7 @@ export class ReportDataEngine {
     return Array.from(monthly.values()).sort((a, b) => a.month_year.localeCompare(b.month_year));
   }
 
-  private calculateCashFlow(transactions: any[]): CashFlowData[] {
+  private calculateCashFlow(transactions: { amount: string | number; type: string; transaction_date: string }[]): CashFlowData[] {
     const daily = new Map<string, { income: number; expenditure: number }>();
 
     transactions.forEach(transaction => {
@@ -521,7 +525,7 @@ export class ReportDataEngine {
       }
 
       const item = daily.get(date)!;
-      const amount = parseFloat(transaction.amount);
+      const amount = parseFloat(String(transaction.amount));
 
       if (transaction.type === 'income') {
         item.income += amount;
@@ -552,7 +556,7 @@ export class ReportDataEngine {
     return cashFlow;
   }
 
-  private processPLStructure(hierarchies: any[], dateRange: { start: Date; end: Date }): CategoryBreakdownData[] {
+  private processPLStructure(hierarchies: { id: string; name: string; type: string; display_order: number; category_hierarchy_assignments: { categories: { id: string; name: string; transactions: { amount: string | number; transaction_date: string }[] } }[] }[], dateRange: { start: Date; end: Date }): CategoryBreakdownData[] {
     const startDate = dateRange.start.toISOString().split('T')[0];
     const endDate = dateRange.end.toISOString().split('T')[0];
 
@@ -560,10 +564,10 @@ export class ReportDataEngine {
       let totalAmount = 0;
       let transactionCount = 0;
 
-      hierarchy.category_hierarchy_assignments?.forEach((assignment: any) => {
-        assignment.categories?.transactions?.forEach((transaction: any) => {
+      hierarchy.category_hierarchy_assignments?.forEach(assignment => {
+        assignment.categories?.transactions?.forEach(transaction => {
           if (transaction.transaction_date >= startDate && transaction.transaction_date <= endDate) {
-            totalAmount += parseFloat(transaction.amount);
+            totalAmount += parseFloat(String(transaction.amount));
             transactionCount += 1;
           }
         });
@@ -582,7 +586,7 @@ export class ReportDataEngine {
     });
   }
 
-  private processHierarchicalPLData(hierarchies: any[], dateRange: { start: Date; end: Date }, uncategorizedTransactions: any[] = []): HierarchicalPLData {
+  private processHierarchicalPLData(hierarchies: { id: string; name: string; type: string; display_order: number; category_hierarchy_assignments: { categories: { id: string; name: string; color?: string; transactions: { id: string; amount: string | number; transaction_date: string; description: string; type: string }[] } }[] }[], dateRange: { start: Date; end: Date }, uncategorizedTransactions: { id: string; amount: string | number; transaction_date: string; description: string; type: string }[] = []): HierarchicalPLData {
     const startDate = dateRange.start.toISOString().split('T')[0];
     const endDate = dateRange.end.toISOString().split('T')[0];
 
@@ -598,7 +602,7 @@ export class ReportDataEngine {
       const categories: CategoryInHierarchy[] = [];
       let hierarchyTotal = 0;
 
-      hierarchy.category_hierarchy_assignments?.forEach((assignment: any) => {
+      hierarchy.category_hierarchy_assignments?.forEach(assignment => {
         const category = assignment.categories;
         if (!category) return;
 
@@ -606,9 +610,9 @@ export class ReportDataEngine {
         let categoryTotal = 0;
         let transactionCount = 0;
 
-        category.transactions?.forEach((transaction: any) => {
+        category.transactions?.forEach(transaction => {
           if (transaction.transaction_date >= startDate && transaction.transaction_date <= endDate) {
-            const amount = parseFloat(transaction.amount);
+            const amount = parseFloat(String(transaction.amount));
             categoryTotal += amount;
             transactionCount += 1;
 
@@ -640,7 +644,7 @@ export class ReportDataEngine {
         const hierarchySection: HierarchySection = {
           id: hierarchy.id,
           name: hierarchy.name,
-          type: hierarchy.type,
+          type: hierarchy.type as 'income' | 'expenditure' | 'capital',
           total_amount: hierarchyTotal,
           categories: categories,
           display_order: hierarchy.display_order || 0,
@@ -676,7 +680,7 @@ export class ReportDataEngine {
     let uncategorizedCapital = 0;
 
     uncategorizedTransactions.forEach(transaction => {
-      const amount = parseFloat(transaction.amount);
+      const amount = parseFloat(String(transaction.amount));
       const transactionItem: TransactionInCategory = {
         id: transaction.id,
         amount: amount,
@@ -949,7 +953,8 @@ export class ReportDataEngine {
           .in('category_id', categoryIds);
 
         if (hierarchyData) {
-          hierarchyData.forEach((item: any) => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (hierarchyData as any[]).forEach((item: { category_id: string; hierarchy_id: string; category_hierarchies: { id: string; name: string } | null }) => {
             if (item.category_hierarchies) {
               hierarchyMap.set(item.category_id, {
                 id: item.category_hierarchies.id,
@@ -967,7 +972,9 @@ export class ReportDataEngine {
           : hierarchyMap.get(tx.category_id) || { id: '', name: 'Unknown' };
 
         // Handle cases where category relationship might be null
-        const category = tx.categories || { id: tx.category_id || '', name: 'Uncategorized' };
+        // Supabase returns relations as arrays - take first element
+        const rawCategory = tx.categories;
+        const category = (Array.isArray(rawCategory) ? rawCategory[0] : rawCategory) || { id: tx.category_id || '', name: 'Uncategorized' };
 
         return {
           id: tx.id,

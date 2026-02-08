@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Settings, Plus, X, Eye } from 'lucide-react';
+import { Settings, Plus, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -309,8 +309,8 @@ export function ReportBuilderDialog({ open, onOpenChange }: ReportBuilderDialogP
             <CardContent className="pt-0">
               <p className="text-blue-700 text-sm">
                 The Report Builder is currently in development. For now, you can create reports 
-                using our pre-built templates or the basic "Create from Scratch" option. 
-                The full visual builder will be available in the next development phase.
+                {`using our pre-built templates or the basic "Create from Scratch" option.
+                The full visual builder will be available in the next development phase.`}
               </p>
             </CardContent>
           </Card>

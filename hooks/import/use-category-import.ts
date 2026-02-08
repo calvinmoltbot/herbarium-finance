@@ -145,7 +145,7 @@ export function useCategoryImport() {
         toast.error(`Failed to import ${result.failed} categories`);
       }
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Category import failed:', error);
       toast.error('Failed to import categories. Please try again.');
     },

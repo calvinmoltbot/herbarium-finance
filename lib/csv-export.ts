@@ -1,14 +1,16 @@
 // CSV Export Utility Functions
+import type { HierarchicalPLData, HierarchySection } from './reports-data-engine';
+
 export interface CSVExportOptions {
   filename: string;
   headers: string[];
-  data: any[];
+  data: Record<string, unknown>[];
   dateRange?: string;
 }
 
 export class CSVExporter {
   // Escape CSV field content
-  private static escapeCSVField(field: any): string {
+  private static escapeCSVField(field: unknown): string {
     if (field === null || field === undefined) {
       return '';
     }
@@ -24,9 +26,9 @@ export class CSVExporter {
   }
 
   // Convert array of objects to CSV string
-  private static arrayToCSV(headers: string[], data: any[]): string {
+  private static arrayToCSV(headers: string[], data: Record<string, unknown>[]): string {
     const csvHeaders = headers.join(',');
-    const csvRows = data.map(row => 
+    const csvRows = data.map(row =>
       headers.map(header => this.escapeCSVField(row[header])).join(',')
     );
     
@@ -58,7 +60,7 @@ export class CSVExporter {
   }
 
   // Export transactions to CSV
-  static exportTransactions(transactions: any[], dateRange?: string): void {
+  static exportTransactions(transactions: Record<string, unknown>[], dateRange?: string): void {
     const headers = [
       'transaction_id',
       'date',
@@ -74,20 +76,25 @@ export class CSVExporter {
       'updated_at'
     ];
 
-    const data = transactions.map(transaction => ({
-      transaction_id: transaction.id,
-      date: transaction.transaction_date,
-      description: transaction.description || '',
-      amount: transaction.amount,
-      type: transaction.type,
-      category_name: transaction.category?.name || 'Uncategorized',
-      category_type: transaction.category?.type || '',
-      user_notes: transaction.metadata?.user_notes || '',
-      extended_description: transaction.metadata?.extended_description || '',
-      tags: transaction.metadata?.tags ? transaction.metadata.tags.join('; ') : '',
-      created_at: transaction.created_at,
-      updated_at: transaction.updated_at
-    }));
+    const data = transactions.map(transaction => {
+      const category = transaction.category as Record<string, unknown> | undefined;
+      const metadata = transaction.metadata as Record<string, unknown> | undefined;
+      const tags = metadata?.tags as string[] | undefined;
+      return {
+        transaction_id: transaction.id,
+        date: transaction.transaction_date,
+        description: (transaction.description as string) || '',
+        amount: transaction.amount,
+        type: transaction.type,
+        category_name: (category?.name as string) || 'Uncategorized',
+        category_type: (category?.type as string) || '',
+        user_notes: (metadata?.user_notes as string) || '',
+        extended_description: (metadata?.extended_description as string) || '',
+        tags: tags ? tags.join('; ') : '',
+        created_at: transaction.created_at,
+        updated_at: transaction.updated_at,
+      };
+    });
 
     const csvContent = this.arrayToCSV(headers, data);
     const filename = this.generateFilename('transactions', dateRange);
@@ -96,7 +103,7 @@ export class CSVExporter {
   }
 
   // Export P&L summary to CSV
-  static exportPLSummary(plData: any, dateRange?: string): void {
+  static exportPLSummary(plData: HierarchicalPLData, dateRange?: string): void {
     const headers = [
       'section_type',
       'hierarchy_name',
@@ -106,49 +113,31 @@ export class CSVExporter {
       'is_uncategorized'
     ];
 
-    const data: any[] = [];
+    const data: Record<string, unknown>[] = [];
+
+    const addSectionData = (sections: HierarchySection[], sectionType: string) => {
+      sections?.forEach(hierarchy => {
+        hierarchy.categories?.forEach(category => {
+          data.push({
+            section_type: sectionType,
+            hierarchy_name: hierarchy.name,
+            category_name: category.name,
+            amount: category.total_amount,
+            transaction_count: category.transaction_count,
+            is_uncategorized: hierarchy.id.startsWith('uncategorized-') ? 'Yes' : 'No'
+          });
+        });
+      });
+    };
 
     // Add income data
-    plData.income?.forEach((hierarchy: any) => {
-      hierarchy.categories?.forEach((category: any) => {
-        data.push({
-          section_type: 'Income',
-          hierarchy_name: hierarchy.name,
-          category_name: category.name,
-          amount: category.total_amount,
-          transaction_count: category.transaction_count,
-          is_uncategorized: hierarchy.id.startsWith('uncategorized-') ? 'Yes' : 'No'
-        });
-      });
-    });
+    addSectionData(plData.income, 'Income');
 
     // Add expenditure data
-    plData.expenditure?.forEach((hierarchy: any) => {
-      hierarchy.categories?.forEach((category: any) => {
-        data.push({
-          section_type: 'Expenditure',
-          hierarchy_name: hierarchy.name,
-          category_name: category.name,
-          amount: category.total_amount,
-          transaction_count: category.transaction_count,
-          is_uncategorized: hierarchy.id.startsWith('uncategorized-') ? 'Yes' : 'No'
-        });
-      });
-    });
+    addSectionData(plData.expenditure, 'Expenditure');
 
     // Add capital data
-    plData.capital?.forEach((hierarchy: any) => {
-      hierarchy.categories?.forEach((category: any) => {
-        data.push({
-          section_type: 'Capital',
-          hierarchy_name: hierarchy.name,
-          category_name: category.name,
-          amount: category.total_amount,
-          transaction_count: category.transaction_count,
-          is_uncategorized: hierarchy.id.startsWith('uncategorized-') ? 'Yes' : 'No'
-        });
-      });
-    });
+    addSectionData(plData.capital, 'Capital');
 
     // Add totals
     data.push({
@@ -203,7 +192,7 @@ export class CSVExporter {
   }
 
   // Export P&L detailed transactions to CSV
-  static exportPLDetailed(plData: any, dateRange?: string): void {
+  static exportPLDetailed(plData: HierarchicalPLData, dateRange?: string): void {
     const headers = [
       'section_type',
       'hierarchy_name',
@@ -216,13 +205,13 @@ export class CSVExporter {
       'is_uncategorized'
     ];
 
-    const data: any[] = [];
+    const data: Record<string, unknown>[] = [];
 
     // Helper function to add transactions from a section
-    const addTransactions = (sections: any[], sectionType: string) => {
-      sections?.forEach((hierarchy: any) => {
-        hierarchy.categories?.forEach((category: any) => {
-          category.transactions?.forEach((transaction: any) => {
+    const addTransactions = (sections: HierarchySection[], sectionType: string) => {
+      sections?.forEach(hierarchy => {
+        hierarchy.categories?.forEach(category => {
+          category.transactions?.forEach(transaction => {
             data.push({
               section_type: sectionType,
               hierarchy_name: hierarchy.name,

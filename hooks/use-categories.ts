@@ -115,7 +115,7 @@ export function useCategoryMutations() {
       queryClient.invalidateQueries({ queryKey: ['categories'] });
       toast.success(`Category "${newCategory.name}" created successfully!`);
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Error creating category:', error);
       toast.error('Failed to create category. Please try again.');
     },
@@ -142,7 +142,7 @@ export function useCategoryMutations() {
       queryClient.invalidateQueries({ queryKey: ['category-breakdown'] });
       toast.success(`Category "${updatedCategory.name}" updated successfully!`);
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Error updating category:', error);
       toast.error('Failed to update category. Please try again.');
     },
@@ -196,7 +196,7 @@ export function useCategoryMutations() {
       queryClient.invalidateQueries({ queryKey: ['category-hierarchies-with-categories'] });
       toast.success('Category deleted successfully!');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Error deleting category:', error);
       if (error.message.includes('in use')) {
         toast.error('Cannot delete category that is in use by transactions');

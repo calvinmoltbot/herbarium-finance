@@ -8,9 +8,9 @@ import { Badge } from '@/components/ui/badge';
 import { CheckCircle, AlertTriangle, Eye, EyeOff, Settings } from 'lucide-react';
 
 interface ImportPreviewProps {
-  data: any[];
+  data: Record<string, unknown>[];
   fileName: string;
-  onImport: (mappedData: any[]) => void;
+  onImport: (mappedData: CategoryMapping[]) => void;
   onCancel: () => void;
 }
 
@@ -31,7 +31,13 @@ export function ImportPreview({ data, fileName, onImport, onCancel }: ImportPrev
   const [selectedColumn, setSelectedColumn] = useState<string>('');
   const [categoryType, setCategoryType] = useState<'income' | 'expenditure'>('expenditure');
   const [showPreview, setShowPreview] = useState(true);
-  const [validationResults, setValidationResults] = useState<any>(null);
+  const [validationResults, setValidationResults] = useState<{
+    total: number;
+    valid: number;
+    invalid: number;
+    duplicates: number;
+    issues: string[];
+  } | null>(null);
 
   // Get available columns from the data
   const columns = useMemo(() => {
@@ -45,7 +51,7 @@ export function ImportPreview({ data, fileName, onImport, onCancel }: ImportPrev
     
     const values = data
       .map(row => row[selectedColumn])
-      .filter(value => value && typeof value === 'string' && value.trim() !== '')
+      .filter((value): value is string => typeof value === 'string' && value.trim() !== '')
       .map(value => value.trim());
     
     return [...new Set(values)];

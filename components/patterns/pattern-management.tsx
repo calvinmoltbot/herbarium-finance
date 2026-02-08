@@ -10,8 +10,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { useCategorizationPatterns } from '@/hooks/use-categorization-patterns';
 import { useCategories } from '@/hooks/use-categories';
 import { PatternMatcher } from '@/lib/pattern-matcher';
+import type { PatternMatch } from '@/lib/pattern-matcher';
+import type { CategorizationPattern } from '@/hooks/use-categorization-patterns';
 import { toast } from 'sonner';
-import { Sparkles, Loader2, ChevronDown, ChevronUp, List } from 'lucide-react';
+import { Sparkles, Loader2, ChevronUp, List } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { createClient } from '@/supabase/client';
 
@@ -19,15 +21,29 @@ export function PatternManagement() {
   const [newPattern, setNewPattern] = useState('');
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
   const [testDescription, setTestDescription] = useState('');
-  const [testResults, setTestResults] = useState<any[]>([]);
+  const [testResults, setTestResults] = useState<PatternMatch[]>([]);
   const [confidenceFilter, setConfidenceFilter] = useState<string>('all');
   const [isLearning, setIsLearning] = useState(false);
-  const [learningResults, setLearningResults] = useState<any>(null);
+  const [learningResults, setLearningResults] = useState<{
+    success: boolean;
+    totalTransactions: number;
+    patternsCreated: number;
+    patternsUpdated: number;
+    patternsSkipped: number;
+    topPatterns?: Array<{ pattern: string; categoryName: string; confidence: number }>;
+    error?: string;
+  } | null>(null);
   const [sortBy, setSortBy] = useState<'confidence' | 'matches' | 'pattern'>('confidence');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-  const [editingPattern, setEditingPattern] = useState<any>(null);
+  const [editingPattern, setEditingPattern] = useState<CategorizationPattern | null>(null);
   const [viewingTransactions, setViewingTransactions] = useState<string | null>(null);
-  const [matchingTransactions, setMatchingTransactions] = useState<any[]>([]);
+  const [matchingTransactions, setMatchingTransactions] = useState<Array<{
+    id: string;
+    description: string;
+    amount: number;
+    transaction_date: string;
+    category: { id: string; name: string; color: string } | Array<{ id: string; name: string; color: string }> | null;
+  }>>([]);
   const [loadingTransactions, setLoadingTransactions] = useState(false);
 
   const {
@@ -52,7 +68,7 @@ export function PatternManagement() {
     // Validate regex pattern
     try {
       new RegExp(newPattern);
-    } catch (error) {
+    } catch {
       toast.error('Invalid regular expression pattern');
       return;
     }
@@ -172,7 +188,7 @@ export function PatternManagement() {
     return sortOrder === 'asc' ? comparison : -comparison;
   });
 
-  const handleEditPattern = (pattern: any) => {
+  const handleEditPattern = (pattern: CategorizationPattern) => {
     setEditingPattern(pattern);
   };
 
@@ -188,7 +204,7 @@ export function PatternManagement() {
     setEditingPattern(null);
   };
 
-  const handleViewTransactions = async (pattern: any) => {
+  const handleViewTransactions = async (pattern: CategorizationPattern) => {
     // Toggle off if clicking the same pattern
     if (viewingTransactions === pattern.id) {
       setViewingTransactions(null);
@@ -219,7 +235,7 @@ export function PatternManagement() {
 
       // Filter transactions that match this pattern
       const regex = new RegExp(pattern.pattern, 'i');
-      const matches = (transactions || []).filter((transaction: any) =>
+      const matches = (transactions || []).filter((transaction: { id: string; description: string; amount: number; transaction_date: string; category: unknown }) =>
         regex.test(PatternMatcher.normalizeText(transaction.description))
       );
 
@@ -255,7 +271,7 @@ export function PatternManagement() {
           <div className="flex items-center justify-between">
             <CardTitle>Your Patterns ({sortedPatterns.length})</CardTitle>
             <div className="flex items-center space-x-2">
-              <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
+              <Select value={sortBy} onValueChange={(value: string) => setSortBy(value as 'confidence' | 'matches' | 'pattern')}>
                 <SelectTrigger className="w-36">
                   <SelectValue />
                 </SelectTrigger>
@@ -289,7 +305,7 @@ export function PatternManagement() {
         <CardContent>
           {sortedPatterns.length === 0 ? (
             <p className="text-center text-gray-500 py-8">
-              No patterns found. Use "Learn from History" below or add patterns manually.
+              {`No patterns found. Use "Learn from History" below or add patterns manually.`}
             </p>
           ) : (
             <div className="max-h-96 overflow-y-auto space-y-3 pr-2">
@@ -382,7 +398,7 @@ export function PatternManagement() {
                             </h4>
                           </div>
                           <div className="max-h-60 overflow-y-auto space-y-2">
-                            {matchingTransactions.map((transaction: any) => (
+                            {matchingTransactions.map((transaction) => (
                               <div
                                 key={transaction.id}
                                 className="p-3 bg-gray-50 rounded border border-gray-200 text-sm"
@@ -566,7 +582,7 @@ export function PatternManagement() {
                 <div className="mt-4 pt-4 border-t">
                   <h4 className="font-medium text-sm mb-2">Top Patterns Learned:</h4>
                   <div className="space-y-2">
-                    {learningResults.topPatterns.slice(0, 5).map((pattern: any, index: number) => (
+                    {learningResults.topPatterns.slice(0, 5).map((pattern: { pattern: string; categoryName: string; confidence: number }, index: number) => (
                       <div key={index} className="flex items-center justify-between text-xs p-2 bg-gray-50 rounded">
                         <code className="font-mono">{pattern.pattern}</code>
                         <div className="flex items-center space-x-2">

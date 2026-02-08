@@ -3,16 +3,16 @@
 import { useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, BarChart3, TrendingUp, TrendingDown, Target, AlertCircle } from 'lucide-react';
+import { ArrowLeft, TrendingUp, TrendingDown, Target, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
 import { useIncomeTransactions, useExpenditureTransactions } from '@/hooks/use-income-transactions';
 import { useCategories } from '@/hooks/use-categories';
-import { format, subMonths, startOfMonth, endOfMonth } from 'date-fns';
+import { subMonths, startOfMonth, endOfMonth } from 'date-fns';
 
 export default function KPIDashboard() {
   const { data: incomeTransactions = [] } = useIncomeTransactions();
   const { data: expenditureTransactions = [] } = useExpenditureTransactions();
-  const { data: categories = [] } = useCategories();
+  useCategories();
 
   // Calculate KPIs and metrics
   const kpiData = useMemo(() => {
@@ -93,7 +93,7 @@ export default function KPIDashboard() {
 
     // Monthly averages (last 3 months)
     const threeMonthsAgo = startOfMonth(subMonths(now, 2));
-    const recentTransactions = [...incomeTransactions, ...expenditureTransactions]
+    [...incomeTransactions, ...expenditureTransactions]
       .filter(t => new Date(t.transaction_date) >= threeMonthsAgo);
 
     const monthlyAverages = {

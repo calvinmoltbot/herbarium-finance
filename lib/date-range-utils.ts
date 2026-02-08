@@ -3,7 +3,7 @@
 // Part of: Enhanced Reporting Module
 
 import { CustomDateRange } from './types';
-import { differenceInDays, format, startOfMonth, endOfMonth, startOfQuarter, endOfQuarter, startOfYear, endOfYear, subMonths, subQuarters, subYears } from 'date-fns';
+import { differenceInDays, format, startOfMonth, endOfMonth, startOfQuarter, endOfQuarter, subMonths, subQuarters, subYears } from 'date-fns';
 
 // ============================================================================
 // VALIDATION

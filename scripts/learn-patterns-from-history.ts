@@ -94,7 +94,7 @@ async function main() {
   console.log('🔍 Grouping transactions by pattern...');
   const groups = new Map<string, PatternGroup>();
 
-  for (const transaction of transactions as Transaction[]) {
+  for (const transaction of transactions as unknown as Transaction[]) {
     // Skip transactions with short or invalid descriptions
     if (!transaction.description || transaction.description.trim().length < 4) {
       continue;

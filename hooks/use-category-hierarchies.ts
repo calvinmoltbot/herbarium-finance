@@ -168,7 +168,7 @@ export function useUpdateCategoryHierarchy() {
 
       const supabase = createClient();
       
-      const updateData: any = { updated_at: new Date().toISOString() };
+      const updateData: Record<string, unknown> = { updated_at: new Date().toISOString() };
       if (data.name !== undefined) updateData.name = data.name;
       if (data.display_order !== undefined) updateData.display_order = data.display_order;
 

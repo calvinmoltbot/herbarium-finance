@@ -12,8 +12,6 @@ import type {
   UpdateReportRequest,
   CreateTemplateRequest,
   ScheduleReportRequest,
-  ReportData,
-  ReportFilters,
 } from '@/lib/reports-types';
 
 // =====================================================
@@ -101,7 +99,7 @@ export function useReportMutations() {
       queryClient.invalidateQueries({ queryKey: ['reports'] });
       toast.success(`Report "${newReport.name}" created successfully!`);
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Error creating report:', error);
       toast.error('Failed to create report. Please try again.');
     },
@@ -112,7 +110,7 @@ export function useReportMutations() {
       if (!user?.id) throw new Error('User not authenticated');
 
       const supabase = createClient();
-      const updateData: any = {};
+      const updateData: Record<string, unknown> = {};
       if (data.name !== undefined) updateData.name = data.name;
       if (data.description !== undefined) updateData.description = data.description;
       if (data.config !== undefined) updateData.config = data.config;
@@ -133,7 +131,7 @@ export function useReportMutations() {
       queryClient.invalidateQueries({ queryKey: ['report', updatedReport.id] });
       toast.success(`Report "${updatedReport.name}" updated successfully!`);
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Error updating report:', error);
       toast.error('Failed to update report. Please try again.');
     },
@@ -164,7 +162,7 @@ export function useReportMutations() {
       queryClient.invalidateQueries({ queryKey: ['scheduled-reports'] });
       toast.success('Report deleted successfully!');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Error deleting report:', error);
       toast.error('Failed to delete report. Please try again.');
     },
@@ -268,7 +266,7 @@ export function useTemplateMutations() {
       queryClient.invalidateQueries({ queryKey: ['report-templates'] });
       toast.success(`Template "${newTemplate.name}" created successfully!`);
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Error creating template:', error);
       toast.error('Failed to create template. Please try again.');
     },
@@ -295,7 +293,7 @@ export function useTemplateMutations() {
       queryClient.invalidateQueries({ queryKey: ['report-template', updatedTemplate.id] });
       toast.success(`Template "${updatedTemplate.name}" updated successfully!`);
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Error updating template:', error);
       toast.error('Failed to update template. Please try again.');
     },
@@ -333,7 +331,7 @@ export function useTemplateMutations() {
       queryClient.invalidateQueries({ queryKey: ['report-templates'] });
       toast.success('Template deleted successfully!');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Error deleting template:', error);
       if (error.message.includes('in use')) {
         toast.error('Cannot delete template that is in use by reports');
@@ -379,7 +377,7 @@ export function useTemplateMutations() {
       queryClient.invalidateQueries({ queryKey: ['reports'] });
       toast.success(`Report "${newReport.name}" created from template successfully!`);
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Error creating report from template:', error);
       toast.error('Failed to create report from template. Please try again.');
     },
@@ -452,7 +450,7 @@ export function useScheduleMutations() {
       queryClient.invalidateQueries({ queryKey: ['scheduled-reports'] });
       toast.success('Report scheduled successfully!');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Error scheduling report:', error);
       toast.error('Failed to schedule report. Please try again.');
     },
@@ -477,7 +475,7 @@ export function useScheduleMutations() {
       queryClient.invalidateQueries({ queryKey: ['scheduled-reports'] });
       toast.success('Schedule updated successfully!');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Error updating schedule:', error);
       toast.error('Failed to update schedule. Please try again.');
     },
@@ -499,7 +497,7 @@ export function useScheduleMutations() {
       queryClient.invalidateQueries({ queryKey: ['scheduled-reports'] });
       toast.success('Schedule deleted successfully!');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Error deleting schedule:', error);
       toast.error('Failed to delete schedule. Please try again.');
     },
@@ -524,7 +522,7 @@ export function useScheduleMutations() {
       queryClient.invalidateQueries({ queryKey: ['scheduled-reports'] });
       toast.success(`Schedule ${scheduledReport.is_active ? 'activated' : 'deactivated'} successfully!`);
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Error toggling schedule:', error);
       toast.error('Failed to toggle schedule. Please try again.');
     },

@@ -96,7 +96,7 @@ export default function ShopifyIntegrationPage() {
             <CardDescription className="text-purple-800 text-base leading-relaxed">
               Shopify integration is planned for a future release. This powerful feature will provide 
               detailed sales analytics, customer insights, and automated income tracking that goes far 
-              beyond what's available in standard Shopify reports.
+              {`beyond what's available in standard Shopify reports.`}
             </CardDescription>
             <div className="mt-4 p-4 bg-purple-100 rounded-lg">
               <p className="text-sm text-purple-800">
@@ -111,7 +111,7 @@ export default function ShopifyIntegrationPage() {
           <CardHeader>
             <CardTitle className="text-xl">Why Connect Your Shopify Store?</CardTitle>
             <CardDescription>
-              Unlock insights that Shopify's built-in analytics can't provide
+              {`Unlock insights that Shopify's built-in analytics can't provide`}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -121,12 +121,12 @@ export default function ShopifyIntegrationPage() {
                 <div className="space-y-3">
                   <div className="p-3 bg-red-50 rounded-lg border border-red-200">
                     <p className="text-sm text-red-800">
-                      <strong>Limited Financial Integration:</strong> Shopify reports don't integrate with your overall financial picture
+                      <strong>Limited Financial Integration:</strong> {`Shopify reports don't integrate with your overall financial picture`}
                     </p>
                   </div>
                   <div className="p-3 bg-red-50 rounded-lg border border-red-200">
                     <p className="text-sm text-red-800">
-                      <strong>No Expense Correlation:</strong> Can't see how product costs relate to revenue
+                      <strong>No Expense Correlation:</strong> {`Can't see how product costs relate to revenue`}
                     </p>
                   </div>
                   <div className="p-3 bg-red-50 rounded-lg border border-red-200">
@@ -224,7 +224,7 @@ export default function ShopifyIntegrationPage() {
         {/* Data Examples */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-xl">What Data You'll Get</CardTitle>
+            <CardTitle className="text-xl">{`What Data You'll Get`}</CardTitle>
             <CardDescription>
               Examples of the detailed insights available through Shopify integration
             </CardDescription>

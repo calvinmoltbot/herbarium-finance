@@ -10,7 +10,7 @@ import { TransactionDetailPanel } from './transaction-detail-panel';
 import { useTransactionMetadata } from '@/hooks/use-transaction-metadata';
 import { useCategorySuggestions } from '@/hooks/use-category-suggestions';
 import { useCategories } from '@/hooks/use-categories';
-import { StickyNote, FileText, Search, Download } from 'lucide-react';
+import { StickyNote, Search, Download } from 'lucide-react';
 import { CSVExporter } from '@/lib/csv-export';
 import { toast } from 'sonner';
 
@@ -43,10 +43,8 @@ export function EnhancedTransactionList({
   const [searchTerm, setSearchTerm] = useState('');
   const [showSuggestionsOnly, setShowSuggestionsOnly] = useState(false);
   const [showNotesOnly, setShowNotesOnly] = useState(false);
-  const [hoveredTransaction, setHoveredTransaction] = useState<string | null>(null);
-
-  const { getMetadataForTransaction, allMetadata } = useTransactionMetadata();
-  const { getSuggestionsForTransaction } = useCategorySuggestions();
+  const { getMetadataForTransaction } = useTransactionMetadata();
+  useCategorySuggestions();
   const { data: categories = [] } = useCategories();
 
   // Enhanced search function that includes notes content
@@ -250,13 +248,9 @@ export function EnhancedTransactionList({
                     metadata: getMetadataForTransaction(transaction.id)
                   }));
                   
-                  const dateRange = filteredTransactions.length > 0 
-                    ? `${Math.min(...filteredTransactions.map(t => new Date(t.transaction_date).getTime()))} to ${Math.max(...filteredTransactions.map(t => new Date(t.transaction_date).getTime()))}`
-                    : 'filtered';
-                  
                   CSVExporter.exportTransactions(enhancedTransactions, 'filtered_transactions');
                   toast.success(`Exported ${enhancedTransactions.length} transactions to CSV`);
-                } catch (error) {
+                } catch {
                   toast.error('Failed to export transactions');
                 }
               }}

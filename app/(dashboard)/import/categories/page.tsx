@@ -72,7 +72,7 @@ export default function ImportCategoriesPage() {
                   <div>
                     <h4 className="font-semibold text-gray-900">Header Row Required</h4>
                     <p className="text-gray-600 text-sm mt-1">
-                      First row should contain column headers (e.g., "Category Name", "Type", etc.)
+                      {`First row should contain column headers (e.g., "Category Name", "Type", etc.)`}
                     </p>
                   </div>
                 </div>
@@ -118,7 +118,7 @@ export default function ImportCategoriesPage() {
               Example CSV Format
             </CardTitle>
             <CardDescription className="text-base">
-              Here's an example of how your CSV file should be structured
+              {`Here's an example of how your CSV file should be structured`}
             </CardDescription>
           </CardHeader>
           <CardContent>

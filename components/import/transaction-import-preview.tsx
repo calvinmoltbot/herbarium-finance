@@ -9,9 +9,9 @@ import { CheckCircle, AlertTriangle, Eye, EyeOff, Settings, Shield } from 'lucid
 import { useCategories } from '@/hooks/use-categories';
 
 interface TransactionImportPreviewProps {
-  data: any[];
+  data: Record<string, string>[];
   fileName: string;
-  onImport: (mappedData: any[], duplicateStrategy: string, transactionType: 'income' | 'expenditure') => void;
+  onImport: (mappedData: ParsedTransaction[], duplicateStrategy: string, transactionType: 'income' | 'expenditure') => void;
   onCancel: () => void;
 }
 
@@ -29,7 +29,7 @@ interface ParsedTransaction {
   description: string;
   amount: number;
   category: string;
-  originalRow: any;
+  originalRow: Record<string, string>;
   fingerprint: string;
   isDuplicate?: boolean;
   duplicateReason?: string;
@@ -52,7 +52,14 @@ export function TransactionImportPreview({ data, fileName, onImport, onCancel }:
   const [duplicateStrategy, setDuplicateStrategy] = useState('skip');
   const [transactionType, setTransactionType] = useState<'income' | 'expenditure'>('expenditure');
   const [showPreview, setShowPreview] = useState(true);
-  const [validationResults, setValidationResults] = useState<any>(null);
+  const [validationResults, setValidationResults] = useState<{
+    total: number;
+    valid: number;
+    invalid: number;
+    duplicates: number;
+    missingCategories: number;
+    issues: string[];
+  } | null>(null);
 
   const { data: categories } = useCategories(transactionType);
 
@@ -264,7 +271,7 @@ export function TransactionImportPreview({ data, fileName, onImport, onCancel }:
             <span>Transaction Type</span>
           </CardTitle>
           <CardDescription>
-            Select whether you're importing income or expenditure transactions
+            {`Select whether you're importing income or expenditure transactions`}
           </CardDescription>
         </CardHeader>
         <CardContent>

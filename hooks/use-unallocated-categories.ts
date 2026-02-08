@@ -120,7 +120,7 @@ export function useBulkAssignCategories() {
 
       toast.success(`Successfully assigned ${variables.categoryIds.length} categories to hierarchy`);
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Error bulk assigning categories:', error);
       toast.error('Failed to assign categories. Please try again.');
     },
@@ -160,7 +160,7 @@ export function useQuickAssignCategory() {
 
       toast.success('Category assigned successfully');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Error assigning category:', error);
       toast.error('Failed to assign category. Please try again.');
     },

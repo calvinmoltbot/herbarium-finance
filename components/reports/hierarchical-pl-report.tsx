@@ -27,7 +27,6 @@ import {
   reportDataEngine,
   HierarchicalPLData,
   HierarchySection,
-  CategoryInHierarchy,
   FlexibleReportConfig
 } from '@/lib/reports-data-engine';
 import { CSVExporter } from '@/lib/csv-export';
@@ -231,6 +230,7 @@ export function HierarchicalPLReport({ className }: HierarchicalPLReportProps) {
 
   useEffect(() => {
     loadPLData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dateRange.start, dateRange.end, comparisonConfig]);
 
   const handleToggleExpand = (hierarchyId: string, expanded: boolean) => {
@@ -369,7 +369,7 @@ export function HierarchicalPLReport({ className }: HierarchicalPLReportProps) {
                       try {
                         CSVExporter.exportPLSummary(plData, plData.dateRange.label);
                         toast.success('P&L Summary exported successfully');
-                      } catch (error) {
+                      } catch {
                         toast.error('Failed to export P&L Summary');
                       }
                     }}
@@ -382,7 +382,7 @@ export function HierarchicalPLReport({ className }: HierarchicalPLReportProps) {
                       try {
                         CSVExporter.exportPLDetailed(plData, plData.dateRange.label);
                         toast.success('P&L Detailed export completed successfully');
-                      } catch (error) {
+                      } catch {
                         toast.error('Failed to export detailed P&L');
                       }
                     }}

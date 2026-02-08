@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus, FileText, Calendar, BarChart3, Download, Settings, TrendingUp, Star, ArrowRight } from 'lucide-react';
+import { Plus, FileText, BarChart3, Download, Settings, TrendingUp, Star, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { PageLayout, PageSection, PageCard, PageEmptyState } from '@/components/ui/page-layout';

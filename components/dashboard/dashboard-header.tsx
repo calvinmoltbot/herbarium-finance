@@ -41,7 +41,7 @@ export function DashboardHeader() {
       await logOut();
       toast.success('Logged out successfully');
       router.push('/login');
-    } catch (error) {
+    } catch {
       toast.error('Failed to log out');
     }
   };

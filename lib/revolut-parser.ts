@@ -8,7 +8,6 @@ import {
   RevolutImportStats,
   parseRevolutDate,
   parseRevolutAmount,
-  getTransactionTypeCategory,
   isIncomeTransaction
 } from './revolut-types';
 
@@ -102,13 +101,13 @@ export class RevolutCSVParser {
    * Map array of values to object using headers
    */
   private static mapRowToObject(headers: string[], values: string[]): RevolutCSVRow {
-    const obj: any = {};
+    const obj: Record<string, string> = {};
     
     headers.forEach((header, index) => {
       obj[header] = values[index] || '';
     });
     
-    return obj as RevolutCSVRow;
+    return obj as unknown as RevolutCSVRow;
   }
 
   /**

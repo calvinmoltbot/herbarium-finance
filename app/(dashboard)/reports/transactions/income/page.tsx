@@ -36,7 +36,7 @@ export default function IncomeTransactionsReport() {
 
   // Filter and sort transactions
   const filteredTransactions = useMemo(() => {
-    let filtered = dateFilteredTransactions.filter(transaction => {
+    const filtered = dateFilteredTransactions.filter(transaction => {
       // Search filter
       const matchesSearch = (transaction.description || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
                            (transaction.category?.name || '').toLowerCase().includes(searchTerm.toLowerCase());
@@ -49,7 +49,7 @@ export default function IncomeTransactionsReport() {
 
     // Sort transactions
     filtered.sort((a, b) => {
-      let aValue: any, bValue: any;
+      let aValue: string | number | Date, bValue: string | number | Date;
       
       switch (sortField) {
         case 'date':

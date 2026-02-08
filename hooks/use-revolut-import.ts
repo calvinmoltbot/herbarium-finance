@@ -7,9 +7,7 @@ import { RevolutCSVParser } from '@/lib/revolut-parser';
 import { TransactionMatcher } from '@/lib/transaction-matcher';
 import { PatternMatcher } from '@/lib/pattern-matcher';
 import {
-  RevolutTransaction,
   ImportedTransaction,
-  TransactionMatch,
   MatchingResult,
   RevolutImportStats
 } from '@/lib/revolut-types';
@@ -206,7 +204,7 @@ export function useRevolutImport() {
       // 6. Run matching algorithm
       const matches = TransactionMatcher.matchTransactions(
         insertedTransactions as ImportedTransaction[],
-        existingTransactions as any[]
+        existingTransactions as unknown as { id: string; description: string; amount: number; transaction_date: string; type: 'income' | 'expenditure'; category?: { id: string; name: string; color: string; type: 'income' | 'expenditure' } }[]
       );
 
       // 6.5. Get user's categorization patterns for pattern-based suggestions

@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useReportMutations, useTemplateMutations } from '@/hooks/use-reports';
 import { ReportTemplate } from '@/lib/reports-types';
@@ -39,7 +39,7 @@ export function CreateReportDialog({ open, onOpenChange, templates }: CreateRepo
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    type: 'profit_loss' as const,
+    type: 'profit_loss' as 'profit_loss' | 'cash_flow' | 'category_analysis' | 'transaction_detail' | 'custom',
   });
 
   const { createReport } = useReportMutations();
@@ -231,7 +231,7 @@ export function CreateReportDialog({ open, onOpenChange, templates }: CreateRepo
               <Label htmlFor="type">Report Type</Label>
               <Select 
                 value={formData.type} 
-                onValueChange={(value: any) => setFormData(prev => ({ ...prev, type: value }))}
+                onValueChange={(value: string) => setFormData(prev => ({ ...prev, type: value as typeof prev.type }))}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select report type" />

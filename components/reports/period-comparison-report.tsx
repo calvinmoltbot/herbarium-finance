@@ -1,20 +1,16 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   ChevronDown,
   ChevronRight,
-  TrendingUp,
-  TrendingDown,
-  Minus as MinusIcon,
   ArrowUp,
   ArrowDown,
   Equal,
   GitCompare
 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import type { HierarchyComparisonResult, CategoryComparisonResult } from '@/lib/types';
+import type { HierarchyComparisonResult } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
 interface PeriodComparisonReportProps {

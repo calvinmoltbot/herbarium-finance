@@ -1,12 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus, Edit, Trash2, ArrowLeft, BarChart3, Settings, Layers, AlertTriangle, TrendingDown, TrendingUp, Wallet } from 'lucide-react';
+import { Plus, Trash2, ArrowLeft, BarChart3, Settings, Layers, AlertTriangle, TrendingDown, TrendingUp, Wallet } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { PageLayout } from '@/components/ui/page-layout';
 import { useCategories, useCategoryMutations, useCategoryStats } from '@/hooks/use-categories';
 import { useCategoryHierarchiesWithCategories, useCreateCategoryHierarchy, useAssignCategoryToHierarchy, useRemoveCategoryFromHierarchy, useSetupDefaultHierarchies, useDeleteCategoryHierarchy, useReorderCategoryHierarchies } from '@/hooks/use-category-hierarchies';
@@ -22,16 +21,13 @@ import Link from 'next/link';
 export default function CategoriesPage() {
   const [activeTab, setActiveTab] = useState<'categories' | 'hierarchies' | 'unallocated'>('categories');
   const [showCreateForm, setShowCreateForm] = useState(false);
-  const [editingCategory, setEditingCategory] = useState<string | null>(null);
-  const [editingCategoryName, setEditingCategoryName] = useState('');
-  const [editingCategoryColor, setEditingCategoryColor] = useState('');
   const [newHierarchyName, setNewHierarchyName] = useState('');
   const [newHierarchyType, setNewHierarchyType] = useState<'income' | 'expenditure' | 'capital'>('expenditure');
 
   const { data: allCategories, isLoading } = useCategories();
   const { data: categoryStats } = useCategoryStats();
   const { data: unallocatedStats } = useUnallocatedCategoriesStats();
-  const { deleteCategory, updateCategory } = useCategoryMutations();
+  const { deleteCategory } = useCategoryMutations();
   const { showConfirmation, ConfirmationDialog } = useConfirmationDialog();
   
   // Hierarchy hooks
@@ -67,37 +63,6 @@ export default function CategoriesPage() {
         }
       }
     });
-  };
-
-  const handleEditCategory = (category: any) => {
-    setEditingCategory(category.id);
-    setEditingCategoryName(category.name);
-    setEditingCategoryColor(category.color || '#3B82F6');
-  };
-
-  const handleSaveEdit = async () => {
-    if (editingCategory && editingCategoryName.trim()) {
-      try {
-        await updateCategory.mutateAsync({
-          id: editingCategory,
-          data: {
-            name: editingCategoryName.trim(),
-            color: editingCategoryColor
-          }
-        });
-        setEditingCategory(null);
-        setEditingCategoryName('');
-        setEditingCategoryColor('');
-      } catch (error) {
-        console.error('Failed to update category:', error);
-      }
-    }
-  };
-
-  const handleCancelEdit = () => {
-    setEditingCategory(null);
-    setEditingCategoryName('');
-    setEditingCategoryColor('');
   };
 
   const handleCreateHierarchy = () => {
@@ -373,13 +338,6 @@ export default function CategoriesPage() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => handleEditCategory(category)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
                           onClick={() => handleDeleteCategory(category.id, category.name)}
                           disabled={deleteCategory.isPending}
                         >
@@ -442,13 +400,6 @@ export default function CategoriesPage() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => handleEditCategory(category)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
                           onClick={() => handleDeleteCategory(category.id, category.name)}
                           disabled={deleteCategory.isPending}
                         >
@@ -508,13 +459,6 @@ export default function CategoriesPage() {
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleEditCategory(category)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
                         <Button
                           variant="ghost"
                           size="sm"
@@ -583,7 +527,7 @@ export default function CategoriesPage() {
                   Unallocated Categories Overview
                 </CardTitle>
                 <CardDescription>
-                  Categories that haven't been assigned to any hierarchy yet. Assign them to organize your P&L reports properly.
+                  {`Categories that haven't been assigned to any hierarchy yet. Assign them to organize your P&L reports properly.`}
                 </CardDescription>
               </CardHeader>
               <CardContent>

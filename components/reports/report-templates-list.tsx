@@ -9,7 +9,6 @@ import {
   Star,
   TrendingUp,
   PieChart,
-  Calendar
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -53,7 +52,7 @@ const getTemplateColor = (type: string) => {
   }
 };
 
-export function ReportTemplatesList({ templates, isLoading, onCreateFromTemplate }: ReportTemplatesListProps) {
+export function ReportTemplatesList({ templates, isLoading }: ReportTemplatesListProps) {
   const { createReportFromTemplate } = useTemplateMutations();
   const [creatingFromTemplate, setCreatingFromTemplate] = useState<string | null>(null);
 

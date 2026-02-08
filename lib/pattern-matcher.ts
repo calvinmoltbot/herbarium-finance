@@ -95,7 +95,7 @@ export class PatternMatcher {
     description: string,
     categoryId: string,
     userId: string,
-    supabaseClient: any
+    supabaseClient: import('@supabase/supabase-js').SupabaseClient
   ): Promise<void> {
     const patterns = this.extractPatternsFromDescription(description);
     const now = new Date().toISOString();

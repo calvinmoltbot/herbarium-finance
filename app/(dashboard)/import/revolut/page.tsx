@@ -103,7 +103,7 @@ export default function RevolutImportPage() {
           </div>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             Import your Revolut CSV export and match transactions with existing manual entries. 
-            This is a safe testing environment that won't overwrite your existing data.
+            {`This is a safe testing environment that won't overwrite your existing data.`}
           </p>
         </div>
 
@@ -385,11 +385,11 @@ export default function RevolutImportPage() {
             </div>
             <div className="flex items-start space-x-3">
               <div className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-medium">2</div>
-              <p>Tap on "More" → "Statement" → "Generate Statement"</p>
+              <p>{`Tap on "More" → "Statement" → "Generate Statement"`}</p>
             </div>
             <div className="flex items-start space-x-3">
               <div className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-medium">3</div>
-              <p>Select your date range and choose "CSV" format</p>
+              <p>{`Select your date range and choose "CSV" format`}</p>
             </div>
             <div className="flex items-start space-x-3">
               <div className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-medium">4</div>

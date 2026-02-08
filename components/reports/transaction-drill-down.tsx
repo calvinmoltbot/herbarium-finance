@@ -3,7 +3,7 @@
 // Sprint 3: Transaction Drill-Down Main Component
 // Purpose: Slide-over panel for viewing transaction details
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ChevronLeft, ChevronRight, Loader2, AlertCircle } from 'lucide-react';
 import {
   Sheet,

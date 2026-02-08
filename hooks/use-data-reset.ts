@@ -200,7 +200,7 @@ export function useDataReset() {
         toast.error('Failed to reset transactions');
       }
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Transaction reset failed:', error);
       toast.error('Failed to reset transactions. Please try again.');
     },
@@ -215,7 +215,7 @@ export function useDataReset() {
         toast.error('Failed to reset categories');
       }
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Category reset failed:', error);
       toast.error('Failed to reset categories. Please try again.');
     },
@@ -230,7 +230,7 @@ export function useDataReset() {
         toast.error('Failed to reset all data');
       }
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Data reset failed:', error);
       toast.error('Failed to reset data. Please try again.');
     },

@@ -101,7 +101,7 @@ export interface TransactionMatch {
     id: string;
     name: string;
     color: string;
-    type: 'income' | 'expenditure';
+    type: 'income' | 'expenditure' | 'capital';
   };
   status: MatchStatus;
 }

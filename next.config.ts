@@ -37,15 +37,6 @@ const nextConfig: NextConfig = {
     ];
   },
   
-  // Skip linting during build for faster deployment
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  
-  // Skip TypeScript checking during build for faster deployment
-  typescript: {
-    ignoreBuildErrors: true,
-  },
   
   // Optimize for production
   poweredByHeader: false,

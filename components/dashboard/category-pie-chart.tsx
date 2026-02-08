@@ -73,7 +73,7 @@ export function IncomeExpenditurePieChart() {
   };
 
   const incomeAngle = (incomePercentage / 100) * 360;
-  const expenditureAngle = (expenditurePercentage / 100) * 360;
+  // expenditureAngle not needed - only incomeAngle used for pie chart arc
 
   return (
     <Card>

@@ -133,10 +133,10 @@ export function ScheduledReportsList({ scheduledReports, isLoading }: ScheduledR
               <div className="flex-1">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <FileText className="w-5 h-5 text-blue-600" />
-                  {(schedule as any).report?.name || 'Unknown Report'}
+                  {(schedule as unknown as { report?: { name?: string } }).report?.name || 'Unknown Report'}
                 </CardTitle>
                 <CardDescription className="mt-1">
-                  {(schedule as any).report?.description || 'No description available'}
+                  {(schedule as unknown as { report?: { description?: string } }).report?.description || 'No description available'}
                 </CardDescription>
               </div>
               <div className="flex items-center gap-2">

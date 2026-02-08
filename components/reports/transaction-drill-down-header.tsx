@@ -3,10 +3,9 @@
 // Sprint 3: Transaction Drill-Down Header Component
 // Purpose: Breadcrumb navigation and summary stats for drill-down
 
-import React from 'react';
 import { ArrowLeft, FileText, Download, Printer } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+// Badge import removed - unused
 
 interface TransactionDrillDownHeaderProps {
   title: string;

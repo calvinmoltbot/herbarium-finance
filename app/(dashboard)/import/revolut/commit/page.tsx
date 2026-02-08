@@ -4,14 +4,19 @@ import { useState, useEffect } from 'react';
 import { ArrowLeft, AlertTriangle, CheckCircle, Database, Trash2, Upload, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { useCommitImport, useGetCommitPreview } from '@/hooks/use-commit-import';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export default function CommitImportPage() {
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [previewData, setPreviewData] = useState<any>(null);
+  const [previewData, setPreviewData] = useState<{
+    manualTransactionsToDelete: number;
+    totalImportedTransactions: number;
+    verifiedTransactions: number;
+    unmatchedTransactions: number;
+    rejectedTransactions: number;
+  } | null>(null);
   
   const commitImport = useCommitImport();
   const getPreview = useGetCommitPreview();
@@ -24,6 +29,7 @@ export default function CommitImportPage() {
         setPreviewData(data);
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleCommit = async () => {
@@ -101,7 +107,7 @@ export default function CommitImportPage() {
                 <h3 className="text-lg font-semibold text-yellow-800 mb-2">Important: This Action Cannot Be Undone</h3>
                 <p className="text-yellow-700 mb-4">
                   This will permanently delete all your existing manual transactions and replace them with bank data. 
-                  Make sure you've verified all important matches before proceeding.
+                  {`Make sure you've verified all important matches before proceeding.`}
                 </p>
                 <div className="text-sm text-yellow-600">
                   <strong>Backup Recommendation:</strong> Consider exporting your current data before proceeding.
@@ -197,8 +203,8 @@ export default function CommitImportPage() {
               <div>
                 <p className="font-medium text-gray-900">Preserve Verified Data</p>
                 <p className="text-sm text-gray-600">
-                  {previewData.verifiedTransactions} verified transactions will use your detailed descriptions and categories 
-                  (e.g., "Amazon - Natural Calico tablecloth" instead of just "Amazon").
+                  {previewData.verifiedTransactions} verified transactions will use your detailed descriptions and categories
+                  {` (e.g., "Amazon - Natural Calico tablecloth" instead of just "Amazon").`}
                 </p>
               </div>
             </div>

@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Icons } from '@/components/ui/icons';
 import { useTransactionMetadata } from '@/hooks/use-transaction-metadata';
-import { useCategorySuggestions } from '@/hooks/use-category-suggestions';
+import { useCategorySuggestions, type CategorySuggestion } from '@/hooks/use-category-suggestions';
 import { CategorySuggestionCard } from './category-suggestion-card';
 import { CategoryPicker } from '@/components/categories/category-picker';
 import { toast } from 'sonner';
@@ -36,6 +36,7 @@ interface TransactionDetailPanelProps {
 }
 
 // Simple debounce utility
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function debounce<T extends (...args: any[]) => any>(
   func: T,
   wait: number
@@ -57,13 +58,11 @@ export function TransactionDetailPanel({
   const [extendedDescription, setExtendedDescription] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-  const [isNotesExpanded, setIsNotesExpanded] = useState(false);
   const [isEditingCategory, setIsEditingCategory] = useState(false);
 
-  const { 
-    getMetadataForTransaction, 
-    updateMetadata, 
-    deleteMetadata 
+  const {
+    getMetadataForTransaction,
+    updateMetadata,
   } = useTransactionMetadata();
   
   const {
@@ -89,6 +88,7 @@ export function TransactionDetailPanel({
   }, [metadata, transaction.id]);
 
   // Auto-save functionality with debounce
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSave = useCallback(
     debounce(async (notesValue: string, descriptionValue: string) => {
       if (!hasUnsavedChanges) return;
@@ -132,7 +132,7 @@ export function TransactionDetailPanel({
   };
 
   // Get category suggestions
-  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [suggestions, setSuggestions] = useState<CategorySuggestion[]>([]);
   const [loadingSuggestions, setLoadingSuggestions] = useState(false);
 
   const loadSuggestions = async () => {
@@ -152,7 +152,7 @@ export function TransactionDetailPanel({
     }
   };
 
-  const handleAcceptSuggestion = async (suggestion: any) => {
+  const handleAcceptSuggestion = async (suggestion: CategorySuggestion) => {
     try {
       await acceptSuggestion({
         transactionId: transaction.id,
@@ -163,7 +163,7 @@ export function TransactionDetailPanel({
       setSuggestions(suggestions.filter(s => s !== suggestion));
       onTransactionUpdate?.();
       toast.success('Category suggestion applied');
-    } catch (error) {
+    } catch {
       toast.error('Failed to apply suggestion');
     }
   };
@@ -178,7 +178,7 @@ export function TransactionDetailPanel({
       });
       setHasUnsavedChanges(false);
       toast.success('Notes saved successfully');
-    } catch (error) {
+    } catch {
       toast.error('Failed to save notes');
     } finally {
       setIsSaving(false);

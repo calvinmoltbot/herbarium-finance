@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Database, Upload, CreditCard, ShoppingCart, RotateCcw, CheckCircle } from 'lucide-react';
+import { Database, CreditCard, ShoppingCart, RotateCcw, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 
 const managementSections = [
@@ -69,19 +69,6 @@ const managementSections = [
   },
 ];
 
-// Archived sections (completed setup)
-const archivedSections = [
-  {
-    title: 'Initial Data Migration',
-    description: 'Historical data import completed',
-    icon: CheckCircle,
-    href: '/import/transactions',
-    status: 'Completed',
-    statusColor: 'green',
-    action: 'Review Data',
-  },
-];
-
 export default function DatabaseManagementPage() {
   return (
     <div className="min-h-screen bg-gray-50">
@@ -103,8 +90,6 @@ export default function DatabaseManagementPage() {
             const Icon = section.icon;
             const isCompleted = section.status === 'Completed';
             const isAvailable = section.status === 'Available' || section.status === 'Completed';
-            const isComingSoon = section.status === 'Coming Soon';
-            
             return (
               <Card key={section.title} className={`relative transition-all duration-200 hover:shadow-lg ${
                 !isAvailable ? 'opacity-75' : 'hover:scale-[1.02]'

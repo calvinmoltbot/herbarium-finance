@@ -8,7 +8,7 @@ export interface UserPreference {
   id: string;
   user_id: string;
   preference_key: string;
-  preference_value: any;
+  preference_value: unknown;
   created_at: string;
   updated_at: string;
 }
@@ -37,7 +37,7 @@ export function useUserPreferences() {
   });
 }
 
-export function useUserPreference<T = any>(key: string, defaultValue?: T) {
+export function useUserPreference<T = unknown>(key: string, defaultValue?: T) {
   const { user } = useAuth();
 
   return useQuery({
@@ -68,7 +68,7 @@ export function useSetUserPreference() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (data: { key: string; value: any }) => {
+    mutationFn: async (data: { key: string; value: unknown }) => {
       if (!user?.id) {
         throw new Error('User not authenticated');
       }

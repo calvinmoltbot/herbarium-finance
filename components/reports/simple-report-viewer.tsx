@@ -5,10 +5,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
-  BarChart3, 
-  TrendingUp, 
-  Download, 
-  Calendar, 
+  BarChart3,
+  TrendingUp,
+  Calendar,
   Table as TableIcon,
   RefreshCw
 } from 'lucide-react';
@@ -23,7 +22,7 @@ interface SimpleReportViewerProps {
   initialConfig?: Partial<FlexibleReportConfig>;
 }
 
-export function SimpleReportViewer({ reportId, initialConfig }: SimpleReportViewerProps) {
+export function SimpleReportViewer({ initialConfig }: SimpleReportViewerProps) {
   // Default configuration
   const [config, setConfig] = useState<FlexibleReportConfig>({
     name: 'Financial Report',
@@ -236,7 +235,7 @@ export function SimpleReportViewer({ reportId, initialConfig }: SimpleReportView
             return (
               <button
                 key={tab.id}
-                onClick={() => setActiveView(tab.id as any)}
+                onClick={() => setActiveView(tab.id as 'overview' | 'breakdown' | 'trends' | 'comparison')}
                 className={`
                   py-2 px-1 border-b-2 font-medium text-sm transition-colors
                   ${isActive

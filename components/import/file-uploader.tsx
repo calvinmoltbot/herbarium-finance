@@ -8,7 +8,7 @@ import { Upload, FileText, AlertCircle } from 'lucide-react';
 import Papa, { ParseResult } from 'papaparse';
 
 interface FileUploaderProps {
-  onFileUpload: (file: File, data: any[]) => void;
+  onFileUpload: (file: File, data: Record<string, string>[]) => void;
   acceptedTypes: string;
   maxSize: number;
   description: string;
@@ -30,7 +30,7 @@ export function FileUploader({ onFileUpload, acceptedTypes, maxSize, description
         skipEmptyLines: true,
         delimiter: '', // Let PapaParse auto-detect, but with fallback
         delimitersToGuess: [',', '\t', '|', ';', Papa.RECORD_SEP, Papa.UNIT_SEP],
-        complete: (results: ParseResult<any>) => {
+        complete: (results: ParseResult<Record<string, string>>) => {
           if (results.errors.length > 0) {
             // If auto-detection fails, try parsing as single column
             const lines = text.split('\n').filter(line => line.trim() !== '');
@@ -77,7 +77,7 @@ export function FileUploader({ onFileUpload, acceptedTypes, maxSize, description
                 return;
               }
             }
-          } catch (fallbackError) {
+          } catch {
             // If fallback also fails, show original error
           }
           
@@ -85,7 +85,7 @@ export function FileUploader({ onFileUpload, acceptedTypes, maxSize, description
           setIsProcessing(false);
         }
       });
-    } catch (err) {
+    } catch {
       setError('Failed to read file');
       setIsProcessing(false);
     }

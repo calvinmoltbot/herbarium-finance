@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from "@/lib/auth-context";
-import React, { useTransition } from "react";
+import { useTransition } from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
 

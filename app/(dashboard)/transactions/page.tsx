@@ -29,6 +29,7 @@ export default function TransactionsPage() {
 
   useEffect(() => {
     fetchTransactions();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchTransactions = async () => {

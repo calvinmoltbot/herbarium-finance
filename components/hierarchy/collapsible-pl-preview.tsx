@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ChevronDown, ChevronRight, Expand, Minimize } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -22,7 +22,7 @@ interface HierarchyItemProps {
   onToggleExpand: (hierarchyId: string, expanded: boolean) => void;
 }
 
-function HierarchyItem({ hierarchy, index, amount, type, isExpanded, onToggleExpand }: HierarchyItemProps) {
+function HierarchyItem({ hierarchy, index, type, isExpanded, onToggleExpand }: HierarchyItemProps) {
   const hasCategories = hierarchy.categories && hierarchy.categories.length > 0;
   const bgColorClass = type === 'income' ? 'bg-green-50' : 
                        type === 'expenditure' ? 'bg-red-50' : 'bg-purple-50';

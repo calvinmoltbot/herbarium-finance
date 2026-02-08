@@ -47,6 +47,7 @@ export default function TransactionNotesPage() {
 
   useEffect(() => {
     fetchTransactions();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchTransactions = async () => {
@@ -121,7 +122,7 @@ export default function TransactionNotesPage() {
       
       setEditingTransaction(null);
       toast.success('Notes saved successfully');
-    } catch (error) {
+    } catch {
       toast.error('Failed to save notes');
     } finally {
       setSaving(null);

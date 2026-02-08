@@ -5,9 +5,8 @@ import { ArrowLeft, CheckCircle, AlertCircle, X, Eye, ThumbsUp, ThumbsDown, Filt
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Select } from '@/components/ui/select';
 import { useImportedTransactions, useUpdateMatchStatus, useBulkProcessMatches, useVerifyMatch } from '@/hooks/use-revolut-import';
-import { ImportedTransaction, MatchConfidence, MatchStatus } from '@/lib/revolut-types';
+import { MatchConfidence, MatchStatus } from '@/lib/revolut-types';
 import Link from 'next/link';
 
 type FilterType = 'all' | 'matched' | 'potential' | 'unmatched' | 'reviewed';
@@ -412,8 +411,8 @@ export default function ReconciliationPage() {
                       <div className="border-l-4 border-gray-300 pl-4">
                         <h3 className="font-medium text-gray-500 mb-2">No Match Found</h3>
                         <p className="text-sm text-gray-600">
-                          This transaction doesn't match any existing manual entries. 
-                          It may be a new transaction that wasn't manually recorded.
+                          {`This transaction doesn't match any existing manual entries.
+                          It may be a new transaction that wasn't manually recorded.`}
                         </p>
                       </div>
                     )}

@@ -7,7 +7,7 @@ import { ArrowLeft, Calculator, TrendingUp, TrendingDown, Settings, ChevronDown,
 import Link from 'next/link';
 import { useIncomeTransactions, useExpenditureTransactions } from '@/hooks/use-income-transactions';
 import { useCapitalTransactions } from '@/hooks/use-capital-transactions';
-import { useCategoryHierarchiesWithCategories, CategoryHierarchyWithCategories } from '@/hooks/use-category-hierarchies';
+import { useCategoryHierarchiesWithCategories } from '@/hooks/use-category-hierarchies';
 import { DateRangePicker, DateRange, filterTransactionsByDateRange } from '@/components/ui/date-range-picker';
 import { format } from 'date-fns';
 
@@ -44,7 +44,7 @@ export default function ProfitLossReport() {
   const reportData = useMemo(() => {
     // Define capital movement hierarchies
     const CAPITAL_INJECTION_HIERARCHY = "Capital Injection";
-    const DIRECTOR_WITHDRAWALS_HIERARCHY = "Directors Drawings"; // Updated to match actual name in database
+    // Director Withdrawals hierarchy name: "Directors Drawings" (matches database)
     
     // Use the directly fetched capital hierarchies
     // This ensures we get all hierarchies of type 'capital'

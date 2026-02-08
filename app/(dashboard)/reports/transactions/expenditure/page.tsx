@@ -29,7 +29,7 @@ export default function ExpenditureTransactionsReport() {
 
   // Filter and sort transactions
   const filteredTransactions = useMemo(() => {
-    let filtered = transactions.filter(transaction => {
+    const filtered = transactions.filter(transaction => {
       // Search filter
       const matchesSearch = (transaction.description || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
                            (transaction.category?.name || '').toLowerCase().includes(searchTerm.toLowerCase());
@@ -64,7 +64,7 @@ export default function ExpenditureTransactionsReport() {
 
     // Sort transactions
     filtered.sort((a, b) => {
-      let aValue: any, bValue: any;
+      let aValue: string | number | Date, bValue: string | number | Date;
       
       switch (sortField) {
         case 'date':

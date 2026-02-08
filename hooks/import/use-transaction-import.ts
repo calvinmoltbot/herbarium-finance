@@ -22,7 +22,7 @@ interface ImportResult {
   failed: number;
   strategy: string;
   errors: string[];
-  duplicateDetails: any[];
+  duplicateDetails: Array<{ transaction: TransactionImportData; reason: string; fingerprint: string }>;
 }
 
 export function useTransactionImport() {
@@ -228,7 +228,7 @@ export function useTransactionImport() {
         toast.error(`Failed to import ${result.failed} transactions`);
       }
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Transaction import failed:', error);
       toast.error('Failed to import transactions. Please try again.');
     },
