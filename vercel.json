@@ -1,0 +1,16 @@
+{
+  "buildCommand": "pnpm build",
+  "devCommand": "pnpm dev",
+  "installCommand": "pnpm install",
+  "framework": "nextjs",
+  "regions": ["lhr1"],
+  "functions": {
+    "app/**/*.tsx": {
+      "maxDuration": 30
+    }
+  },
+  "crons": [],
+  "env": {
+    "NODE_ENV": "production"
+  }
+}
