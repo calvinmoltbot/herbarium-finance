@@ -2,7 +2,7 @@
 
 import { useRecentTransactions } from '@/hooks/use-recent-transactions';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { TrendingUp, TrendingDown, Calendar, PoundSterling } from 'lucide-react';
+import { TrendingUp, TrendingDown, Calendar, PoundSterling, Wallet } from 'lucide-react';
 
 export function RecentTransactions() {
   const { data: transactions, isLoading, error } = useRecentTransactions();
@@ -81,11 +81,15 @@ export function RecentTransactions() {
                     className={`p-2 rounded-full flex-shrink-0 ${
                       transaction.type === 'income'
                         ? 'bg-green-100 text-green-600 dark:bg-green-950 dark:text-green-400'
+                        : transaction.type === 'capital'
+                        ? 'bg-purple-100 text-purple-600 dark:bg-purple-950 dark:text-purple-400'
                         : 'bg-red-100 text-red-600 dark:bg-red-950 dark:text-red-400'
                     }`}
                   >
                     {transaction.type === 'income' ? (
                       <TrendingUp className="h-4 w-4" />
+                    ) : transaction.type === 'capital' ? (
+                      <Wallet className="h-4 w-4" />
                     ) : (
                       <TrendingDown className="h-4 w-4" />
                     )}
@@ -119,10 +123,12 @@ export function RecentTransactions() {
                     className={`font-semibold text-sm ${
                       transaction.type === 'income'
                         ? 'text-green-600'
+                        : transaction.type === 'capital'
+                        ? 'text-purple-600'
                         : 'text-red-600'
                     }`}
                   >
-                    {transaction.type === 'income' ? '+' : '-'}£{transaction.amount.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    {transaction.type === 'income' ? '+' : transaction.type === 'capital' ? '' : '-'}£{transaction.amount.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </p>
                 </div>
               </div>

@@ -18,7 +18,8 @@ import {
   ShoppingCart,
   ChevronDown,
   ChevronRight,
-  StickyNote
+  StickyNote,
+  Wallet
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { LucideIcon } from 'lucide-react';
@@ -51,6 +52,7 @@ const navigation: NavigationItem[] = [
     children: [
       { name: 'Add Income', href: '/add-income', icon: TrendingUp },
       { name: 'Add Expenditure', href: '/add-expenditure', icon: TrendingDown },
+      { name: 'Add Capital', href: '/add-capital', icon: Wallet },
     ]
   },
   {

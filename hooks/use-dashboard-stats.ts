@@ -18,6 +18,37 @@ interface DashboardStats {
   balanceChange: number;
 }
 
+/** Sum transactions by type for a given date range using a single query */
+async function getTypeTotals(
+  supabase: ReturnType<typeof createClient>,
+  startDate: string,
+  endDate: string
+): Promise<{ income: number; expenditure: number }> {
+  // Fetch only the fields needed for aggregation, filtered at DB level
+  const { data, error } = await supabase
+    .from('transactions')
+    .select('amount, type')
+    .in('type', ['income', 'expenditure'])
+    .gte('transaction_date', startDate)
+    .lte('transaction_date', endDate);
+
+  if (error) throw error;
+
+  let income = 0;
+  let expenditure = 0;
+  for (const row of data || []) {
+    const amount = Number(row.amount);
+    if (row.type === 'income') income += amount;
+    else if (row.type === 'expenditure') expenditure += amount;
+  }
+
+  return { income, expenditure };
+}
+
+function toDateString(date: Date): string {
+  return date.toISOString().split('T')[0];
+}
+
 export function useDashboardStats() {
   const { user } = useAuth();
   const { dateFilter, getDateRange, isClient } = useDateFilter();
@@ -31,104 +62,61 @@ export function useDashboardStats() {
 
       const supabase = createClient();
       const { start: filterStart, end: filterEnd } = getDateRange();
-      
-      // Get current month dates for comparison calculations
+
+      // Current and previous month boundaries
       const now = new Date();
-      const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-      const currentMonthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-      
-      // Get previous month dates for comparison
-      const previousMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-      const previousMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
+      const currentMonthStart = toDateString(new Date(now.getFullYear(), now.getMonth(), 1));
+      const currentMonthEnd = toDateString(new Date(now.getFullYear(), now.getMonth() + 1, 0));
+      const previousMonthStart = toDateString(new Date(now.getFullYear(), now.getMonth() - 1, 1));
+      const previousMonthEnd = toDateString(new Date(now.getFullYear(), now.getMonth(), 0));
 
-      // Get all transactions (shared data model)
-      let query = supabase
-        .from('transactions')
-        .select('amount, type, transaction_date');
+      // Run queries in parallel — each fetches only what's needed
+      const queries: [
+        Promise<{ income: number; expenditure: number }>,
+        Promise<{ income: number; expenditure: number }>,
+        Promise<{ income: number; expenditure: number }>
+      ] = [
+        // Current month totals
+        getTypeTotals(supabase, currentMonthStart, currentMonthEnd),
+        // Previous month totals
+        getTypeTotals(supabase, previousMonthStart, previousMonthEnd),
+        // Filtered period totals (or all-time)
+        filterStart && filterEnd
+          ? getTypeTotals(supabase, toDateString(filterStart), toDateString(filterEnd))
+          : getTypeTotals(supabase, '2000-01-01', toDateString(now)),
+      ];
 
-      // Apply date filter if not "all-time"
-      if (filterStart && filterEnd) {
-        query = query
-          .gte('transaction_date', filterStart.toISOString().split('T')[0])
-          .lte('transaction_date', filterEnd.toISOString().split('T')[0]);
-      }
-
-      const { data: filteredTransactions, error: filteredError } = await query;
-      if (filteredError) throw filteredError;
-
-      // Get all transactions for comparison calculations (always needed for month-over-month)
-      const { data: allTransactions, error: allError } = await supabase
-        .from('transactions')
-        .select('amount, type, transaction_date');
-
-      if (allError) throw allError;
-
-      // Calculate totals for the filtered period
-      const totalIncome = filteredTransactions
-        ?.filter(t => t.type === 'income')
-        .reduce((sum, t) => sum + Number(t.amount), 0) || 0;
-      
-      const totalExpenditure = filteredTransactions
-        ?.filter(t => t.type === 'expenditure')
-        .reduce((sum, t) => sum + Number(t.amount), 0) || 0;
-
-      // Calculate current month totals (for comparison, always use actual current month)
-      const currentMonthTransactions = allTransactions?.filter(t => {
-        const transactionDate = new Date(t.transaction_date);
-        return transactionDate >= currentMonthStart && transactionDate <= currentMonthEnd;
-      }) || [];
-
-      const currentMonthIncome = currentMonthTransactions
-        .filter(t => t.type === 'income')
-        .reduce((sum, t) => sum + Number(t.amount), 0);
-      
-      const currentMonthExpenditure = currentMonthTransactions
-        .filter(t => t.type === 'expenditure')
-        .reduce((sum, t) => sum + Number(t.amount), 0);
-
-      // Calculate previous month totals (for comparison)
-      const previousMonthTransactions = allTransactions?.filter(t => {
-        const transactionDate = new Date(t.transaction_date);
-        return transactionDate >= previousMonthStart && transactionDate <= previousMonthEnd;
-      }) || [];
-
-      const previousMonthIncome = previousMonthTransactions
-        .filter(t => t.type === 'income')
-        .reduce((sum, t) => sum + Number(t.amount), 0);
-      
-      const previousMonthExpenditure = previousMonthTransactions
-        .filter(t => t.type === 'expenditure')
-        .reduce((sum, t) => sum + Number(t.amount), 0);
+      const [currentMonth, previousMonth, filtered] = await Promise.all(queries);
 
       // Calculate percentage changes
-      const incomeChange = previousMonthIncome > 0 
-        ? ((currentMonthIncome - previousMonthIncome) / previousMonthIncome) * 100
-        : currentMonthIncome > 0 ? 100 : 0;
+      const incomeChange = previousMonth.income > 0
+        ? ((currentMonth.income - previousMonth.income) / previousMonth.income) * 100
+        : currentMonth.income > 0 ? 100 : 0;
 
-      const expenditureChange = previousMonthExpenditure > 0 
-        ? ((currentMonthExpenditure - previousMonthExpenditure) / previousMonthExpenditure) * 100
-        : currentMonthExpenditure > 0 ? 100 : 0;
+      const expenditureChange = previousMonth.expenditure > 0
+        ? ((currentMonth.expenditure - previousMonth.expenditure) / previousMonth.expenditure) * 100
+        : currentMonth.expenditure > 0 ? 100 : 0;
 
-      const previousBalance = previousMonthIncome - previousMonthExpenditure;
-      const currentBalance = currentMonthIncome - currentMonthExpenditure;
-      const balanceChange = previousBalance !== 0 
+      const previousBalance = previousMonth.income - previousMonth.expenditure;
+      const currentBalance = currentMonth.income - currentMonth.expenditure;
+      const balanceChange = previousBalance !== 0
         ? ((currentBalance - previousBalance) / Math.abs(previousBalance)) * 100
         : currentBalance > 0 ? 100 : currentBalance < 0 ? -100 : 0;
 
       return {
-        totalIncome,
-        totalExpenditure,
-        netBalance: totalIncome - totalExpenditure,
-        currentMonthIncome,
-        currentMonthExpenditure,
-        previousMonthIncome,
-        previousMonthExpenditure,
+        totalIncome: filtered.income,
+        totalExpenditure: filtered.expenditure,
+        netBalance: filtered.income - filtered.expenditure,
+        currentMonthIncome: currentMonth.income,
+        currentMonthExpenditure: currentMonth.expenditure,
+        previousMonthIncome: previousMonth.income,
+        previousMonthExpenditure: previousMonth.expenditure,
         incomeChange,
         expenditureChange,
         balanceChange,
       };
     },
-    enabled: !!user?.id && isClient, // Only run query when user is authenticated and on client
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    enabled: !!user?.id && isClient,
+    staleTime: 5 * 60 * 1000,
   });
 }
