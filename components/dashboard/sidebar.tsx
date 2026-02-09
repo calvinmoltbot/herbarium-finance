@@ -3,14 +3,14 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { 
-  BarChart3, 
-  Database, 
-  TrendingUp, 
-  TrendingDown, 
-  Tags, 
-  FileText, 
-  List, 
+import {
+  BarChart3,
+  Database,
+  TrendingUp,
+  TrendingDown,
+  Tags,
+  FileText,
+  List,
   CreditCard,
   Settings,
   Plus,
@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { LucideIcon } from 'lucide-react';
+import { ThemeToggle } from '@/components/layout/theme-toggle';
 
 interface NavigationItem {
   name: string;
@@ -73,7 +74,7 @@ export function Sidebar() {
   const [expandedSections, setExpandedSections] = useState<string[]>(['Bank Import', 'Manual Transactions']);
 
   const toggleSection = (sectionName: string) => {
-    setExpandedSections(prev => 
+    setExpandedSections(prev =>
       prev.includes(sectionName)
         ? prev.filter(name => name !== sectionName)
         : [...prev, sectionName]
@@ -81,22 +82,25 @@ export function Sidebar() {
   };
 
   const isActive = (href: string) => pathname === href;
-  const isSectionActive = (children: NavigationItem[]) => 
+  const isSectionActive = (children: NavigationItem[]) =>
     children.some(child => child.href && pathname === child.href);
 
   return (
-    <div className="flex flex-col w-64 bg-slate-900">
-      <div className="flex items-center h-16 px-6 bg-slate-800">
-        <BarChart3 className="w-8 h-8 text-blue-400" />
-        <span className="ml-2 text-xl font-bold text-white">Herbarium</span>
+    <div className="hidden lg:flex flex-col w-64 glass-sidebar">
+      <div className="flex items-center justify-between h-16 px-6 border-b border-border/50">
+        <div className="flex items-center">
+          <BarChart3 className="w-8 h-8 text-primary" />
+          <span className="ml-2 text-xl font-bold text-foreground">Herbarium</span>
+        </div>
+        <ThemeToggle />
       </div>
-      
+
       <nav className="flex-1 px-4 py-6 space-y-1">
         {navigation.map((item) => {
           if (item.children) {
             const isExpanded = expandedSections.includes(item.name);
             const hasActiveChild = isSectionActive(item.children);
-            
+
             return (
               <div key={item.name} className="space-y-1">
                 <button
@@ -104,8 +108,8 @@ export function Sidebar() {
                   className={cn(
                     'flex items-center justify-between w-full px-4 py-3 text-sm font-medium rounded-lg transition-colors',
                     hasActiveChild
-                      ? 'bg-blue-600/20 text-blue-300'
-                      : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                      ? 'bg-primary/15 text-primary'
+                      : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                   )}
                 >
                   <div className="flex items-center">
@@ -118,7 +122,7 @@ export function Sidebar() {
                     <ChevronRight className="w-4 h-4" />
                   )}
                 </button>
-                
+
                 {isExpanded && (
                   <div className="ml-4 space-y-1">
                     {item.children.map((child) => (
@@ -128,16 +132,16 @@ export function Sidebar() {
                         className={cn(
                           'flex items-center px-4 py-2 text-sm rounded-lg transition-colors',
                           child.href && isActive(child.href)
-                            ? 'bg-blue-600 text-white'
+                            ? 'bg-primary text-primary-foreground'
                             : child.href
-                            ? 'text-slate-400 hover:bg-slate-800 hover:text-white'
-                            : 'text-slate-500 cursor-not-allowed'
+                            ? 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                            : 'text-muted-foreground/50 cursor-not-allowed'
                         )}
                       >
                         <child.icon className="w-4 h-4 mr-3" />
                         {child.name}
                         {!child.href && (
-                          <span className="ml-auto text-xs text-slate-500">Soon</span>
+                          <span className="ml-auto text-xs text-muted-foreground/50">Soon</span>
                         )}
                       </Link>
                     ))}
@@ -154,10 +158,10 @@ export function Sidebar() {
               className={cn(
                 'flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors',
                 item.href && isActive(item.href)
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-primary text-primary-foreground'
                   : item.href
-                  ? 'text-slate-300 hover:bg-slate-800 hover:text-white'
-                  : 'text-slate-500 cursor-not-allowed'
+                  ? 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                  : 'text-muted-foreground/50 cursor-not-allowed'
               )}
             >
               <item.icon className="w-5 h-5 mr-3" />
@@ -169,3 +173,6 @@ export function Sidebar() {
     </div>
   );
 }
+
+export { navigation };
+export type { NavigationItem };

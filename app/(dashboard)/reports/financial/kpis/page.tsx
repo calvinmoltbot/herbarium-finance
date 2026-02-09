@@ -135,7 +135,7 @@ export default function KPIDashboard() {
   const getChangeIcon = (change: number) => {
     if (change > 0) return <TrendingUp className="h-4 w-4 text-green-600" />;
     if (change < 0) return <TrendingDown className="h-4 w-4 text-red-600" />;
-    return <Target className="h-4 w-4 text-gray-600" />;
+    return <Target className="h-4 w-4 text-muted-foreground" />;
   };
 
   const getChangeColor = (change: number, isExpenditure = false) => {
@@ -148,11 +148,11 @@ export default function KPIDashboard() {
       if (change > 0) return 'text-green-600';
       if (change < 0) return 'text-red-600';
     }
-    return 'text-gray-600';
+    return 'text-muted-foreground';
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto py-8 px-6 space-y-8">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -164,8 +164,8 @@ export default function KPIDashboard() {
               </Link>
             </Button>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Key Performance Indicators</h1>
-              <p className="text-gray-600">Financial metrics and performance analysis</p>
+              <h1 className="text-3xl font-bold text-foreground">Key Performance Indicators</h1>
+              <p className="text-muted-foreground">Financial metrics and performance analysis</p>
             </div>
           </div>
         </div>
@@ -185,12 +185,12 @@ export default function KPIDashboard() {
                   £{kpiData.currentMonth.income.toLocaleString('en-GB')}
                 </div>
                 <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-600">vs last month:</span>
+                  <span className="text-sm text-muted-foreground">vs last month:</span>
                   <span className={`text-sm font-medium ${getChangeColor(kpiData.changes.income)}`}>
                     {kpiData.changes.income > 0 ? '+' : ''}{kpiData.changes.income.toFixed(1)}%
                   </span>
                 </div>
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-muted-foreground">
                   Last month: £{kpiData.lastMonth.income.toLocaleString('en-GB')}
                 </div>
               </div>
@@ -210,12 +210,12 @@ export default function KPIDashboard() {
                   £{kpiData.currentMonth.expenditure.toLocaleString('en-GB')}
                 </div>
                 <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-600">vs last month:</span>
+                  <span className="text-sm text-muted-foreground">vs last month:</span>
                   <span className={`text-sm font-medium ${getChangeColor(kpiData.changes.expenditure, true)}`}>
                     {kpiData.changes.expenditure > 0 ? '+' : ''}{kpiData.changes.expenditure.toFixed(1)}%
                   </span>
                 </div>
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-muted-foreground">
                   Last month: £{kpiData.lastMonth.expenditure.toLocaleString('en-GB')}
                 </div>
               </div>
@@ -238,12 +238,12 @@ export default function KPIDashboard() {
                   £{Math.abs(kpiData.currentMonth.profit).toLocaleString('en-GB')}
                 </div>
                 <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-600">vs last month:</span>
+                  <span className="text-sm text-muted-foreground">vs last month:</span>
                   <span className={`text-sm font-medium ${kpiData.changes.profit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                     {kpiData.changes.profit >= 0 ? '+' : ''}£{Math.abs(kpiData.changes.profit).toLocaleString('en-GB')}
                   </span>
                 </div>
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-muted-foreground">
                   Last month: £{Math.abs(kpiData.lastMonth.profit).toLocaleString('en-GB')}
                 </div>
               </div>
@@ -373,7 +373,7 @@ export default function KPIDashboard() {
           <CardContent>
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-3">
-                <h4 className="font-medium text-gray-900">Positive Indicators</h4>
+                <h4 className="font-medium text-foreground">Positive Indicators</h4>
                 <div className="space-y-2">
                   {kpiData.ratios.grossProfitMargin > 0 && (
                     <div className="flex items-center p-3 bg-green-50 rounded-lg">
@@ -397,7 +397,7 @@ export default function KPIDashboard() {
               </div>
 
               <div className="space-y-3">
-                <h4 className="font-medium text-gray-900">Areas for Attention</h4>
+                <h4 className="font-medium text-foreground">Areas for Attention</h4>
                 <div className="space-y-2">
                   {kpiData.ratios.grossProfitMargin < 0 && (
                     <div className="flex items-center p-3 bg-red-50 rounded-lg">

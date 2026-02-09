@@ -35,7 +35,7 @@ export function TransactionDrillDownTable({
   if (transactions.length === 0) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500">No transactions found</p>
+        <p className="text-muted-foreground">No transactions found</p>
       </div>
     );
   }
@@ -49,20 +49,20 @@ export function TransactionDrillDownTable({
     <div className="overflow-x-auto">
       <table className="w-full border-collapse">
         <thead>
-          <tr className="border-b-2 border-gray-200">
-            <th className="text-left py-3 px-4 font-semibold text-sm text-gray-700">
+          <tr className="border-b-2 border-border">
+            <th className="text-left py-3 px-4 font-semibold text-sm text-foreground">
               Date
             </th>
-            <th className="text-left py-3 px-4 font-semibold text-sm text-gray-700">
+            <th className="text-left py-3 px-4 font-semibold text-sm text-foreground">
               Description
             </th>
-            <th className="text-left py-3 px-4 font-semibold text-sm text-gray-700">
+            <th className="text-left py-3 px-4 font-semibold text-sm text-foreground">
               Category
             </th>
-            <th className="text-left py-3 px-4 font-semibold text-sm text-gray-700">
+            <th className="text-left py-3 px-4 font-semibold text-sm text-foreground">
               Hierarchy
             </th>
-            <th className="text-right py-3 px-4 font-semibold text-sm text-gray-700">
+            <th className="text-right py-3 px-4 font-semibold text-sm text-foreground">
               Amount
             </th>
           </tr>
@@ -71,14 +71,14 @@ export function TransactionDrillDownTable({
           {transactions.map((tx, index) => (
             <tr
               key={tx.id}
-              className={`border-b border-gray-100 hover:bg-gray-50 transition-colors ${
-                index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'
+              className={`border-b border-border hover:bg-muted transition-colors ${
+                index % 2 === 0 ? 'bg-card' : 'bg-muted/50'
               }`}
             >
-              <td className="py-3 px-4 text-sm text-gray-600">
+              <td className="py-3 px-4 text-sm text-muted-foreground">
                 {formatDate(tx.date)}
               </td>
-              <td className="py-3 px-4 text-sm text-gray-900">
+              <td className="py-3 px-4 text-sm text-foreground">
                 {tx.description || '—'}
               </td>
               <td className="py-3 px-4 text-sm">
@@ -86,7 +86,7 @@ export function TransactionDrillDownTable({
                   {tx.category}
                 </Badge>
               </td>
-              <td className="py-3 px-4 text-sm text-gray-600">
+              <td className="py-3 px-4 text-sm text-muted-foreground">
                 {tx.hierarchy}
               </td>
               <td className={`py-3 px-4 text-sm font-semibold text-right ${amountColorClass}`}>

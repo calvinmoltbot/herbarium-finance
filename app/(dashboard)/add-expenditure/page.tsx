@@ -94,18 +94,18 @@ export default function AddExpenditurePage() {
   if (!user) {
     return (
       <div className="flex items-center justify-center h-64">
-        <p className="text-gray-500">Please log in to add expenditures.</p>
+        <p className="text-muted-foreground">Please log in to add expenditures.</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto py-12 px-6 space-y-8">
         {/* Header */}
         <div className="space-y-6">
           <Link href="/dashboard">
-            <Button variant="ghost" size="sm" className="text-gray-600 hover:text-gray-900">
+            <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Dashboard
             </Button>
@@ -114,9 +114,9 @@ export default function AddExpenditurePage() {
           <div className="text-center space-y-4">
             <div className="flex items-center justify-center space-x-3">
               <TrendingDown className="h-12 w-12 text-red-600" />
-              <h1 className="text-4xl font-bold tracking-tight text-gray-900">Add Expenditure</h1>
+              <h1 className="text-4xl font-bold tracking-tight text-foreground">Add Expenditure</h1>
             </div>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               Record a new expenditure transaction to track your spending
             </p>
           </div>

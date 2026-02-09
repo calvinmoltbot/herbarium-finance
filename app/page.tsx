@@ -23,10 +23,10 @@ export default function Home() {
 
   // Show loading spinner while checking auth state
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="text-center">
-        <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-gray-600" />
-        <p className="text-gray-600">Loading...</p>
+        <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-muted-foreground" />
+        <p className="text-muted-foreground">Loading...</p>
       </div>
     </div>
   );

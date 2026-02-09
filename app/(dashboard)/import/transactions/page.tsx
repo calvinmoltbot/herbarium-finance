@@ -206,18 +206,18 @@ export default function ImportTransactionsPage() {
                   ? 'border-blue-500 bg-blue-500 text-white' 
                   : isCompleted 
                     ? 'border-green-500 bg-green-500 text-white'
-                    : 'border-gray-300 bg-white text-gray-400'
+                    : 'border-border bg-card text-muted-foreground'
               }`}>
                 <Icon className="h-4 w-4" />
               </div>
               <span className={`ml-2 text-sm font-medium ${
-                isActive ? 'text-blue-600' : isCompleted ? 'text-green-600' : 'text-gray-400'
+                isActive ? 'text-primary' : isCompleted ? 'text-green-600' : 'text-muted-foreground'
               }`}>
                 {step.label}
               </span>
               {index < 3 && (
                 <div className={`w-8 h-0.5 mx-4 ${
-                  isCompleted ? 'bg-green-500' : 'bg-gray-300'
+                  isCompleted ? 'bg-green-500' : 'bg-muted'
                 }`} />
               )}
             </div>

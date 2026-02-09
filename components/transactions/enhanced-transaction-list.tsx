@@ -126,7 +126,7 @@ export function EnhancedTransactionList({
       case 'income': return 'bg-green-100 text-green-800';
       case 'expenditure': return 'bg-red-100 text-red-800';
       case 'capital': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-gray-100 text-gray-800';
+      default: return 'bg-muted text-foreground';
     }
   };
 
@@ -151,7 +151,7 @@ export function EnhancedTransactionList({
                 className="mt-1"
               />
               {searchTerm && (
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-muted-foreground mt-1">
                   Searching in descriptions, notes, and extended descriptions
                 </p>
               )}
@@ -273,21 +273,21 @@ export function EnhancedTransactionList({
         <CardContent>
           <div className="space-y-2">
             {filteredTransactions.length === 0 ? (
-              <p className="text-center text-gray-500 py-8">
+              <p className="text-center text-muted-foreground py-8">
                 No transactions match your filters.
               </p>
             ) : (
               filteredTransactions.map(transaction => (
                 <div
                   key={transaction.id}
-                  className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 cursor-pointer"
+                  className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted cursor-pointer"
                   onClick={() => setSelectedTransaction(transaction)}
                 >
                   <div className="flex-1">
                     <div className="flex items-center space-x-3">
                       <div>
                         <p className="font-medium">{transaction.description}</p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-muted-foreground">
                           {new Date(transaction.transaction_date).toLocaleDateString()}
                         </p>
                       </div>

@@ -18,7 +18,7 @@ function getChangeDisplay(change: number, hasData: boolean) {
   if (!hasData) {
     return {
       text: 'No previous data',
-      color: 'text-gray-500',
+      color: 'text-muted-foreground',
       icon: null,
     };
   }
@@ -38,7 +38,7 @@ function getChangeDisplay(change: number, hasData: boolean) {
   } else {
     return {
       text: 'No change from last month',
-      color: 'text-gray-500',
+      color: 'text-muted-foreground',
       icon: null,
     };
   }
@@ -98,12 +98,12 @@ export function StatsCards() {
         {[...Array(3)].map((_, i) => (
           <Card key={i}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <div className="h-4 w-20 bg-gray-200 rounded animate-pulse" />
-              <div className="h-4 w-4 bg-gray-200 rounded animate-pulse" />
+              <div className="h-4 w-20 bg-muted rounded animate-pulse" />
+              <div className="h-4 w-4 bg-muted rounded animate-pulse" />
             </CardHeader>
             <CardContent>
-              <div className="h-8 w-32 bg-gray-200 rounded animate-pulse mb-2" />
-              <div className="h-3 w-24 bg-gray-200 rounded animate-pulse" />
+              <div className="h-8 w-32 bg-muted rounded animate-pulse mb-2" />
+              <div className="h-3 w-24 bg-muted rounded animate-pulse" />
             </CardContent>
           </Card>
         ))}
@@ -149,13 +149,13 @@ export function StatsCards() {
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-gray-600">
+          <CardTitle className="text-sm font-medium text-muted-foreground">
             {labels.income}
           </CardTitle>
           <TrendingUp className="h-4 w-4 text-green-600" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold text-gray-900">
+          <div className="text-2xl font-bold text-foreground">
             {formatCurrency(displayIncome)}
           </div>
           <div className="flex items-center mt-2">
@@ -169,13 +169,13 @@ export function StatsCards() {
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-gray-600">
+          <CardTitle className="text-sm font-medium text-muted-foreground">
             {labels.expenditure}
           </CardTitle>
           <TrendingDown className="h-4 w-4 text-red-600" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold text-gray-900">
+          <div className="text-2xl font-bold text-foreground">
             {formatCurrency(displayExpenditure)}
           </div>
           <div className="flex items-center mt-2">
@@ -189,10 +189,10 @@ export function StatsCards() {
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-gray-600">
+          <CardTitle className="text-sm font-medium text-muted-foreground">
             {labels.balance}
           </CardTitle>
-          <PoundSterling className="h-4 w-4 text-blue-600" />
+          <PoundSterling className="h-4 w-4 text-primary" />
         </CardHeader>
         <CardContent>
           <div className={`text-2xl font-bold ${

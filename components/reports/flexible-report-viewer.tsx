@@ -224,7 +224,7 @@ export function FlexibleReportViewer({ initialConfig }: FlexibleReportViewerProp
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Transactions</CardTitle>
-              <TableIcon className="h-4 w-4 text-gray-600" />
+              <TableIcon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
@@ -256,16 +256,16 @@ export function FlexibleReportViewer({ initialConfig }: FlexibleReportViewerProp
                 {plStructure.data && plStructure.data.length > 0 ? (
                   <div className="space-y-3">
                     {plStructure.data.map((item) => (
-                      <div key={item.hierarchy_id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div key={item.hierarchy_id} className="flex items-center justify-between p-3 bg-muted rounded-lg">
                         <div>
                           <p className="font-medium">{item.hierarchy_name}</p>
-                          <p className="text-sm text-gray-600">{item.transaction_count} transactions</p>
+                          <p className="text-sm text-muted-foreground">{item.transaction_count} transactions</p>
                         </div>
                         <div className="text-right">
                           <p className={`font-bold ${item.total_amount >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                             £{Math.abs(item.total_amount).toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                           </p>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted-foreground">
                             {item.percentage_of_total.toFixed(1)}%
                           </p>
                         </div>
@@ -273,7 +273,7 @@ export function FlexibleReportViewer({ initialConfig }: FlexibleReportViewerProp
                     ))}
                   </div>
                 ) : (
-                  <p className="text-gray-500 text-center py-8">No P&L data available for this period</p>
+                  <p className="text-muted-foreground text-center py-8">No P&L data available for this period</p>
                 )}
               </CardContent>
             </Card>
@@ -288,16 +288,16 @@ export function FlexibleReportViewer({ initialConfig }: FlexibleReportViewerProp
                 {categoryBreakdown.data && categoryBreakdown.data.length > 0 ? (
                   <div className="space-y-3">
                     {categoryBreakdown.data.slice(0, 5).map((item) => (
-                      <div key={item.category_id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div key={item.category_id} className="flex items-center justify-between p-3 bg-muted rounded-lg">
                         <div>
                           <p className="font-medium">{item.category_name}</p>
-                          <p className="text-sm text-gray-600">{item.transaction_count} transactions</p>
+                          <p className="text-sm text-muted-foreground">{item.transaction_count} transactions</p>
                         </div>
                         <div className="text-right">
                           <p className="font-bold">
                             £{Math.abs(item.total_amount).toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                           </p>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted-foreground">
                             {item.percentage_of_total.toFixed(1)}%
                           </p>
                         </div>
@@ -305,7 +305,7 @@ export function FlexibleReportViewer({ initialConfig }: FlexibleReportViewerProp
                     ))}
                   </div>
                 ) : (
-                  <p className="text-gray-500 text-center py-8">No category data available for this period</p>
+                  <p className="text-muted-foreground text-center py-8">No category data available for this period</p>
                 )}
               </CardContent>
             </Card>
@@ -334,9 +334,9 @@ export function FlexibleReportViewer({ initialConfig }: FlexibleReportViewerProp
                     </thead>
                     <tbody>
                       {categoryBreakdown.data.map((item) => (
-                        <tr key={item.category_id} className="border-b hover:bg-gray-50">
+                        <tr key={item.category_id} className="border-b hover:bg-muted">
                           <td className="p-2 font-medium">{item.category_name}</td>
-                          <td className="p-2 text-gray-600">{item.hierarchy_name || '-'}</td>
+                          <td className="p-2 text-muted-foreground">{item.hierarchy_name || '-'}</td>
                           <td className="p-2 text-right font-mono">
                             £{Math.abs(item.total_amount).toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                           </td>
@@ -351,7 +351,7 @@ export function FlexibleReportViewer({ initialConfig }: FlexibleReportViewerProp
                   </table>
                 </div>
               ) : (
-                <p className="text-gray-500 text-center py-8">No category breakdown data available</p>
+                <p className="text-muted-foreground text-center py-8">No category breakdown data available</p>
               )}
             </CardContent>
           </Card>
@@ -377,7 +377,7 @@ export function FlexibleReportViewer({ initialConfig }: FlexibleReportViewerProp
                     </thead>
                     <tbody>
                       {monthlyTrends.data.map((item) => (
-                        <tr key={item.month_year} className="border-b hover:bg-gray-50">
+                        <tr key={item.month_year} className="border-b hover:bg-muted">
                           <td className="p-2 font-medium">{item.month} {item.year}</td>
                           <td className="p-2 text-right font-mono text-green-600">
                             £{item.income_total.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
@@ -394,7 +394,7 @@ export function FlexibleReportViewer({ initialConfig }: FlexibleReportViewerProp
                   </table>
                 </div>
               ) : (
-                <p className="text-gray-500 text-center py-8">No monthly trend data available</p>
+                <p className="text-muted-foreground text-center py-8">No monthly trend data available</p>
               )}
             </CardContent>
           </Card>
@@ -422,7 +422,7 @@ export function FlexibleReportViewer({ initialConfig }: FlexibleReportViewerProp
                       </thead>
                       <tbody>
                         {periodComparison.data.map((item, index) => (
-                          <tr key={index} className="border-b hover:bg-gray-50">
+                          <tr key={index} className="border-b hover:bg-muted">
                             <td className="p-2 font-medium">
                               {item.hierarchy_name || item.category_name}
                             </td>
@@ -444,18 +444,18 @@ export function FlexibleReportViewer({ initialConfig }: FlexibleReportViewerProp
                     </table>
                   </div>
                 ) : (
-                  <p className="text-gray-500 text-center py-8">No comparison data available</p>
+                  <p className="text-muted-foreground text-center py-8">No comparison data available</p>
                 )}
               </CardContent>
             </Card>
           ) : (
             <Card>
               <CardContent className="text-center py-12">
-                <TrendingUp className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                <TrendingUp className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+                <h3 className="text-lg font-medium text-foreground mb-2">
                   Period Comparison Disabled
                 </h3>
-                <p className="text-gray-500 mb-6">
+                <p className="text-muted-foreground mb-6">
                   Enable period comparison to see how this period compares to the previous one.
                 </p>
                 <Button onClick={toggleComparison}>

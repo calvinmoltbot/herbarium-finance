@@ -102,15 +102,15 @@ export function TransactionDrillDownFilters({
   };
 
   return (
-    <div className="border-b border-gray-200 bg-gray-50 p-4 print:hidden">
+    <div className="border-b border-border bg-muted p-4 print:hidden">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Search Filter */}
         <div className="space-y-2">
-          <Label htmlFor="search" className="text-sm font-medium text-gray-700">
+          <Label htmlFor="search" className="text-sm font-medium text-foreground">
             Search Description
           </Label>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               id="search"
               type="text"
@@ -124,7 +124,7 @@ export function TransactionDrillDownFilters({
 
         {/* Amount Range Filter */}
         <div className="space-y-2">
-          <Label className="text-sm font-medium text-gray-700">
+          <Label className="text-sm font-medium text-foreground">
             Amount Range
           </Label>
           <div className="flex gap-2">
@@ -149,7 +149,7 @@ export function TransactionDrillDownFilters({
 
         {/* Date Range Filter */}
         <div className="space-y-2">
-          <Label className="text-sm font-medium text-gray-700">
+          <Label className="text-sm font-medium text-foreground">
             Date Range
           </Label>
           <div className="flex gap-2">
@@ -188,7 +188,7 @@ export function TransactionDrillDownFilters({
 
       {/* Active Filters Summary */}
       {hasActiveFilters && (
-        <div className="mt-3 flex flex-wrap gap-2 text-sm text-gray-600">
+        <div className="mt-3 flex flex-wrap gap-2 text-sm text-muted-foreground">
           <span className="font-medium">Active filters:</span>
           {filters.searchText && (
             <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded">

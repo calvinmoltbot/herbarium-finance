@@ -100,7 +100,7 @@ export function DateRangePicker({ value, onChange, className }: DateRangePickerP
   return (
     <div className={`space-y-3 ${className}`}>
       <div className="space-y-2">
-        <label className="text-sm font-medium text-gray-700">Date Range</label>
+        <label className="text-sm font-medium text-foreground">Date Range</label>
         <Select 
           value={showCustom ? 'custom' : (value.preset || 'all')} 
           onValueChange={handlePresetChange}
@@ -168,7 +168,7 @@ export function DateRangePicker({ value, onChange, className }: DateRangePickerP
       )}
 
       {!showCustom && value.from && value.to && (
-        <div className="text-xs text-gray-600 bg-gray-100 p-2 rounded">
+        <div className="text-xs text-muted-foreground bg-muted p-2 rounded">
           <strong>Range:</strong> {format(value.from, 'dd/MM/yyyy')} - {format(value.to, 'dd/MM/yyyy')}
         </div>
       )}

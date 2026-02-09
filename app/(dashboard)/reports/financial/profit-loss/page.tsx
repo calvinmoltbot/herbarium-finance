@@ -228,7 +228,7 @@ export default function ProfitLossReport() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto py-8 px-6 space-y-8">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -240,8 +240,8 @@ export default function ProfitLossReport() {
               </Link>
             </Button>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Trading & Profit and Loss Account</h1>
-              <p className="text-gray-600">{getReportPeriod()}</p>
+              <h1 className="text-3xl font-bold text-foreground">Trading & Profit and Loss Account</h1>
+              <p className="text-muted-foreground">{getReportPeriod()}</p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
@@ -286,7 +286,7 @@ export default function ProfitLossReport() {
           <CardContent className="p-0">
             <div className="space-y-0">
               {reportData.incomeByHierarchy.map((hierarchy, index) => (
-                <div key={`${hierarchy.name}-${index}`} className="border-b border-gray-200">
+                <div key={`${hierarchy.name}-${index}`} className="border-b border-border">
                   {/* Hierarchy Header - Clickable */}
                   <div 
                     className="bg-green-100 px-6 py-3 border-b border-green-200 cursor-pointer hover:bg-green-150 transition-colors"
@@ -312,9 +312,9 @@ export default function ProfitLossReport() {
                     <table className="w-full">
                       <tbody>
                         {hierarchy.categories.map((item) => (
-                          <tr key={item.category} className="border-b border-gray-100">
-                            <td className="py-2 px-6 pl-8 text-gray-700">{item.category}</td>
-                            <td className="py-2 px-6 text-right text-gray-700">
+                          <tr key={item.category} className="border-b border-border">
+                            <td className="py-2 px-6 pl-8 text-foreground">{item.category}</td>
+                            <td className="py-2 px-6 text-right text-foreground">
                               {item.total.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                             </td>
                           </tr>
@@ -359,14 +359,14 @@ export default function ProfitLossReport() {
           <CardContent className="p-0">
             <div className="space-y-0">
               {reportData.expenditureByHierarchy.map((hierarchy, index) => (
-                <div key={`${hierarchy.name}-${index}`} className="border-b border-gray-200">
+                <div key={`${hierarchy.name}-${index}`} className="border-b border-border">
                   {/* Hierarchy Header - Clickable */}
                   <div 
-                    className="bg-gray-100 px-6 py-3 border-b border-gray-200 cursor-pointer hover:bg-gray-150 transition-colors"
+                    className="bg-muted px-6 py-3 border-b border-border cursor-pointer hover:bg-muted/80 transition-colors"
                     onClick={() => toggleHierarchy(hierarchy.name)}
                   >
                     <div className="flex items-center justify-between">
-                      <h4 className="font-bold text-gray-900 uppercase tracking-wide text-sm flex items-center">
+                      <h4 className="font-bold text-foreground uppercase tracking-wide text-sm flex items-center">
                         {isHierarchyExpanded(hierarchy.name) ? (
                           <ChevronDown className="h-4 w-4 mr-2" />
                         ) : (
@@ -374,7 +374,7 @@ export default function ProfitLossReport() {
                         )}
                         {hierarchy.name}
                       </h4>
-                      <span className="font-semibold text-gray-900">
+                      <span className="font-semibold text-foreground">
                         £{hierarchy.total.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                       </span>
                     </div>
@@ -385,16 +385,16 @@ export default function ProfitLossReport() {
                     <table className="w-full">
                       <tbody>
                         {hierarchy.categories.map((item) => (
-                          <tr key={item.category} className="border-b border-gray-100">
-                            <td className="py-2 px-6 pl-8 text-gray-700">- {item.category}</td>
-                            <td className="py-2 px-6 text-right text-gray-700">
+                          <tr key={item.category} className="border-b border-border">
+                            <td className="py-2 px-6 pl-8 text-foreground">- {item.category}</td>
+                            <td className="py-2 px-6 text-right text-foreground">
                               {item.total.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                             </td>
                           </tr>
                         ))}
-                        <tr className="bg-gray-50 border-b-2 border-gray-300">
-                          <td className="py-3 px-6 font-semibold text-gray-900">Sub-total</td>
-                          <td className="py-3 px-6 text-right font-semibold text-gray-900">
+                        <tr className="bg-muted border-b-2 border-border">
+                          <td className="py-3 px-6 font-semibold text-foreground">Sub-total</td>
+                          <td className="py-3 px-6 text-right font-semibold text-foreground">
                             £{hierarchy.total.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                           </td>
                         </tr>
@@ -433,7 +433,7 @@ export default function ProfitLossReport() {
             <CardContent className="p-0">
               <div className="space-y-0">
                 {reportData.capitalMovements.map((movement, index) => (
-                  <div key={`${movement.name}-${index}`} className="border-b border-gray-200">
+                  <div key={`${movement.name}-${index}`} className="border-b border-border">
                     {/* Movement Header - Clickable */}
                     <div 
                       className={`px-6 py-3 border-b cursor-pointer hover:bg-opacity-80 transition-colors ${
@@ -467,9 +467,9 @@ export default function ProfitLossReport() {
                       <table className="w-full">
                         <tbody>
                           {movement.categories.map((item) => (
-                            <tr key={item.category} className="border-b border-gray-100">
-                              <td className="py-2 px-6 pl-8 text-gray-700">{item.category}</td>
-                              <td className="py-2 px-6 text-right text-gray-700">
+                            <tr key={item.category} className="border-b border-border">
+                              <td className="py-2 px-6 pl-8 text-foreground">{item.category}</td>
+                              <td className="py-2 px-6 text-right text-foreground">
                                 {item.total.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                               </td>
                             </tr>
@@ -565,23 +565,23 @@ export default function ProfitLossReport() {
               <table className="w-full">
                 <tbody>
                   <tr className={`${reportData.totalAfterCapitalMovements >= 0 ? 'bg-indigo-50' : 'bg-red-50'}`}>
-                    <td className="py-3 px-6 text-gray-700">Operating Profit</td>
-                    <td className="py-3 px-6 text-right text-gray-700">
+                    <td className="py-3 px-6 text-foreground">Operating Profit</td>
+                    <td className="py-3 px-6 text-right text-foreground">
                       £{reportData.netProfit.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                     </td>
                   </tr>
                   {reportData.totalCapitalInjection > 0 && (
                     <tr className={`${reportData.totalAfterCapitalMovements >= 0 ? 'bg-indigo-50' : 'bg-red-50'}`}>
-                      <td className="py-3 px-6 text-gray-700">Add: Capital Injection</td>
-                      <td className="py-3 px-6 text-right text-gray-700">
+                      <td className="py-3 px-6 text-foreground">Add: Capital Injection</td>
+                      <td className="py-3 px-6 text-right text-foreground">
                         £{reportData.totalCapitalInjection.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                       </td>
                     </tr>
                   )}
                   {reportData.totalCapitalWithdrawal > 0 && (
                     <tr className={`${reportData.totalAfterCapitalMovements >= 0 ? 'bg-indigo-50' : 'bg-red-50'}`}>
-                      <td className="py-3 px-6 text-gray-700">Less: Director Withdrawals</td>
-                      <td className="py-3 px-6 text-right text-gray-700">
+                      <td className="py-3 px-6 text-foreground">Less: Director Withdrawals</td>
+                      <td className="py-3 px-6 text-right text-foreground">
                         £{reportData.totalCapitalWithdrawal.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                       </td>
                     </tr>
@@ -609,17 +609,17 @@ export default function ProfitLossReport() {
           <CardContent>
             <div className="grid gap-6 md:grid-cols-3">
               <div className="space-y-3">
-                <h4 className="font-medium text-gray-900">Profitability Ratios</h4>
+                <h4 className="font-medium text-foreground">Profitability Ratios</h4>
                 <div className="space-y-2">
-                  <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                    <span className="text-sm text-gray-700">Net Profit Margin:</span>
+                  <div className="flex justify-between items-center p-3 bg-muted rounded-lg">
+                    <span className="text-sm text-foreground">Net Profit Margin:</span>
                     <span className={`font-medium ${reportData.grossProfitMargin >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                       {reportData.grossProfitMargin.toFixed(1)}%
                     </span>
                   </div>
-                  <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                    <span className="text-sm text-gray-700">Total Revenue:</span>
-                    <span className="font-medium text-gray-900">
+                  <div className="flex justify-between items-center p-3 bg-muted rounded-lg">
+                    <span className="text-sm text-foreground">Total Revenue:</span>
+                    <span className="font-medium text-foreground">
                       £{reportData.totalIncome.toLocaleString('en-GB')}
                     </span>
                   </div>
@@ -627,16 +627,16 @@ export default function ProfitLossReport() {
               </div>
               
               <div className="space-y-3">
-                <h4 className="font-medium text-gray-900">Expenditure Analysis</h4>
+                <h4 className="font-medium text-foreground">Expenditure Analysis</h4>
                 <div className="space-y-2">
                   {reportData.expenditureByHierarchy
                     .slice(0, 3)
                     .map((hierarchy, index) => {
                       const percentage = reportData.totalExpenditure > 0 ? (hierarchy.total / reportData.totalExpenditure) * 100 : 0;
                       return (
-                        <div key={`${hierarchy.name}-${index}`} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                          <span className="text-sm text-gray-700">{hierarchy.name}:</span>
-                          <span className="font-medium text-gray-900">{percentage.toFixed(1)}%</span>
+                        <div key={`${hierarchy.name}-${index}`} className="flex justify-between items-center p-3 bg-muted rounded-lg">
+                          <span className="text-sm text-foreground">{hierarchy.name}:</span>
+                          <span className="font-medium text-foreground">{percentage.toFixed(1)}%</span>
                         </div>
                       );
                     })}
@@ -644,7 +644,7 @@ export default function ProfitLossReport() {
               </div>
               
               <div className="space-y-3">
-                <h4 className="font-medium text-gray-900">Financial Summary</h4>
+                <h4 className="font-medium text-foreground">Financial Summary</h4>
                 <div className="space-y-2">
                   <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
                     <span className="text-sm text-green-700">Total Income:</span>

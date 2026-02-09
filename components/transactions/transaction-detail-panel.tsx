@@ -242,26 +242,26 @@ export function TransactionDetailPanel({
         
         <CardContent className="space-y-6 p-6">
           {/* Transaction Info */}
-          <div className="bg-gray-50 rounded-lg p-4">
+          <div className="bg-muted rounded-lg p-4">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <Receipt className="h-4 w-4" />
               Transaction Information
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div>
-                <span className="text-gray-600 font-medium">Description:</span>
-                <p className="font-semibold text-gray-900 mt-1">{transaction.description}</p>
+                <span className="text-muted-foreground font-medium">Description:</span>
+                <p className="font-semibold text-foreground mt-1">{transaction.description}</p>
               </div>
               <div>
-                <span className="text-gray-600 font-medium">Amount:</span>
-                <p className="font-semibold text-gray-900 mt-1">
+                <span className="text-muted-foreground font-medium">Amount:</span>
+                <p className="font-semibold text-foreground mt-1">
                   {transaction.type === 'expenditure' ? '-' : ''}£
                   {Math.abs(transaction.amount).toFixed(2)}
                 </p>
               </div>
               <div>
-                <span className="text-gray-600 font-medium">Date:</span>
-                <p className="font-semibold text-gray-900 mt-1">
+                <span className="text-muted-foreground font-medium">Date:</span>
+                <p className="font-semibold text-foreground mt-1">
                   {new Date(transaction.transaction_date).toLocaleDateString('en-GB', {
                     weekday: 'long',
                     year: 'numeric',
@@ -271,7 +271,7 @@ export function TransactionDetailPanel({
                 </p>
               </div>
               <div>
-                <span className="text-gray-600 font-medium">Type:</span>
+                <span className="text-muted-foreground font-medium">Type:</span>
                 <Badge variant="outline" className="capitalize mt-1">
                   {transaction.type}
                 </Badge>
@@ -281,7 +281,7 @@ export function TransactionDetailPanel({
             {/* Category Section */}
             <div className="mt-4">
               <div className="flex items-center justify-between">
-                <span className="text-gray-600 font-medium">Category:</span>
+                <span className="text-muted-foreground font-medium">Category:</span>
                 {!isEditingCategory && (
                   <Button
                     variant="ghost"
@@ -333,7 +333,7 @@ export function TransactionDetailPanel({
                   {transaction.category.name}
                 </Badge>
               ) : (
-                <p className="text-sm text-gray-500 mt-1">No category assigned</p>
+                <p className="text-sm text-muted-foreground mt-1">No category assigned</p>
               )}
             </div>
           </div>
@@ -397,7 +397,7 @@ export function TransactionDetailPanel({
               </h3>
               <div className="flex items-center gap-2">
                 {isSaving && (
-                  <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Icons.spinner className="h-3 w-3 animate-spin" />
                     Saving...
                   </div>
@@ -423,8 +423,8 @@ export function TransactionDetailPanel({
               {/* Quick Notes */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium text-gray-700">Quick Notes</label>
-                  <span className={`text-xs ${notesCharCount > maxChars ? 'text-red-500' : 'text-gray-500'}`}>
+                  <label className="text-sm font-medium text-foreground">Quick Notes</label>
+                  <span className={`text-xs ${notesCharCount > maxChars ? 'text-red-500' : 'text-muted-foreground'}`}>
                     {notesCharCount}/{maxChars}
                   </span>
                 </div>
@@ -435,7 +435,7 @@ export function TransactionDetailPanel({
                   className="min-h-[120px] resize-none"
                   maxLength={maxChars}
                 />
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   Auto-saves after 3 seconds of inactivity
                 </p>
               </div>
@@ -443,8 +443,8 @@ export function TransactionDetailPanel({
               {/* Extended Description */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium text-gray-700">Extended Description</label>
-                  <span className={`text-xs ${descriptionCharCount > maxChars ? 'text-red-500' : 'text-gray-500'}`}>
+                  <label className="text-sm font-medium text-foreground">Extended Description</label>
+                  <span className={`text-xs ${descriptionCharCount > maxChars ? 'text-red-500' : 'text-muted-foreground'}`}>
                     {descriptionCharCount}/{maxChars}
                   </span>
                 </div>
@@ -455,7 +455,7 @@ export function TransactionDetailPanel({
                   className="min-h-[120px] resize-none"
                   maxLength={maxChars}
                 />
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   For longer descriptions and detailed context
                 </p>
               </div>
@@ -463,18 +463,18 @@ export function TransactionDetailPanel({
 
             {/* Notes Preview (when not empty) */}
             {(notes || extendedDescription) && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <h4 className="font-medium text-blue-900 mb-2">Notes Summary</h4>
+              <div className="bg-primary/10 border border-primary/20 rounded-lg p-4">
+                <h4 className="font-medium text-primary mb-2">Notes Summary</h4>
                 {notes && (
                   <div className="mb-2">
-                    <span className="text-sm font-medium text-blue-800">Quick Notes:</span>
-                    <p className="text-sm text-blue-700 mt-1">{notes}</p>
+                    <span className="text-sm font-medium text-primary">Quick Notes:</span>
+                    <p className="text-sm text-primary/80 mt-1">{notes}</p>
                   </div>
                 )}
                 {extendedDescription && (
                   <div>
-                    <span className="text-sm font-medium text-blue-800">Extended Description:</span>
-                    <p className="text-sm text-blue-700 mt-1">{extendedDescription}</p>
+                    <span className="text-sm font-medium text-primary">Extended Description:</span>
+                    <p className="text-sm text-primary/80 mt-1">{extendedDescription}</p>
                   </div>
                 )}
               </div>

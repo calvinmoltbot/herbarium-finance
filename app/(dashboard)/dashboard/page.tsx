@@ -7,7 +7,7 @@ import { IncomeExpenditurePieChart } from '@/components/dashboard/category-pie-c
 
 export default function DashboardPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="flex-1 space-y-8 p-8 max-w-7xl mx-auto">
         <DashboardHeader />
         

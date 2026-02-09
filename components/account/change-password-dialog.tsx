@@ -151,9 +151,9 @@ export function ChangePasswordDialog({ open, onOpenChange }: ChangePasswordDialo
                 onClick={() => setShowCurrentPassword(!showCurrentPassword)}
               >
                 {showCurrentPassword ? (
-                  <EyeOff className="h-4 w-4 text-gray-400" />
+                  <EyeOff className="h-4 w-4 text-muted-foreground" />
                 ) : (
-                  <Eye className="h-4 w-4 text-gray-400" />
+                  <Eye className="h-4 w-4 text-muted-foreground" />
                 )}
               </button>
             </div>
@@ -179,13 +179,13 @@ export function ChangePasswordDialog({ open, onOpenChange }: ChangePasswordDialo
                 onClick={() => setShowNewPassword(!showNewPassword)}
               >
                 {showNewPassword ? (
-                  <EyeOff className="h-4 w-4 text-gray-400" />
+                  <EyeOff className="h-4 w-4 text-muted-foreground" />
                 ) : (
-                  <Eye className="h-4 w-4 text-gray-400" />
+                  <Eye className="h-4 w-4 text-muted-foreground" />
                 )}
               </button>
             </div>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-muted-foreground">
               Password must be at least 6 characters long
             </p>
           </div>
@@ -210,9 +210,9 @@ export function ChangePasswordDialog({ open, onOpenChange }: ChangePasswordDialo
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
                 {showConfirmPassword ? (
-                  <EyeOff className="h-4 w-4 text-gray-400" />
+                  <EyeOff className="h-4 w-4 text-muted-foreground" />
                 ) : (
-                  <Eye className="h-4 w-4 text-gray-400" />
+                  <Eye className="h-4 w-4 text-muted-foreground" />
                 )}
               </button>
             </div>

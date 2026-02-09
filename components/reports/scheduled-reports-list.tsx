@@ -90,13 +90,13 @@ export function ScheduledReportsList({ scheduledReports, isLoading }: ScheduledR
         {[...Array(3)].map((_, i) => (
           <Card key={i} className="animate-pulse">
             <CardHeader>
-              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-              <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+              <div className="h-4 bg-muted rounded w-3/4"></div>
+              <div className="h-3 bg-muted rounded w-1/2"></div>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                <div className="h-3 bg-gray-200 rounded"></div>
-                <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+                <div className="h-3 bg-muted rounded"></div>
+                <div className="h-3 bg-muted rounded w-2/3"></div>
               </div>
             </CardContent>
           </Card>
@@ -108,11 +108,11 @@ export function ScheduledReportsList({ scheduledReports, isLoading }: ScheduledR
   if (scheduledReports.length === 0) {
     return (
       <div className="text-center py-12">
-        <Calendar className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-        <h3 className="text-lg font-medium text-gray-900 mb-2">
+        <Calendar className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+        <h3 className="text-lg font-medium text-foreground mb-2">
           No scheduled reports
         </h3>
-        <p className="text-gray-500 mb-6 max-w-md mx-auto">
+        <p className="text-muted-foreground mb-6 max-w-md mx-auto">
           Schedule reports to be automatically generated and delivered on a regular basis. 
           Perfect for monthly financial summaries or weekly updates.
         </p>
@@ -132,7 +132,7 @@ export function ScheduledReportsList({ scheduledReports, isLoading }: ScheduledR
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <FileText className="w-5 h-5 text-blue-600" />
+                  <FileText className="w-5 h-5 text-primary" />
                   {(schedule as unknown as { report?: { name?: string } }).report?.name || 'Unknown Report'}
                 </CardTitle>
                 <CardDescription className="mt-1">
@@ -156,7 +156,7 @@ export function ScheduledReportsList({ scheduledReports, isLoading }: ScheduledR
               {/* Schedule Details */}
               <div className="space-y-3">
                 <div className="flex items-center gap-2 text-sm">
-                  <Clock className="w-4 h-4 text-gray-500" />
+                  <Clock className="w-4 h-4 text-muted-foreground" />
                   <span className="font-medium">Frequency:</span>
                   <Badge variant="outline">
                     {getFrequencyLabel(schedule.schedule_config.frequency)}
@@ -165,7 +165,7 @@ export function ScheduledReportsList({ scheduledReports, isLoading }: ScheduledR
                 
                 {schedule.schedule_config.time && (
                   <div className="flex items-center gap-2 text-sm">
-                    <Clock className="w-4 h-4 text-gray-500" />
+                    <Clock className="w-4 h-4 text-muted-foreground" />
                     <span className="font-medium">Time:</span>
                     <span>{schedule.schedule_config.time}</span>
                   </div>
@@ -174,7 +174,7 @@ export function ScheduledReportsList({ scheduledReports, isLoading }: ScheduledR
                 {schedule.schedule_config.emailRecipients && 
                  schedule.schedule_config.emailRecipients.length > 0 && (
                   <div className="flex items-center gap-2 text-sm">
-                    <Mail className="w-4 h-4 text-gray-500" />
+                    <Mail className="w-4 h-4 text-muted-foreground" />
                     <span className="font-medium">Recipients:</span>
                     <span>{schedule.schedule_config.emailRecipients.length}</span>
                   </div>
@@ -185,7 +185,7 @@ export function ScheduledReportsList({ scheduledReports, isLoading }: ScheduledR
               <div className="space-y-3">
                 <div className="text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Next Run:</span>
+                    <span className="text-muted-foreground">Next Run:</span>
                     <span className="font-medium">
                       {getNextRunDisplay(schedule.next_run)}
                     </span>
@@ -195,7 +195,7 @@ export function ScheduledReportsList({ scheduledReports, isLoading }: ScheduledR
                 {schedule.last_run && (
                   <div className="text-sm">
                     <div className="flex justify-between">
-                      <span className="text-gray-500">Last Run:</span>
+                      <span className="text-muted-foreground">Last Run:</span>
                       <span>{format(new Date(schedule.last_run), 'MMM d, yyyy HH:mm')}</span>
                     </div>
                   </div>
@@ -203,7 +203,7 @@ export function ScheduledReportsList({ scheduledReports, isLoading }: ScheduledR
 
                 <div className="text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Created:</span>
+                    <span className="text-muted-foreground">Created:</span>
                     <span>{format(new Date(schedule.created_at), 'MMM d, yyyy')}</span>
                   </div>
                 </div>
@@ -215,7 +215,7 @@ export function ScheduledReportsList({ scheduledReports, isLoading }: ScheduledR
              schedule.schedule_config.format.length > 0 && (
               <div className="mt-4 pt-4 border-t">
                 <div className="flex items-center gap-2 text-sm">
-                  <span className="text-gray-500">Export Formats:</span>
+                  <span className="text-muted-foreground">Export Formats:</span>
                   <div className="flex gap-1">
                     {schedule.schedule_config.format.map((format) => (
                       <Badge key={format} variant="outline" className="text-xs">

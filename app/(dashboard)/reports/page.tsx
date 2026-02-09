@@ -73,9 +73,9 @@ export default function ReportsPage() {
           <PageCard>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Reports</p>
-                <p className="text-3xl font-bold text-gray-900">{stats.totalReports}</p>
-                <p className="text-sm text-gray-500 mt-1">Custom reports created</p>
+                <p className="text-sm font-medium text-muted-foreground">Total Reports</p>
+                <p className="text-3xl font-bold text-foreground">{stats.totalReports}</p>
+                <p className="text-sm text-muted-foreground mt-1">Custom reports created</p>
               </div>
               <div className="p-3 bg-blue-100 rounded-lg">
                 <FileText className="h-8 w-8 text-blue-600" />
@@ -86,9 +86,9 @@ export default function ReportsPage() {
           <PageCard>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Templates</p>
-                <p className="text-3xl font-bold text-gray-900">{stats.totalTemplates}</p>
-                <p className="text-sm text-gray-500 mt-1">Available templates</p>
+                <p className="text-sm font-medium text-muted-foreground">Templates</p>
+                <p className="text-3xl font-bold text-foreground">{stats.totalTemplates}</p>
+                <p className="text-sm text-muted-foreground mt-1">Available templates</p>
               </div>
               <div className="p-3 bg-green-100 rounded-lg">
                 <BarChart3 className="h-8 w-8 text-green-600" />
@@ -99,9 +99,9 @@ export default function ReportsPage() {
           <PageCard>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Recent Activity</p>
-                <p className="text-3xl font-bold text-gray-900">{stats.recentReports?.length || 0}</p>
-                <p className="text-sm text-gray-500 mt-1">Reports this week</p>
+                <p className="text-sm font-medium text-muted-foreground">Recent Activity</p>
+                <p className="text-3xl font-bold text-foreground">{stats.recentReports?.length || 0}</p>
+                <p className="text-sm text-muted-foreground mt-1">Reports this week</p>
               </div>
               <div className="p-3 bg-purple-100 rounded-lg">
                 <Download className="h-8 w-8 text-purple-600" />
@@ -125,16 +125,16 @@ export default function ReportsPage() {
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-semibold text-gray-900">Standard Hierarchical P&L</h3>
+                    <h3 className="font-semibold text-foreground">Standard Hierarchical P&L</h3>
                     <Badge variant="secondary" className="text-xs">
                       <Star className="w-3 h-3 mr-1" />
                       Featured
                     </Badge>
                   </div>
-                  <p className="text-sm text-gray-600 mb-3">
+                  <p className="text-sm text-muted-foreground mb-3">
                     Professional P&L with collapsible hierarchies showing Net Operating Profit and Profit After Capital Movements
                   </p>
-                  <div className="flex items-center text-sm text-blue-600 font-medium">
+                  <div className="flex items-center text-sm text-primary font-medium">
                     <span>View Report</span>
                     <ArrowRight className="w-4 h-4 ml-1" />
                   </div>
@@ -150,15 +150,15 @@ export default function ReportsPage() {
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <h3 className="font-semibold text-gray-900">Cash Flow Statement</h3>
+                  <h3 className="font-semibold text-foreground">Cash Flow Statement</h3>
                   <Badge variant="outline" className="text-xs">
                     Coming Soon
                   </Badge>
                 </div>
-                <p className="text-sm text-gray-600 mb-3">
+                <p className="text-sm text-muted-foreground mb-3">
                   Comprehensive cash flow analysis with operating, investing, and financing activities
                 </p>
-                <div className="flex items-center text-sm text-gray-400 font-medium">
+                <div className="flex items-center text-sm text-muted-foreground font-medium">
                   <span>Available Soon</span>
                 </div>
               </div>
@@ -172,15 +172,15 @@ export default function ReportsPage() {
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <h3 className="font-semibold text-gray-900">Balance Sheet</h3>
+                  <h3 className="font-semibold text-foreground">Balance Sheet</h3>
                   <Badge variant="outline" className="text-xs">
                     Coming Soon
                   </Badge>
                 </div>
-                <p className="text-sm text-gray-600 mb-3">
+                <p className="text-sm text-muted-foreground mb-3">
                   Assets, liabilities, and equity statement with period comparisons
                 </p>
-                <div className="flex items-center text-sm text-gray-400 font-medium">
+                <div className="flex items-center text-sm text-muted-foreground font-medium">
                   <span>Available Soon</span>
                 </div>
               </div>
@@ -194,7 +194,7 @@ export default function ReportsPage() {
         title="Report Management"
         description="Browse your reports, templates, and use the report builder"
       >
-        <div className="border-b border-gray-200 mb-6">
+        <div className="border-b border-border mb-6">
           <nav className="-mb-px flex space-x-8">
             {tabs.map((tab) => {
               const Icon = tab.icon;
@@ -207,8 +207,8 @@ export default function ReportsPage() {
                   className={`
                     flex items-center py-3 px-1 border-b-2 font-medium text-sm transition-colors
                     ${isActive
-                      ? 'border-blue-500 text-blue-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      ? 'border-primary text-primary'
+                      : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
                     }
                   `}
                 >

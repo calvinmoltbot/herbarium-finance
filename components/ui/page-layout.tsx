@@ -12,27 +12,27 @@ interface PageLayoutProps {
   className?: string;
 }
 
-export function PageLayout({ 
-  title, 
-  description, 
-  icon: Icon, 
-  children, 
+export function PageLayout({
+  title,
+  description,
+  icon: Icon,
+  children,
   actions,
   className = ""
 }: PageLayoutProps) {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className={`max-w-6xl mx-auto py-12 px-6 space-y-8 ${className}`}>
         {/* Professional Header - Following Transaction Notes Pattern */}
         <div className="text-center space-y-4">
           <div className="flex items-center justify-center space-x-3">
-            <Icon className="h-12 w-12 text-blue-600" />
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900">{title}</h1>
+            <Icon className="h-12 w-12 text-primary" />
+            <h1 className="text-4xl font-bold tracking-tight text-foreground">{title}</h1>
           </div>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             {description}
           </p>
-          
+
           {/* Action buttons if provided */}
           {actions && (
             <div className="flex items-center justify-center gap-4 pt-2">
@@ -59,24 +59,24 @@ interface PageSectionProps {
   className?: string;
 }
 
-export function PageSection({ 
-  title, 
-  description, 
-  icon: Icon, 
-  children, 
+export function PageSection({
+  title,
+  description,
+  icon: Icon,
+  children,
   actions,
   className = ""
 }: PageSectionProps) {
   return (
-    <div className={`bg-white rounded-lg border border-gray-200 shadow-sm ${className}`}>
-      <div className="px-6 py-4 border-b border-gray-200">
+    <div className={`bg-card rounded-lg border border-border shadow-sm ${className}`}>
+      <div className="px-6 py-4 border-b border-border">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            {Icon && <Icon className="h-5 w-5 text-gray-600" />}
+            {Icon && <Icon className="h-5 w-5 text-muted-foreground" />}
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+              <h2 className="text-lg font-semibold text-foreground">{title}</h2>
               {description && (
-                <p className="text-sm text-gray-600 mt-1">{description}</p>
+                <p className="text-sm text-muted-foreground mt-1">{description}</p>
               )}
             </div>
           </div>
@@ -109,7 +109,7 @@ export function PageCard({ children, className = "", padding = 'md' }: PageCardP
   };
 
   return (
-    <div className={`bg-white rounded-lg border border-gray-200 shadow-sm ${paddingClasses[padding]} ${className}`}>
+    <div className={`bg-card rounded-lg border border-border shadow-sm ${paddingClasses[padding]} ${className}`}>
       {children}
     </div>
   );
@@ -123,11 +123,11 @@ interface PageListItemProps {
 }
 
 export function PageListItem({ children, className = "", isLast = false, onClick }: PageListItemProps) {
-  const baseClasses = `p-4 transition-colors ${!isLast ? 'border-b border-gray-100' : ''}`;
-  const interactiveClasses = onClick ? 'hover:bg-gray-50 cursor-pointer' : '';
-  
+  const baseClasses = `p-4 transition-colors ${!isLast ? 'border-b border-border' : ''}`;
+  const interactiveClasses = onClick ? 'hover:bg-muted cursor-pointer' : '';
+
   return (
-    <div 
+    <div
       className={`${baseClasses} ${interactiveClasses} ${className}`}
       onClick={onClick}
     >
@@ -146,9 +146,9 @@ interface PageEmptyStateProps {
 export function PageEmptyState({ icon: Icon, title, description, action }: PageEmptyStateProps) {
   return (
     <div className="text-center py-12">
-      <Icon className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-      <h3 className="text-lg font-medium text-gray-900 mb-2">{title}</h3>
-      <p className="text-gray-500 mb-6 max-w-md mx-auto">{description}</p>
+      <Icon className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+      <h3 className="text-lg font-medium text-foreground mb-2">{title}</h3>
+      <p className="text-muted-foreground mb-6 max-w-md mx-auto">{description}</p>
       {action}
     </div>
   );

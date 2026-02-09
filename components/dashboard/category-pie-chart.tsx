@@ -2,6 +2,23 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useDashboardStats } from '@/hooks/use-dashboard-stats';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+
+function formatGBP(value: number): string {
+  return `£${value.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+function CustomTooltip({ active, payload }: { active?: boolean; payload?: Array<{ name: string; value: number; payload: { fill: string } }> }) {
+  if (!active || !payload?.[0]) return null;
+  const entry = payload[0];
+  return (
+    <div className="bg-popover border border-border rounded-lg p-3 shadow-lg">
+      <p className="text-sm font-medium" style={{ color: entry.payload.fill }}>
+        {entry.name}: {formatGBP(entry.value)}
+      </p>
+    </div>
+  );
+}
 
 export function IncomeExpenditurePieChart() {
   const { data: stats, isLoading, error } = useDashboardStats();
@@ -14,7 +31,7 @@ export function IncomeExpenditurePieChart() {
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center h-48">
-            <div className="w-32 h-32 bg-gray-200 rounded-full animate-pulse" />
+            <div className="w-32 h-32 bg-muted rounded-full animate-pulse" />
           </div>
         </CardContent>
       </Card>
@@ -45,7 +62,7 @@ export function IncomeExpenditurePieChart() {
           <CardTitle>Income vs Expenditure</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-gray-500 text-center py-8">No financial data available</p>
+          <p className="text-muted-foreground text-center py-8">No financial data available</p>
         </CardContent>
       </Card>
     );
@@ -54,26 +71,10 @@ export function IncomeExpenditurePieChart() {
   const incomePercentage = (income / total) * 100;
   const expenditurePercentage = (expenditure / total) * 100;
 
-  // Create SVG path for pie segments
-  const createPath = (startAngle: number, endAngle: number, radius = 70) => {
-    const centerX = 100;
-    const centerY = 100;
-    
-    const startAngleRad = (startAngle * Math.PI) / 180;
-    const endAngleRad = (endAngle * Math.PI) / 180;
-    
-    const x1 = centerX + radius * Math.cos(startAngleRad);
-    const y1 = centerY + radius * Math.sin(startAngleRad);
-    const x2 = centerX + radius * Math.cos(endAngleRad);
-    const y2 = centerY + radius * Math.sin(endAngleRad);
-    
-    const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
-    
-    return `M ${centerX} ${centerY} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
-  };
-
-  const incomeAngle = (incomePercentage / 100) * 360;
-  // expenditureAngle not needed - only incomeAngle used for pie chart arc
+  const data = [
+    { name: 'Income', value: income, fill: '#22c55e' },
+    { name: 'Expenditure', value: expenditure, fill: '#ef4444' },
+  ];
 
   return (
     <Card>
@@ -82,33 +83,27 @@ export function IncomeExpenditurePieChart() {
       </CardHeader>
       <CardContent>
         <div className="space-y-6">
-          {/* Pie Chart */}
-          <div className="flex justify-center">
-            <svg width="200" height="200" viewBox="0 0 200 200" className="transform -rotate-90">
-              {/* Income Segment */}
-              {income > 0 && (
-                <path
-                  d={createPath(0, incomeAngle)}
-                  fill="#10b981"
-                  stroke="white"
-                  strokeWidth="3"
-                  className="hover:opacity-80 transition-opacity"
-                />
-              )}
-              {/* Expenditure Segment */}
-              {expenditure > 0 && (
-                <path
-                  d={createPath(incomeAngle, 360)}
-                  fill="#ef4444"
-                  stroke="white"
-                  strokeWidth="3"
-                  className="hover:opacity-80 transition-opacity"
-                />
-              )}
-            </svg>
-          </div>
+          <ResponsiveContainer width="100%" height={200}>
+            <PieChart>
+              <Pie
+                data={data}
+                cx="50%"
+                cy="50%"
+                innerRadius={45}
+                outerRadius={80}
+                paddingAngle={3}
+                dataKey="value"
+                stroke="hsl(var(--background))"
+                strokeWidth={3}
+              >
+                {data.map((entry, index) => (
+                  <Cell key={index} fill={entry.fill} />
+                ))}
+              </Pie>
+              <Tooltip content={<CustomTooltip />} />
+            </PieChart>
+          </ResponsiveContainer>
 
-          {/* Legend */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
@@ -117,14 +112,14 @@ export function IncomeExpenditurePieChart() {
               </div>
               <div className="text-right">
                 <div className="text-sm font-semibold text-green-600">
-                  £{income.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
+                  {formatGBP(income)}
                 </div>
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-muted-foreground">
                   {incomePercentage.toFixed(1)}%
                 </div>
               </div>
             </div>
-            
+
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="w-4 h-4 bg-red-500 rounded-full" />
@@ -132,9 +127,9 @@ export function IncomeExpenditurePieChart() {
               </div>
               <div className="text-right">
                 <div className="text-sm font-semibold text-red-600">
-                  £{expenditure.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
+                  {formatGBP(expenditure)}
                 </div>
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-muted-foreground">
                   {expenditurePercentage.toFixed(1)}%
                 </div>
               </div>

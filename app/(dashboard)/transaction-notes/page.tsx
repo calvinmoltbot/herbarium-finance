@@ -170,20 +170,20 @@ export default function TransactionNotesPage() {
       case 'income': return 'bg-green-100 text-green-800';
       case 'expenditure': return 'bg-red-100 text-red-800';
       case 'capital': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-gray-100 text-gray-800';
+      default: return 'bg-muted text-foreground';
     }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-background">
         <div className="max-w-6xl mx-auto py-12 px-6">
           <div className="text-center space-y-4">
             <div className="flex items-center justify-center space-x-3">
-              <StickyNote className="h-12 w-12 text-blue-600" />
-              <h1 className="text-4xl font-bold tracking-tight text-gray-900">Transaction Notes</h1>
+              <StickyNote className="h-12 w-12 text-primary" />
+              <h1 className="text-4xl font-bold tracking-tight text-foreground">Transaction Notes</h1>
             </div>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               Loading transactions...
             </p>
           </div>
@@ -193,15 +193,15 @@ export default function TransactionNotesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto py-12 px-6 space-y-8">
         {/* Professional Header */}
         <div className="text-center space-y-4">
           <div className="flex items-center justify-center space-x-3">
-            <StickyNote className="h-12 w-12 text-blue-600" />
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900">Transaction Notes</h1>
+            <StickyNote className="h-12 w-12 text-primary" />
+            <h1 className="text-4xl font-bold tracking-tight text-foreground">Transaction Notes</h1>
           </div>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Add and edit notes for your transactions in one dedicated place
           </p>
         </div>
@@ -257,7 +257,7 @@ export default function TransactionNotesPage() {
           <CardContent>
             <div className="space-y-4">
               {filteredTransactions.length === 0 ? (
-                <p className="text-center text-gray-500 py-8">
+                <p className="text-center text-muted-foreground py-8">
                   No transactions match your filters.
                 </p>
               ) : (
@@ -275,7 +275,7 @@ export default function TransactionNotesPage() {
                               </Badge>
                             )}
                           </div>
-                          <div className="flex items-center gap-4 text-sm text-gray-600">
+                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
                             <span>{new Date(transaction.transaction_date).toLocaleDateString('en-GB')}</span>
                             <Badge className={getTypeColor(transaction.type)}>
                               {transaction.type}
@@ -337,7 +337,7 @@ export default function TransactionNotesPage() {
                       {editingTransaction === transaction.id ? (
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                           <div>
-                            <label className="text-sm font-medium text-gray-700 mb-2 block">
+                            <label className="text-sm font-medium text-foreground mb-2 block">
                               Quick Notes ({editingNotes.length}/1000)
                             </label>
                             <Textarea
@@ -349,7 +349,7 @@ export default function TransactionNotesPage() {
                             />
                           </div>
                           <div>
-                            <label className="text-sm font-medium text-gray-700 mb-2 block">
+                            <label className="text-sm font-medium text-foreground mb-2 block">
                               Extended Description ({editingExtended.length}/1000)
                             </label>
                             <Textarea
@@ -376,8 +376,8 @@ export default function TransactionNotesPage() {
                             </div>
                           )}
                           {!transaction.hasNotes && (
-                            <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 text-center">
-                              <p className="text-gray-500 text-sm">No notes added yet</p>
+                            <div className="bg-muted border border-border rounded-lg p-3 text-center">
+                              <p className="text-muted-foreground text-sm">No notes added yet</p>
                             </div>
                           )}
                         </div>

@@ -87,13 +87,13 @@ export function UnallocatedCategoriesPanel({ type, className }: UnallocatedCateg
     return (
       <Card className={className}>
         <CardHeader>
-          <div className="h-6 bg-gray-200 rounded animate-pulse" />
-          <div className="h-4 bg-gray-200 rounded animate-pulse w-2/3" />
+          <div className="h-6 bg-muted rounded animate-pulse" />
+          <div className="h-4 bg-muted rounded animate-pulse w-2/3" />
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
             {[1, 2, 3].map(i => (
-              <div key={i} className="h-16 bg-gray-200 rounded animate-pulse" />
+              <div key={i} className="h-16 bg-muted rounded animate-pulse" />
             ))}
           </div>
         </CardContent>
@@ -114,7 +114,7 @@ export function UnallocatedCategoriesPanel({ type, className }: UnallocatedCateg
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="text-center py-6 text-gray-500">
+          <div className="text-center py-6 text-muted-foreground">
             <Users className="h-12 w-12 mx-auto mb-3 text-green-300" />
             <p className="font-medium">Perfect organization!</p>
             <p className="text-sm">No unallocated categories found</p>
@@ -148,7 +148,7 @@ export function UnallocatedCategoriesPanel({ type, className }: UnallocatedCateg
       <CardContent className="space-y-4">
         {/* Bulk Assignment Controls */}
         {unallocatedCategories.length > 1 && (
-          <div className="p-4 bg-gray-50 rounded-lg space-y-3">
+          <div className="p-4 bg-muted rounded-lg space-y-3">
             <div className="flex items-center justify-between">
               <Button
                 variant="outline"
@@ -157,7 +157,7 @@ export function UnallocatedCategoriesPanel({ type, className }: UnallocatedCateg
               >
                 {selectedCategories.size === unallocatedCategories.length ? 'Deselect All' : 'Select All'}
               </Button>
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-muted-foreground">
                 {selectedCategories.size} of {unallocatedCategories.length} selected
               </span>
             </div>
@@ -197,7 +197,7 @@ export function UnallocatedCategoriesPanel({ type, className }: UnallocatedCateg
               className={`p-4 border rounded-lg transition-all ${
                 selectedCategories.has(category.id)
                   ? 'border-blue-400 bg-blue-50 shadow-sm'
-                  : 'border-gray-200 hover:border-gray-300 hover:shadow-sm'
+                  : 'border-border hover:border-border hover:shadow-sm'
               }`}
             >
               {/* Category Info Row */}
@@ -209,7 +209,7 @@ export function UnallocatedCategoriesPanel({ type, className }: UnallocatedCateg
                     className={`w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
                       selectedCategories.has(category.id)
                         ? 'bg-blue-600 border-blue-600 text-white'
-                        : 'border-gray-300 hover:border-gray-400'
+                        : 'border-border hover:border-border'
                     }`}
                   >
                     {selectedCategories.has(category.id) && (
@@ -226,9 +226,9 @@ export function UnallocatedCategoriesPanel({ type, className }: UnallocatedCateg
 
                 {/* Category Name and Stats */}
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-gray-900 truncate">{category.name}</p>
+                  <p className="font-medium text-foreground truncate">{category.name}</p>
                   {(category.transactionCount || 0) > 0 && (
-                    <p className="text-sm text-gray-500 mt-0.5">
+                    <p className="text-sm text-muted-foreground mt-0.5">
                       {category.transactionCount} transaction{category.transactionCount !== 1 ? 's' : ''} • £{(category.totalAmount || 0).toFixed(2)}
                     </p>
                   )}
@@ -272,7 +272,7 @@ export function UnallocatedCategoriesPanel({ type, className }: UnallocatedCateg
                         delete newStates[category.id];
                         return newStates;
                       })}
-                      className="border-gray-300 hover:bg-gray-50 h-9 w-9 p-0"
+                      className="border-border hover:bg-muted h-9 w-9 p-0"
                       title="Cancel"
                     >
                       <X className="h-4 w-4" />
@@ -286,7 +286,7 @@ export function UnallocatedCategoriesPanel({ type, className }: UnallocatedCateg
 
         {/* Summary Stats */}
         {stats && stats.total > 0 && (
-          <div className="pt-3 border-t text-sm text-gray-600">
+          <div className="pt-3 border-t text-sm text-muted-foreground">
             <p>
               <strong>{stats.total}</strong> unallocated categories total
               {stats.income > 0 && ` • ${stats.income} income`}

@@ -114,7 +114,7 @@ export default function IncomeTransactionsReport() {
   const totalAmount = filteredTransactions.reduce((sum, transaction) => sum + transaction.amount, 0);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto py-8 px-6 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -126,8 +126,8 @@ export default function IncomeTransactionsReport() {
               </Link>
             </Button>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Income Transactions Report</h1>
-              <p className="text-gray-600">Detailed analysis of all income transactions</p>
+              <h1 className="text-3xl font-bold text-foreground">Income Transactions Report</h1>
+              <p className="text-muted-foreground">Detailed analysis of all income transactions</p>
             </div>
           </div>
           <Button onClick={exportToCSV} className="flex items-center space-x-2">
@@ -147,9 +147,9 @@ export default function IncomeTransactionsReport() {
           <CardContent>
             <div className="grid gap-4 md:grid-cols-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Search</label>
+                <label className="text-sm font-medium text-foreground">Search</label>
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
                     placeholder="Search transactions..."
                     value={searchTerm}
@@ -160,7 +160,7 @@ export default function IncomeTransactionsReport() {
               </div>
               
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Category</label>
+                <label className="text-sm font-medium text-foreground">Category</label>
                 <Select value={selectedCategory} onValueChange={setSelectedCategory}>
                   <SelectTrigger>
                     <SelectValue placeholder="All categories" />
@@ -181,7 +181,7 @@ export default function IncomeTransactionsReport() {
               </div>
               
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Summary</label>
+                <label className="text-sm font-medium text-foreground">Summary</label>
                 <div className="p-3 bg-green-50 rounded-lg border border-green-200">
                   <div className="flex items-center space-x-2">
                     <TrendingUp className="h-4 w-4 text-green-600" />
@@ -209,17 +209,17 @@ export default function IncomeTransactionsReport() {
           <CardContent>
             {isLoading ? (
               <div className="flex items-center justify-center py-12">
-                <div className="text-gray-500">Loading transactions...</div>
+                <div className="text-muted-foreground">Loading transactions...</div>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-gray-200">
+                    <tr className="border-b border-border">
                       <th className="text-left py-3 px-4">
                         <button
                           onClick={() => handleSort('date')}
-                          className="flex items-center space-x-1 font-medium text-gray-900 hover:text-blue-600"
+                          className="flex items-center space-x-1 font-medium text-foreground hover:text-primary"
                         >
                           <span>Date</span>
                           <ArrowUpDown className="h-4 w-4" />
@@ -228,7 +228,7 @@ export default function IncomeTransactionsReport() {
                       <th className="text-left py-3 px-4">
                         <button
                           onClick={() => handleSort('description')}
-                          className="flex items-center space-x-1 font-medium text-gray-900 hover:text-blue-600"
+                          className="flex items-center space-x-1 font-medium text-foreground hover:text-primary"
                         >
                           <span>Description</span>
                           <ArrowUpDown className="h-4 w-4" />
@@ -237,7 +237,7 @@ export default function IncomeTransactionsReport() {
                       <th className="text-left py-3 px-4">
                         <button
                           onClick={() => handleSort('category')}
-                          className="flex items-center space-x-1 font-medium text-gray-900 hover:text-blue-600"
+                          className="flex items-center space-x-1 font-medium text-foreground hover:text-primary"
                         >
                           <span>Category</span>
                           <ArrowUpDown className="h-4 w-4" />
@@ -246,7 +246,7 @@ export default function IncomeTransactionsReport() {
                       <th className="text-right py-3 px-4">
                         <button
                           onClick={() => handleSort('amount')}
-                          className="flex items-center justify-end space-x-1 font-medium text-gray-900 hover:text-blue-600"
+                          className="flex items-center justify-end space-x-1 font-medium text-foreground hover:text-primary"
                         >
                           <span>Amount</span>
                           <ArrowUpDown className="h-4 w-4" />
@@ -256,11 +256,11 @@ export default function IncomeTransactionsReport() {
                   </thead>
                   <tbody>
                     {filteredTransactions.map((transaction) => (
-                      <tr key={transaction.id} className="border-b border-gray-100 hover:bg-gray-50">
-                        <td className="py-3 px-4 text-sm text-gray-900">
+                      <tr key={transaction.id} className="border-b border-border hover:bg-muted">
+                        <td className="py-3 px-4 text-sm text-foreground">
                           {format(new Date(transaction.transaction_date), 'dd/MM/yyyy')}
                         </td>
-                        <td className="py-3 px-4 text-sm text-gray-900">
+                        <td className="py-3 px-4 text-sm text-foreground">
                           {transaction.description || ''}
                         </td>
                         <td className="py-3 px-4 text-sm">
@@ -278,7 +278,7 @@ export default function IncomeTransactionsReport() {
                 
                 {filteredTransactions.length === 0 && (
                   <div className="text-center py-12">
-                    <div className="text-gray-500">No transactions found matching your criteria</div>
+                    <div className="text-muted-foreground">No transactions found matching your criteria</div>
                   </div>
                 )}
               </div>

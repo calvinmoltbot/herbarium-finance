@@ -101,9 +101,9 @@ function HierarchyItem({ hierarchy, isExpanded, onToggleExpand, onHierarchyClick
         <div className="flex items-center space-x-3">
           {hasCategories ? (
             isExpanded ? (
-              <ChevronDown className="h-4 w-4 text-gray-500" />
+              <ChevronDown className="h-4 w-4 text-muted-foreground" />
             ) : (
-              <ChevronRight className="h-4 w-4 text-gray-500" />
+              <ChevronRight className="h-4 w-4 text-muted-foreground" />
             )
           ) : (
             <div className="w-4 h-4" />
@@ -127,11 +127,11 @@ function HierarchyItem({ hierarchy, isExpanded, onToggleExpand, onHierarchyClick
 
       {/* Category Details (Collapsible) */}
       {hasCategories && isExpanded && (
-        <div className="ml-6 space-y-2 border-l-2 border-gray-200 pl-4">
+        <div className="ml-6 space-y-2 border-l-2 border-border pl-4">
           {hierarchy.categories.map((category) => (
             <div
               key={category.id}
-              className="flex items-center justify-between py-2 px-3 bg-white rounded border cursor-pointer hover:bg-gray-50 transition-colors"
+              className="flex items-center justify-between py-2 px-3 bg-card rounded border cursor-pointer hover:bg-muted transition-colors"
               onClick={() => onCategoryClick(category.id, category.name, hierarchy.name, type)}
               title="Click to view transactions"
             >
@@ -140,14 +140,14 @@ function HierarchyItem({ hierarchy, isExpanded, onToggleExpand, onHierarchyClick
                   className="w-3 h-3 rounded-full"
                   style={{ backgroundColor: category.color || '#6B7280' }}
                 />
-                <span className="text-gray-700 font-medium">{category.name}</span>
+                <span className="text-foreground font-medium">{category.name}</span>
                 <Badge variant="outline" className="text-xs">
                   {category.transaction_count} transactions
                 </Badge>
               </div>
               <div className="flex items-center space-x-2">
                 {category.total_amount < 0 && <Minus className="h-3 w-3 text-red-500" />}
-                <span className="font-semibold text-gray-900">
+                <span className="font-semibold text-foreground">
                   {formatCurrency(Math.abs(category.total_amount))}
                 </span>
               </div>
@@ -293,8 +293,8 @@ export function HierarchicalPLReport({ className }: HierarchicalPLReportProps) {
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center py-12">
-            <RefreshCw className="h-8 w-8 animate-spin text-gray-400" />
-            <span className="ml-2 text-gray-600">Loading P&L data...</span>
+            <RefreshCw className="h-8 w-8 animate-spin text-muted-foreground" />
+            <span className="ml-2 text-muted-foreground">Loading P&L data...</span>
           </div>
         </CardContent>
       </Card>
@@ -417,13 +417,13 @@ export function HierarchicalPLReport({ className }: HierarchicalPLReportProps) {
           <div>
             <div className="flex items-center justify-between mb-4 pb-2 border-b-2 border-green-200">
               <h3 className="font-bold text-green-700 text-lg">INCOME</h3>
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-muted-foreground">
                 {plData.income.length} hierarchies
               </span>
             </div>
             <div className="space-y-2">
               {plData.income.length === 0 ? (
-                <div className="text-center py-6 text-gray-500">
+                <div className="text-center py-6 text-muted-foreground">
                   No income hierarchies for this period
                 </div>
               ) : (
@@ -454,13 +454,13 @@ export function HierarchicalPLReport({ className }: HierarchicalPLReportProps) {
           <div>
             <div className="flex items-center justify-between mb-4 pb-2 border-b-2 border-red-200">
               <h3 className="font-bold text-red-700 text-lg">EXPENDITURE</h3>
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-muted-foreground">
                 {plData.expenditure.length} hierarchies
               </span>
             </div>
             <div className="space-y-2">
               {plData.expenditure.length === 0 ? (
-                <div className="text-center py-6 text-gray-500">
+                <div className="text-center py-6 text-muted-foreground">
                   No expenditure hierarchies for this period
                 </div>
               ) : (
@@ -488,7 +488,7 @@ export function HierarchicalPLReport({ className }: HierarchicalPLReportProps) {
           </div>
 
           {/* Net Operating Profit/Loss */}
-          <div className="border-t-4 border-gray-400 pt-4">
+          <div className="border-t-4 border-border pt-4">
             <div className={`flex items-center justify-between p-4 rounded-lg ${
               totals.net_operating_profit >= 0 ? 'bg-green-50 border-2 border-green-200' : 'bg-red-50 border-2 border-red-200'
             }`}>
@@ -517,7 +517,7 @@ export function HierarchicalPLReport({ className }: HierarchicalPLReportProps) {
             <div>
               <div className="flex items-center justify-between mb-4 pb-2 border-b-2 border-purple-200">
                 <h3 className="font-bold text-purple-700 text-lg">CAPITAL MOVEMENTS</h3>
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-muted-foreground">
                   {plData.capital.length} hierarchies
                 </span>
               </div>
@@ -549,7 +549,7 @@ export function HierarchicalPLReport({ className }: HierarchicalPLReportProps) {
           )}
 
           {/* Final Result */}
-          <div className="border-t-4 border-gray-600 pt-4">
+          <div className="border-t-4 border-border pt-4">
             <div className={`flex items-center justify-between p-6 rounded-lg border-4 ${
               isProfit ? 'bg-green-50 border-green-300' : 'bg-red-50 border-red-300'
             }`}>

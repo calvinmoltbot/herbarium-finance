@@ -172,7 +172,7 @@ export default function BankUploadPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto py-12 px-6 space-y-8">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -187,12 +187,12 @@ export default function BankUploadPage() {
           
           <div className="text-center">
             <div className="flex items-center justify-center space-x-3">
-              <Upload className="h-12 w-12 text-blue-600" />
-              <h1 className="text-4xl font-bold tracking-tight text-gray-900">
+              <Upload className="h-12 w-12 text-primary" />
+              <h1 className="text-4xl font-bold tracking-tight text-foreground">
                 Smart Bank Import
               </h1>
             </div>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Import your Revolut CSV with intelligent categorization and duplicate detection
             </p>
           </div>
@@ -204,29 +204,29 @@ export default function BankUploadPage() {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
-              <div className={`flex items-center space-x-2 ${currentStep === 'upload' ? 'text-blue-600' : 'text-gray-400'}`}>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep === 'upload' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>
+              <div className={`flex items-center space-x-2 ${currentStep === 'upload' ? 'text-blue-600' : 'text-muted-foreground'}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep === 'upload' ? 'bg-blue-600 text-white' : 'bg-muted'}`}>
                   1
                 </div>
                 <span className="font-medium">Upload File</span>
               </div>
               
-              <div className={`flex items-center space-x-2 ${currentStep === 'processing' ? 'text-blue-600' : currentStep === 'review' || currentStep === 'complete' ? 'text-green-600' : 'text-gray-400'}`}>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep === 'processing' ? 'bg-blue-600 text-white' : currentStep === 'review' || currentStep === 'complete' ? 'bg-green-600 text-white' : 'bg-gray-200'}`}>
+              <div className={`flex items-center space-x-2 ${currentStep === 'processing' ? 'text-blue-600' : currentStep === 'review' || currentStep === 'complete' ? 'text-green-600' : 'text-muted-foreground'}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep === 'processing' ? 'bg-blue-600 text-white' : currentStep === 'review' || currentStep === 'complete' ? 'bg-green-600 text-white' : 'bg-muted'}`}>
                   2
                 </div>
                 <span className="font-medium">Process & Categorize</span>
               </div>
               
-              <div className={`flex items-center space-x-2 ${currentStep === 'review' ? 'text-blue-600' : currentStep === 'complete' ? 'text-green-600' : 'text-gray-400'}`}>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep === 'review' ? 'bg-blue-600 text-white' : currentStep === 'complete' ? 'bg-green-600 text-white' : 'bg-gray-200'}`}>
+              <div className={`flex items-center space-x-2 ${currentStep === 'review' ? 'text-blue-600' : currentStep === 'complete' ? 'text-green-600' : 'text-muted-foreground'}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep === 'review' ? 'bg-blue-600 text-white' : currentStep === 'complete' ? 'bg-green-600 text-white' : 'bg-muted'}`}>
                   3
                 </div>
                 <span className="font-medium">Review & Confirm</span>
               </div>
               
-              <div className={`flex items-center space-x-2 ${currentStep === 'complete' ? 'text-green-600' : 'text-gray-400'}`}>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep === 'complete' ? 'bg-green-600 text-white' : 'bg-gray-200'}`}>
+              <div className={`flex items-center space-x-2 ${currentStep === 'complete' ? 'text-green-600' : 'text-muted-foreground'}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep === 'complete' ? 'bg-green-600 text-white' : 'bg-muted'}`}>
                   ✓
                 </div>
                 <span className="font-medium">Complete</span>
@@ -245,21 +245,21 @@ export default function BankUploadPage() {
               <div
                 className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
                   dragActive 
-                    ? 'border-blue-500 bg-blue-50' 
-                    : 'border-gray-300 hover:border-gray-400'
+                    ? 'border-blue-500 bg-blue-50'
+                    : 'border-border hover:border-muted-foreground'
                 }`}
                 onDragEnter={handleDrag}
                 onDragLeave={handleDrag}
                 onDragOver={handleDrag}
                 onDrop={handleDrop}
               >
-                <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <Upload className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                 
                 {selectedFile ? (
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <p className="text-lg font-medium text-gray-900">{selectedFile.name}</p>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-lg font-medium text-foreground">{selectedFile.name}</p>
+                      <p className="text-sm text-muted-foreground">
                         {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
                       </p>
                     </div>
@@ -275,7 +275,7 @@ export default function BankUploadPage() {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    <p className="text-lg text-gray-600">
+                    <p className="text-lg text-muted-foreground">
                       Drag and drop your Revolut CSV file here, or click to browse
                     </p>
                     <input
@@ -290,7 +290,7 @@ export default function BankUploadPage() {
                         <span>Browse Files</span>
                       </Button>
                     </label>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-muted-foreground">
                       Supports CSV files up to 10MB
                     </p>
                   </div>
@@ -300,8 +300,8 @@ export default function BankUploadPage() {
               {/* Instructions */}
               <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <h3 className="font-medium text-gray-900 mb-3">How to Export from Revolut</h3>
-                  <div className="space-y-2 text-sm text-gray-600">
+                  <h3 className="font-medium text-foreground mb-3">How to Export from Revolut</h3>
+                  <div className="space-y-2 text-sm text-muted-foreground">
                     <div className="flex items-start space-x-2">
                       <span className="w-5 h-5 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-medium">1</span>
                       <p>Open Revolut app → More → Statement</p>
@@ -318,8 +318,8 @@ export default function BankUploadPage() {
                 </div>
                 
                 <div>
-                  <h3 className="font-medium text-gray-900 mb-3">Smart Features</h3>
-                  <div className="space-y-2 text-sm text-gray-600">
+                  <h3 className="font-medium text-foreground mb-3">Smart Features</h3>
+                  <div className="space-y-2 text-sm text-muted-foreground">
                     <div className="flex items-center space-x-2">
                       <Lightbulb className="h-4 w-4 text-yellow-500" />
                       <p>Intelligent category suggestions</p>
@@ -361,15 +361,15 @@ export default function BankUploadPage() {
                     <span>Generating intelligent category suggestions</span>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                      <div className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full"></div>
+                    <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center">
+                      <div className="w-4 h-4 border-2 border-border border-t-transparent rounded-full"></div>
                     </div>
                     <span>Checking for duplicates</span>
                   </div>
                 </div>
                 
                 <Progress value={65} className="h-2" />
-                <p className="text-center text-sm text-gray-600">
+                <p className="text-center text-sm text-muted-foreground">
                   This may take a few moments for large files...
                 </p>
               </div>
@@ -421,26 +421,26 @@ export default function BankUploadPage() {
                 {importStats && (
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-gray-900">{importStats.totalImported || importedTransactions.length}</div>
-                      <div className="text-sm text-gray-600">Total Imported</div>
+                      <div className="text-2xl font-bold text-foreground">{importStats.totalImported || importedTransactions.length}</div>
+                      <div className="text-sm text-muted-foreground">Total Imported</div>
                     </div>
                     <div className="text-center">
                       <div className="text-2xl font-bold text-green-600">
                         {importedTransactions.filter(t => t.category_id).length}
                       </div>
-                      <div className="text-sm text-gray-600">Categorized</div>
+                      <div className="text-sm text-muted-foreground">Categorized</div>
                     </div>
                     <div className="text-center">
                       <div className="text-2xl font-bold text-orange-600">
                         {importedTransactions.filter(t => !t.category_id).length}
                       </div>
-                      <div className="text-sm text-gray-600">Needs Review</div>
+                      <div className="text-sm text-muted-foreground">Needs Review</div>
                     </div>
                     <div className="text-center">
                       <div className="text-2xl font-bold text-blue-600">
                         {formatCurrency(importedTransactions.reduce((sum, t) => sum + Math.abs(t.amount), 0))}
                       </div>
-                      <div className="text-sm text-gray-600">Total Value</div>
+                      <div className="text-sm text-muted-foreground">Total Value</div>
                     </div>
                   </div>
                 )}
@@ -475,7 +475,7 @@ export default function BankUploadPage() {
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
                           <h3 className="font-medium">{transaction.description}</h3>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted-foreground">
                             {formatCurrency(transaction.amount)} • {format(new Date(transaction.transaction_date), 'dd/MM/yyyy')}
                           </p>
                           <Badge className={transaction.type === 'income' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}>
@@ -602,8 +602,8 @@ export default function BankUploadPage() {
           <Card>
             <CardContent className="p-8 text-center">
               <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Import Complete!</h2>
-              <p className="text-gray-600 mb-6">
+              <h2 className="text-2xl font-bold text-foreground mb-2">Import Complete!</h2>
+              <p className="text-muted-foreground mb-6">
                 Your Revolut transactions have been successfully imported and categorized.
               </p>
               

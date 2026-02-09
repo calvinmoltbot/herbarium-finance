@@ -61,7 +61,7 @@ const integrationSteps = [
 
 export default function ShopifyIntegrationPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto py-12 px-6 space-y-8">
         {/* Back Navigation */}
         <div className="flex items-center space-x-4">
@@ -76,10 +76,10 @@ export default function ShopifyIntegrationPage() {
         {/* Professional Header */}
         <div className="text-center space-y-4">
           <div className="flex items-center justify-center space-x-3">
-            <ShoppingCart className="h-12 w-12 text-blue-600" />
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900">Shopify Integration</h1>
+            <ShoppingCart className="h-12 w-12 text-primary" />
+            <h1 className="text-4xl font-bold tracking-tight text-foreground">Shopify Integration</h1>
           </div>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Connect your Shopify store for comprehensive sales analytics and automated income tracking
           </p>
         </div>
@@ -117,7 +117,7 @@ export default function ShopifyIntegrationPage() {
           <CardContent>
             <div className="grid gap-6 md:grid-cols-2">
               <div className="space-y-4">
-                <h4 className="font-medium text-gray-900">Current Limitations</h4>
+                <h4 className="font-medium text-foreground">Current Limitations</h4>
                 <div className="space-y-3">
                   <div className="p-3 bg-red-50 rounded-lg border border-red-200">
                     <p className="text-sm text-red-800">
@@ -138,7 +138,7 @@ export default function ShopifyIntegrationPage() {
               </div>
               
               <div className="space-y-4">
-                <h4 className="font-medium text-gray-900">HDW Finance Benefits</h4>
+                <h4 className="font-medium text-foreground">HDW Finance Benefits</h4>
                 <div className="space-y-3">
                   <div className="p-3 bg-green-50 rounded-lg border border-green-200">
                     <p className="text-sm text-green-800">
@@ -183,7 +183,7 @@ export default function ShopifyIntegrationPage() {
                   </CardDescription>
                   <div className="space-y-2">
                     {feature.benefits.map((benefit, benefitIndex) => (
-                      <div key={benefitIndex} className="flex items-center text-sm text-gray-600">
+                      <div key={benefitIndex} className="flex items-center text-sm text-muted-foreground">
                         <CheckCircle className="h-4 w-4 text-green-600 mr-2 flex-shrink-0" />
                         {benefit}
                       </div>
@@ -211,9 +211,9 @@ export default function ShopifyIntegrationPage() {
                     {step.step}
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-medium text-gray-900">{step.title}</h4>
-                    <p className="text-sm text-gray-600 mt-1">{step.description}</p>
-                    <p className="text-xs text-gray-500 mt-2">{step.details}</p>
+                    <h4 className="font-medium text-foreground">{step.title}</h4>
+                    <p className="text-sm text-muted-foreground mt-1">{step.description}</p>
+                    <p className="text-xs text-muted-foreground mt-2">{step.details}</p>
                   </div>
                 </div>
               ))}
@@ -232,8 +232,8 @@ export default function ShopifyIntegrationPage() {
           <CardContent>
             <div className="grid gap-6 md:grid-cols-3">
               <div className="space-y-3">
-                <h4 className="font-medium text-gray-900">Sales Analytics</h4>
-                <div className="space-y-2 text-sm text-gray-600">
+                <h4 className="font-medium text-foreground">Sales Analytics</h4>
+                <div className="space-y-2 text-sm text-muted-foreground">
                   <div>• Daily/weekly/monthly revenue trends</div>
                   <div>• Average order value progression</div>
                   <div>• Payment method preferences</div>
@@ -243,8 +243,8 @@ export default function ShopifyIntegrationPage() {
               </div>
               
               <div className="space-y-3">
-                <h4 className="font-medium text-gray-900">Product Insights</h4>
-                <div className="space-y-2 text-sm text-gray-600">
+                <h4 className="font-medium text-foreground">Product Insights</h4>
+                <div className="space-y-2 text-sm text-muted-foreground">
                   <div>• Best and worst performing products</div>
                   <div>• Product category profitability</div>
                   <div>• Inventory turnover rates</div>
@@ -254,8 +254,8 @@ export default function ShopifyIntegrationPage() {
               </div>
               
               <div className="space-y-3">
-                <h4 className="font-medium text-gray-900">Customer Data</h4>
-                <div className="space-y-2 text-sm text-gray-600">
+                <h4 className="font-medium text-foreground">Customer Data</h4>
+                <div className="space-y-2 text-sm text-muted-foreground">
                   <div>• Customer lifetime value</div>
                   <div>• Purchase frequency patterns</div>
                   <div>• Geographic sales distribution</div>
@@ -313,7 +313,7 @@ export default function ShopifyIntegrationPage() {
             <div className="mt-6 grid gap-4 md:grid-cols-3">
               <Button asChild variant="outline" className="h-auto p-4 border-blue-300 hover:bg-blue-50">
                 <Link href="/add-income" className="flex flex-col items-center space-y-2">
-                  <ShoppingCart className="h-5 w-5 text-blue-600" />
+                  <ShoppingCart className="h-5 w-5 text-primary" />
                   <span className="text-sm font-medium">Add Sales Manually</span>
                   <span className="text-xs text-blue-600">Enter daily/weekly totals</span>
                 </Link>
@@ -321,7 +321,7 @@ export default function ShopifyIntegrationPage() {
               
               <Button asChild variant="outline" className="h-auto p-4 border-blue-300 hover:bg-blue-50">
                 <Link href="/import/transactions" className="flex flex-col items-center space-y-2">
-                  <Package className="h-5 w-5 text-blue-600" />
+                  <Package className="h-5 w-5 text-primary" />
                   <span className="text-sm font-medium">Import CSV Data</span>
                   <span className="text-xs text-blue-600">Upload Shopify exports</span>
                 </Link>
@@ -329,7 +329,7 @@ export default function ShopifyIntegrationPage() {
               
               <Button asChild variant="outline" className="h-auto p-4 border-blue-300 hover:bg-blue-50">
                 <Link href="/categories" className="flex flex-col items-center space-y-2">
-                  <BarChart3 className="h-5 w-5 text-blue-600" />
+                  <BarChart3 className="h-5 w-5 text-primary" />
                   <span className="text-sm font-medium">Setup Categories</span>
                   <span className="text-xs text-blue-600">Prepare for integration</span>
                 </Link>

@@ -37,18 +37,18 @@ function HierarchyItem({ hierarchy, index, type, isExpanded, onToggleExpand }: H
         <div className="flex items-center space-x-2">
           {hasCategories ? (
             isExpanded ? (
-              <ChevronDown className="h-4 w-4 text-gray-500" />
+              <ChevronDown className="h-4 w-4 text-muted-foreground" />
             ) : (
-              <ChevronRight className="h-4 w-4 text-gray-500" />
+              <ChevronRight className="h-4 w-4 text-muted-foreground" />
             )
           ) : (
             <div className="w-4 h-4" /> // Spacer for alignment
           )}
-          <span className="text-gray-700 font-medium">
+          <span className="text-foreground font-medium">
             {index + 1}. {hierarchy.name}
           </span>
           {hasCategories && (
-            <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+            <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">
               {hierarchy.categories.length} categories
             </span>
           )}
@@ -65,7 +65,7 @@ function HierarchyItem({ hierarchy, index, type, isExpanded, onToggleExpand }: H
                   className="w-3 h-3 rounded-full"
                   style={{ backgroundColor: category.color }}
                 />
-                <span className="text-gray-600">{category.name}</span>
+                <span className="text-muted-foreground">{category.name}</span>
               </div>
             </div>
           ))}
@@ -163,13 +163,13 @@ export function CollapsiblePLPreview({ incomeHierarchies, expenditureHierarchies
           <div>
             <h3 className="font-bold text-green-700 mb-3 border-b border-green-200 pb-2 flex items-center justify-between">
               <span>INCOME</span>
-              <span className="text-xs font-normal text-gray-500">
+              <span className="text-xs font-normal text-muted-foreground">
                 {incomeHierarchies.length} hierarchies
               </span>
             </h3>
             <div className="space-y-1">
               {incomeHierarchies.length === 0 ? (
-                <div className="text-center py-4 text-gray-500 text-xs">
+                <div className="text-center py-4 text-muted-foreground text-xs">
                   No income hierarchies configured
                 </div>
               ) : (
@@ -195,13 +195,13 @@ export function CollapsiblePLPreview({ incomeHierarchies, expenditureHierarchies
           <div>
             <h3 className="font-bold text-red-700 mb-3 border-b border-red-200 pb-2 flex items-center justify-between">
               <span>EXPENDITURE</span>
-              <span className="text-xs font-normal text-gray-500">
+              <span className="text-xs font-normal text-muted-foreground">
                 {expenditureHierarchies.length} hierarchies
               </span>
             </h3>
             <div className="space-y-1">
               {expenditureHierarchies.length === 0 ? (
-                <div className="text-center py-4 text-gray-500 text-xs">
+                <div className="text-center py-4 text-muted-foreground text-xs">
                   No expenditure hierarchies configured
                 </div>
               ) : (
@@ -228,7 +228,7 @@ export function CollapsiblePLPreview({ incomeHierarchies, expenditureHierarchies
             <div>
               <h3 className="font-bold text-purple-700 mb-3 border-b border-purple-200 pb-2 flex items-center justify-between">
                 <span>CAPITAL MOVEMENTS</span>
-                <span className="text-xs font-normal text-gray-500">
+                <span className="text-xs font-normal text-muted-foreground">
                   {capitalHierarchies.length} hierarchies
                 </span>
               </h3>
@@ -252,7 +252,7 @@ export function CollapsiblePLPreview({ incomeHierarchies, expenditureHierarchies
           )}
 
           {/* Net Profit */}
-          <div className="border-t-2 border-gray-400 pt-3">
+          <div className="border-t-2 border-border pt-3">
             <div className={`font-bold text-lg ${
               netProfit >= 0 ? 'text-green-700' : 'text-red-700'
             }`}>

@@ -153,7 +153,7 @@ export default function DataResetPage() {
                   </div>
                   
                   {isConfirming && (
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-muted-foreground">
                       Click {`"${option.title}"`} again to confirm this permanent action.
                     </p>
                   )}

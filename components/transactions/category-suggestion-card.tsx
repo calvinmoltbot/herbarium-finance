@@ -63,7 +63,7 @@ export function CategorySuggestionCard({
         </div>
         
         {suggestion.pattern_id && (
-          <p className="text-xs text-gray-500 mt-2">
+          <p className="text-xs text-muted-foreground mt-2">
             Based on learned pattern
           </p>
         )}

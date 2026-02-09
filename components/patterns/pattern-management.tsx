@@ -258,7 +258,7 @@ export function PatternManagement() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center p-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground"></div>
       </div>
     );
   }
@@ -304,7 +304,7 @@ export function PatternManagement() {
         </CardHeader>
         <CardContent>
           {sortedPatterns.length === 0 ? (
-            <p className="text-center text-gray-500 py-8">
+            <p className="text-center text-muted-foreground py-8">
               {`No patterns found. Use "Learn from History" below or add patterns manually.`}
             </p>
           ) : (
@@ -314,7 +314,7 @@ export function PatternManagement() {
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
-                        <code className="bg-gray-100 px-2 py-1 rounded text-sm">
+                        <code className="bg-muted px-2 py-1 rounded text-sm">
                           {pattern.pattern}
                         </code>
                         <Badge
@@ -325,7 +325,7 @@ export function PatternManagement() {
                         </Badge>
                       </div>
 
-                      <div className="flex items-center space-x-4 text-sm text-gray-600">
+                      <div className="flex items-center space-x-4 text-sm text-muted-foreground">
                         <span>Matches: {pattern.match_count}</span>
                         <Badge
                           variant="secondary"
@@ -383,17 +383,17 @@ export function PatternManagement() {
                     <div className="mt-4 pt-4 border-t">
                       {loadingTransactions ? (
                         <div className="flex items-center justify-center py-4">
-                          <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
-                          <span className="ml-2 text-sm text-gray-600">Loading transactions...</span>
+                          <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                          <span className="ml-2 text-sm text-muted-foreground">Loading transactions...</span>
                         </div>
                       ) : matchingTransactions.length === 0 ? (
-                        <div className="text-center py-4 text-sm text-gray-500">
+                        <div className="text-center py-4 text-sm text-muted-foreground">
                           No transactions match this pattern
                         </div>
                       ) : (
                         <div className="space-y-2">
                           <div className="flex items-center justify-between mb-2">
-                            <h4 className="text-sm font-medium text-gray-700">
+                            <h4 className="text-sm font-medium text-foreground">
                               Matching Transactions ({matchingTransactions.length})
                             </h4>
                           </div>
@@ -401,14 +401,14 @@ export function PatternManagement() {
                             {matchingTransactions.map((transaction) => (
                               <div
                                 key={transaction.id}
-                                className="p-3 bg-gray-50 rounded border border-gray-200 text-sm"
+                                className="p-3 bg-muted rounded border border-border text-sm"
                               >
                                 <div className="flex items-start justify-between">
                                   <div className="flex-1 min-w-0">
-                                    <p className="font-medium text-gray-900 truncate">
+                                    <p className="font-medium text-foreground truncate">
                                       {transaction.description}
                                     </p>
-                                    <div className="flex items-center space-x-3 mt-1 text-xs text-gray-600">
+                                    <div className="flex items-center space-x-3 mt-1 text-xs text-muted-foreground">
                                       <span>
                                         {new Date(transaction.transaction_date).toLocaleDateString()}
                                       </span>
@@ -459,9 +459,9 @@ export function PatternManagement() {
                 <Input
                   value={editingPattern.pattern}
                   disabled
-                  className="mt-1 bg-gray-100"
+                  className="mt-1 bg-muted"
                 />
-                <p className="text-xs text-gray-500 mt-1">Pattern cannot be changed</p>
+                <p className="text-xs text-muted-foreground mt-1">Pattern cannot be changed</p>
               </div>
 
               <div>
@@ -534,7 +534,7 @@ export function PatternManagement() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-sm text-gray-700">
+          <p className="text-sm text-foreground">
             Automatically analyze your existing categorized transactions to create smart patterns.
             This improves future import suggestions by learning from your past categorization decisions.
           </p>
@@ -558,23 +558,23 @@ export function PatternManagement() {
           </Button>
 
           {learningResults && learningResults.success && (
-            <div className="mt-4 p-4 bg-white border rounded-lg space-y-3">
+            <div className="mt-4 p-4 bg-card border rounded-lg space-y-3">
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <p className="text-gray-600">Transactions Analyzed</p>
-                  <p className="text-2xl font-bold text-gray-900">{learningResults.totalTransactions}</p>
+                  <p className="text-muted-foreground">Transactions Analyzed</p>
+                  <p className="text-2xl font-bold text-foreground">{learningResults.totalTransactions}</p>
                 </div>
                 <div>
-                  <p className="text-gray-600">Patterns Created</p>
+                  <p className="text-muted-foreground">Patterns Created</p>
                   <p className="text-2xl font-bold text-green-600">{learningResults.patternsCreated}</p>
                 </div>
                 <div>
-                  <p className="text-gray-600">Patterns Updated</p>
+                  <p className="text-muted-foreground">Patterns Updated</p>
                   <p className="text-2xl font-bold text-blue-600">{learningResults.patternsUpdated}</p>
                 </div>
                 <div>
-                  <p className="text-gray-600">Patterns Skipped</p>
-                  <p className="text-2xl font-bold text-gray-600">{learningResults.patternsSkipped}</p>
+                  <p className="text-muted-foreground">Patterns Skipped</p>
+                  <p className="text-2xl font-bold text-muted-foreground">{learningResults.patternsSkipped}</p>
                 </div>
               </div>
 
@@ -583,13 +583,13 @@ export function PatternManagement() {
                   <h4 className="font-medium text-sm mb-2">Top Patterns Learned:</h4>
                   <div className="space-y-2">
                     {learningResults.topPatterns.slice(0, 5).map((pattern: { pattern: string; categoryName: string; confidence: number }, index: number) => (
-                      <div key={index} className="flex items-center justify-between text-xs p-2 bg-gray-50 rounded">
+                      <div key={index} className="flex items-center justify-between text-xs p-2 bg-muted rounded">
                         <code className="font-mono">{pattern.pattern}</code>
                         <div className="flex items-center space-x-2">
                           <Badge variant="secondary" className="text-xs">
                             {pattern.categoryName}
                           </Badge>
-                          <span className="text-gray-600">{pattern.confidence}%</span>
+                          <span className="text-muted-foreground">{pattern.confidence}%</span>
                         </div>
                       </div>
                     ))}
@@ -615,7 +615,7 @@ export function PatternManagement() {
               placeholder="e.g., amazon|amzn for Amazon transactions"
               className="mt-1"
             />
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Use regular expressions to match transaction descriptions. Case insensitive.
             </p>
           </div>

@@ -49,13 +49,13 @@ function VarianceIndicator({ trend, variance, variancePercentage, type }: Varian
   const isPositiveChange = type === 'income' ? trend === 'up' : trend === 'down';
   const isNegativeChange = type === 'income' ? trend === 'down' : trend === 'up';
 
-  const colorClass = trend === 'flat' ? 'text-gray-500' :
+  const colorClass = trend === 'flat' ? 'text-muted-foreground' :
     isPositiveChange ? 'text-green-600' :
-    isNegativeChange ? 'text-red-600' : 'text-gray-500';
+    isNegativeChange ? 'text-red-600' : 'text-muted-foreground';
 
-  const bgColorClass = trend === 'flat' ? 'bg-gray-50' :
+  const bgColorClass = trend === 'flat' ? 'bg-muted' :
     isPositiveChange ? 'bg-green-50' :
-    isNegativeChange ? 'bg-red-50' : 'bg-gray-50';
+    isNegativeChange ? 'bg-red-50' : 'bg-muted';
 
   const Icon = trend === 'up' ? ArrowUp : trend === 'down' ? ArrowDown : Equal;
 
@@ -105,13 +105,13 @@ function ComparisonRow({
     ? type === 'income' ? 'bg-green-50/50 hover:bg-green-100/50' :
       type === 'expenditure' ? 'bg-red-50/50 hover:bg-red-100/50' :
       'bg-purple-50/50 hover:bg-purple-100/50'
-    : 'bg-white hover:bg-gray-50';
+    : 'bg-card hover:bg-muted';
 
   const textColor = !isCategory
     ? type === 'income' ? 'text-green-900' :
       type === 'expenditure' ? 'text-red-900' :
       'text-purple-900'
-    : 'text-gray-900';
+    : 'text-foreground';
 
   return (
     <div
@@ -127,9 +127,9 @@ function ComparisonRow({
       <div className={cn('col-span-2 flex items-center gap-2', textColor)}>
         {hasChildren && (
           isExpanded ? (
-            <ChevronDown className="h-4 w-4 text-gray-500" />
+            <ChevronDown className="h-4 w-4 text-muted-foreground" />
           ) : (
-            <ChevronRight className="h-4 w-4 text-gray-500" />
+            <ChevronRight className="h-4 w-4 text-muted-foreground" />
           )
         )}
         {isCategory && color && (
@@ -145,7 +145,7 @@ function ComparisonRow({
         {formatCurrency(Math.abs(current))}
       </div>
 
-      <div className="text-right text-gray-600">
+      <div className="text-right text-muted-foreground">
         {formatCurrency(Math.abs(previous))}
       </div>
 
@@ -263,14 +263,14 @@ export function PeriodComparisonReport({
             <span>Current: {currentLabel}</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-gray-400 rounded-full" />
+            <div className="w-3 h-3 bg-muted-foreground rounded-full" />
             <span>Previous: {previousLabel}</span>
           </div>
         </div>
       </div>
 
       {/* Column Headers */}
-      <div className="grid grid-cols-6 gap-4 p-3 mb-2 bg-gray-50 rounded-lg text-sm font-semibold text-gray-700">
+      <div className="grid grid-cols-6 gap-4 p-3 mb-2 bg-muted rounded-lg text-sm font-semibold text-foreground">
         <div className="col-span-2">Category / Hierarchy</div>
         <div className="text-right">Current Period</div>
         <div className="text-right">Previous Period</div>

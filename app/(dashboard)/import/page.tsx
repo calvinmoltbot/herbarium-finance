@@ -71,15 +71,15 @@ const managementSections = [
 
 export default function DatabaseManagementPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto py-12 px-6 space-y-8">
         {/* Professional Header */}
         <div className="text-center space-y-4">
           <div className="flex items-center justify-center space-x-3">
-            <Database className="h-12 w-12 text-blue-600" />
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900">Database Management</h1>
+            <Database className="h-12 w-12 text-primary" />
+            <h1 className="text-4xl font-bold tracking-tight text-foreground">Database Management</h1>
           </div>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Comprehensive tools for managing your financial data, imports, and integrations
           </p>
         </div>
@@ -106,7 +106,7 @@ export default function DatabaseManagementPage() {
                         <Icon className="h-6 w-6" />
                       </div>
                       <div>
-                        <CardTitle className="text-xl font-semibold text-gray-900">
+                        <CardTitle className="text-xl font-semibold text-foreground">
                           {section.title}
                         </CardTitle>
                         <div className="flex items-center space-x-2 mt-2">
@@ -126,17 +126,17 @@ export default function DatabaseManagementPage() {
                 </CardHeader>
                 
                 <CardContent className="space-y-6">
-                  <CardDescription className="text-base leading-relaxed text-gray-600">
+                  <CardDescription className="text-base leading-relaxed text-muted-foreground">
                     {section.description}
                   </CardDescription>
                   
                   {/* Features List */}
                   <div className="space-y-2">
-                    <h4 className="text-sm font-medium text-gray-900">Key Features:</h4>
+                    <h4 className="text-sm font-medium text-foreground">Key Features:</h4>
                     <ul className="space-y-1">
                       {section.features.map((feature, index) => (
-                        <li key={index} className="flex items-center text-sm text-gray-600">
-                          <div className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-3 flex-shrink-0" />
+                        <li key={index} className="flex items-center text-sm text-muted-foreground">
+                          <div className="w-1.5 h-1.5 bg-primary rounded-full mr-3 flex-shrink-0" />
                           {feature}
                         </li>
                       ))}
@@ -175,21 +175,21 @@ export default function DatabaseManagementPage() {
             <div className="grid gap-4 md:grid-cols-3">
               <Button asChild variant="outline" className="h-auto p-4 border-blue-300 hover:bg-blue-50">
                 <Link href="/import/categories" className="flex flex-col items-center space-y-2">
-                  <Database className="h-5 w-5 text-blue-600" />
+                  <Database className="h-5 w-5 text-primary" />
                   <span className="text-sm font-medium">Manage Categories</span>
                 </Link>
               </Button>
               
               <Button asChild variant="outline" className="h-auto p-4 border-blue-300 hover:bg-blue-50">
                 <Link href="/dashboard" className="flex flex-col items-center space-y-2">
-                  <CheckCircle className="h-5 w-5 text-blue-600" />
+                  <CheckCircle className="h-5 w-5 text-primary" />
                   <span className="text-sm font-medium">View Dashboard</span>
                 </Link>
               </Button>
               
               <Button asChild variant="outline" className="h-auto p-4 border-blue-300 hover:bg-blue-50">
                 <Link href="/import/reset" className="flex flex-col items-center space-y-2">
-                  <RotateCcw className="h-5 w-5 text-blue-600" />
+                  <RotateCcw className="h-5 w-5 text-primary" />
                   <span className="text-sm font-medium">Reset Options</span>
                 </Link>
               </Button>
@@ -208,7 +208,7 @@ export default function DatabaseManagementPage() {
           <CardContent>
             <div className="grid gap-6 md:grid-cols-2">
               <div className="space-y-4">
-                <h4 className="font-medium text-gray-900">Completed Setup</h4>
+                <h4 className="font-medium text-foreground">Completed Setup</h4>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
                     <span className="text-sm text-green-800">Initial Data Migration</span>
@@ -222,7 +222,7 @@ export default function DatabaseManagementPage() {
               </div>
               
               <div className="space-y-4">
-                <h4 className="font-medium text-gray-900">Available Features</h4>
+                <h4 className="font-medium text-foreground">Available Features</h4>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
                     <span className="text-sm text-blue-800">Bank Statement Upload</span>

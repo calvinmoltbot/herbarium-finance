@@ -46,10 +46,10 @@ export default function CommitImportPage() {
 
   if (!previewData) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading commit preview...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading commit preview...</p>
         </div>
       </div>
     );
@@ -57,12 +57,12 @@ export default function CommitImportPage() {
 
   if (previewData.totalImportedTransactions === 0) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-background">
         <div className="max-w-4xl mx-auto py-12 px-6">
           <div className="text-center space-y-4">
             <AlertTriangle className="h-12 w-12 text-yellow-500 mx-auto" />
-            <h1 className="text-2xl font-bold text-gray-900">No Import Data Found</h1>
-            <p className="text-gray-600">
+            <h1 className="text-2xl font-bold text-foreground">No Import Data Found</h1>
+            <p className="text-muted-foreground">
               You need to import and review Revolut transactions before you can commit them.
             </p>
             <Button asChild>
@@ -78,7 +78,7 @@ export default function CommitImportPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto py-12 px-6 space-y-8">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -90,9 +90,9 @@ export default function CommitImportPage() {
                   Back to Reconciliation
                 </Link>
               </Button>
-              <h1 className="text-3xl font-bold text-gray-900">Commit Bank Import</h1>
+              <h1 className="text-3xl font-bold text-foreground">Commit Bank Import</h1>
             </div>
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               Replace your manual transactions with bank data, preserving verified descriptions and categories.
             </p>
           </div>
@@ -153,7 +153,7 @@ export default function CommitImportPage() {
 
           {/* Detailed Breakdown */}
           <div className="mt-8 space-y-4">
-            <h4 className="font-medium text-gray-900">Transaction Breakdown</h4>
+            <h4 className="font-medium text-foreground">Transaction Breakdown</h4>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 text-center">
@@ -162,10 +162,10 @@ export default function CommitImportPage() {
                 <div className="text-xs text-purple-500 mt-1">Will keep your descriptions & categories</div>
               </div>
               
-              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
-                <div className="text-xl font-bold text-gray-700">{previewData.unmatchedTransactions}</div>
-                <div className="text-sm text-gray-600">Unmatched</div>
-                <div className="text-xs text-gray-500 mt-1">Ready for categorization</div>
+              <div className="bg-muted border border-border rounded-lg p-4 text-center">
+                <div className="text-xl font-bold text-foreground">{previewData.unmatchedTransactions}</div>
+                <div className="text-sm text-muted-foreground">Unmatched</div>
+                <div className="text-xs text-muted-foreground mt-1">Ready for categorization</div>
               </div>
               
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
@@ -185,24 +185,24 @@ export default function CommitImportPage() {
             <div className="flex items-start space-x-3">
               <div className="w-6 h-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-xs font-medium">1</div>
               <div>
-                <p className="font-medium text-gray-900">Delete All Manual Transactions</p>
-                <p className="text-sm text-gray-600">Your {previewData.manualTransactionsToDelete} existing manual transactions will be permanently removed.</p>
+                <p className="font-medium text-foreground">Delete All Manual Transactions</p>
+                <p className="text-sm text-muted-foreground">Your {previewData.manualTransactionsToDelete} existing manual transactions will be permanently removed.</p>
               </div>
             </div>
             
             <div className="flex items-start space-x-3">
               <div className="w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs font-medium">2</div>
               <div>
-                <p className="font-medium text-gray-900">Import Bank Transactions</p>
-                <p className="text-sm text-gray-600">All {previewData.totalImportedTransactions} bank transactions will become your new main transaction data.</p>
+                <p className="font-medium text-foreground">Import Bank Transactions</p>
+                <p className="text-sm text-muted-foreground">All {previewData.totalImportedTransactions} bank transactions will become your new main transaction data.</p>
               </div>
             </div>
             
             <div className="flex items-start space-x-3">
               <div className="w-6 h-6 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-xs font-medium">3</div>
               <div>
-                <p className="font-medium text-gray-900">Preserve Verified Data</p>
-                <p className="text-sm text-gray-600">
+                <p className="font-medium text-foreground">Preserve Verified Data</p>
+                <p className="text-sm text-muted-foreground">
                   {previewData.verifiedTransactions} verified transactions will use your detailed descriptions and categories
                   {` (e.g., "Amazon - Natural Calico tablecloth" instead of just "Amazon").`}
                 </p>
@@ -212,8 +212,8 @@ export default function CommitImportPage() {
             <div className="flex items-start space-x-3">
               <div className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-medium">4</div>
               <div>
-                <p className="font-medium text-gray-900">Ready for Categorization</p>
-                <p className="text-sm text-gray-600">
+                <p className="font-medium text-foreground">Ready for Categorization</p>
+                <p className="text-sm text-muted-foreground">
                   {previewData.unmatchedTransactions + previewData.rejectedTransactions} transactions will be uncategorized 
                   and ready for you to assign categories.
                 </p>

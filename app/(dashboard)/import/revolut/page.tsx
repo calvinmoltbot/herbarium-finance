@@ -91,17 +91,17 @@ export default function RevolutImportPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto py-12 px-6 space-y-8">
         {/* Header */}
         <div className="text-center space-y-4">
           <div className="flex items-center justify-center space-x-3">
-            <FileText className="h-12 w-12 text-blue-600" />
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900">
+            <FileText className="h-12 w-12 text-primary" />
+            <h1 className="text-4xl font-bold tracking-tight text-foreground">
               Revolut Bank Import
             </h1>
           </div>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Import your Revolut CSV export and match transactions with existing manual entries. 
             {`This is a safe testing environment that won't overwrite your existing data.`}
           </p>
@@ -132,20 +132,20 @@ export default function RevolutImportPage() {
             
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="text-center">
-                <div className="text-2xl font-bold text-gray-900">{statistics.total}</div>
-                <div className="text-sm text-gray-600">Total Imported</div>
+                <div className="text-2xl font-bold text-foreground">{statistics.total}</div>
+                <div className="text-sm text-muted-foreground">Total Imported</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-green-600">{statistics.byStatus.matched}</div>
-                <div className="text-sm text-gray-600">Matched</div>
+                <div className="text-sm text-muted-foreground">Matched</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-yellow-600">{statistics.byStatus.potential}</div>
-                <div className="text-sm text-gray-600">Potential</div>
+                <div className="text-sm text-muted-foreground">Potential</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-gray-600">{statistics.byStatus.unmatched}</div>
-                <div className="text-sm text-gray-600">Unmatched</div>
+                <div className="text-2xl font-bold text-muted-foreground">{statistics.byStatus.unmatched}</div>
+                <div className="text-sm text-muted-foreground">Unmatched</div>
               </div>
             </div>
           </Card>
@@ -158,20 +158,20 @@ export default function RevolutImportPage() {
           <div
             className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
               dragActive 
-                ? 'border-blue-500 bg-blue-50' 
-                : 'border-gray-300 hover:border-gray-400'
+                ? 'border-blue-500 bg-blue-50'
+                : 'border-border hover:border-muted-foreground'
             }`}
             onDragEnter={handleDrag}
             onDragLeave={handleDrag}
             onDragOver={handleDrag}
             onDrop={handleDrop}
           >
-            <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <Upload className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
             
             {selectedFile ? (
               <div className="space-y-2">
-                <p className="text-lg font-medium text-gray-900">{selectedFile.name}</p>
-                <p className="text-sm text-gray-600">
+                <p className="text-lg font-medium text-foreground">{selectedFile.name}</p>
+                <p className="text-sm text-muted-foreground">
                   {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
                 </p>
                 <Button onClick={() => setSelectedFile(null)} variant="outline" size="sm">
@@ -180,7 +180,7 @@ export default function RevolutImportPage() {
               </div>
             ) : (
               <div className="space-y-4">
-                <p className="text-lg text-gray-600">
+                <p className="text-lg text-muted-foreground">
                   Drag and drop your Revolut CSV file here, or click to browse
                 </p>
                 <input
@@ -195,7 +195,7 @@ export default function RevolutImportPage() {
                     Browse Files
                   </Button>
                 </label>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-muted-foreground">
                   Supports CSV files up to 10MB
                 </p>
               </div>
@@ -252,7 +252,7 @@ export default function RevolutImportPage() {
             <h3 className="text-lg font-semibold mb-4">Import Statistics</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
-                <h4 className="font-medium text-gray-900 mb-2">Transaction Summary</h4>
+                <h4 className="font-medium text-foreground mb-2">Transaction Summary</h4>
                 <div className="space-y-1 text-sm">
                   <div className="flex justify-between">
                     <span>Total Transactions:</span>
@@ -272,7 +272,7 @@ export default function RevolutImportPage() {
               </div>
 
               <div>
-                <h4 className="font-medium text-gray-900 mb-2">Financial Summary</h4>
+                <h4 className="font-medium text-foreground mb-2">Financial Summary</h4>
                 <div className="space-y-1 text-sm">
                   <div className="flex justify-between">
                     <span>Total Amount:</span>
@@ -290,7 +290,7 @@ export default function RevolutImportPage() {
               </div>
 
               <div>
-                <h4 className="font-medium text-gray-900 mb-2">Transaction Types</h4>
+                <h4 className="font-medium text-foreground mb-2">Transaction Types</h4>
                 <div className="space-y-1 text-sm">
                   {Object.entries(importStats.transactionTypes).map(([type, count]) => (
                     <div key={type} className="flex justify-between">
@@ -311,31 +311,31 @@ export default function RevolutImportPage() {
             
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
               <div className="text-center">
-                <div className="text-2xl font-bold text-gray-900">{importResult.totalImported}</div>
-                <div className="text-sm text-gray-600">Total Imported</div>
+                <div className="text-2xl font-bold text-foreground">{importResult.totalImported}</div>
+                <div className="text-sm text-muted-foreground">Total Imported</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-green-600">{importResult.highConfidenceMatches}</div>
-                <div className="text-sm text-gray-600">High Confidence</div>
+                <div className="text-sm text-muted-foreground">High Confidence</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-yellow-600">{importResult.mediumConfidenceMatches}</div>
-                <div className="text-sm text-gray-600">Medium Confidence</div>
+                <div className="text-sm text-muted-foreground">Medium Confidence</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-orange-600">{importResult.lowConfidenceMatches}</div>
-                <div className="text-sm text-gray-600">Low Confidence</div>
+                <div className="text-sm text-muted-foreground">Low Confidence</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-gray-600">{importResult.unmatched}</div>
-                <div className="text-sm text-gray-600">Unmatched</div>
+                <div className="text-2xl font-bold text-muted-foreground">{importResult.unmatched}</div>
+                <div className="text-sm text-muted-foreground">Unmatched</div>
               </div>
             </div>
 
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h4 className="font-medium">Matching Progress</h4>
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-muted-foreground">
                   {importResult.totalImported - importResult.unmatched} of {importResult.totalImported} matched
                 </span>
               </div>
@@ -358,7 +358,7 @@ export default function RevolutImportPage() {
                   <AlertCircle className="h-3 w-3 mr-1" />
                   {importResult.lowConfidenceMatches} Low Confidence
                 </Badge>
-                <Badge variant="outline" className="text-gray-600 border-gray-600">
+                <Badge variant="outline" className="text-muted-foreground border-muted-foreground">
                   <X className="h-3 w-3 mr-1" />
                   {importResult.unmatched} Unmatched
                 </Badge>
@@ -378,7 +378,7 @@ export default function RevolutImportPage() {
         {/* Instructions */}
         <Card className="p-6">
           <h3 className="text-lg font-semibold mb-4">How to Export from Revolut</h3>
-          <div className="space-y-3 text-sm text-gray-600">
+          <div className="space-y-3 text-sm text-muted-foreground">
             <div className="flex items-start space-x-3">
               <div className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-medium">1</div>
               <p>Open the Revolut app and go to your account</p>

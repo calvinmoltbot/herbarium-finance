@@ -115,7 +115,7 @@ export function CreateReportDialog({ open, onOpenChange, templates }: CreateRepo
             <div className="grid gap-3 md:grid-cols-2">
               <Card 
                 className={`cursor-pointer transition-colors ${
-                  mode === 'template' ? 'ring-2 ring-blue-500 bg-blue-50' : 'hover:bg-gray-50'
+                  mode === 'template' ? 'ring-2 ring-primary bg-primary/10' : 'hover:bg-muted'
                 }`}
                 onClick={() => setMode('template')}
               >
@@ -133,7 +133,7 @@ export function CreateReportDialog({ open, onOpenChange, templates }: CreateRepo
 
               <Card 
                 className={`cursor-pointer transition-colors ${
-                  mode === 'scratch' ? 'ring-2 ring-blue-500 bg-blue-50' : 'hover:bg-gray-50'
+                  mode === 'scratch' ? 'ring-2 ring-primary bg-primary/10' : 'hover:bg-muted'
                 }`}
                 onClick={() => setMode('scratch')}
               >
@@ -157,15 +157,15 @@ export function CreateReportDialog({ open, onOpenChange, templates }: CreateRepo
               
               {systemTemplates.length > 0 && (
                 <div className="space-y-2">
-                  <h4 className="text-sm font-medium text-gray-700">System Templates</h4>
+                  <h4 className="text-sm font-medium text-foreground">System Templates</h4>
                   <div className="grid gap-2">
                     {systemTemplates.map((template) => (
                       <Card 
                         key={template.id}
                         className={`cursor-pointer transition-colors ${
                           selectedTemplate === template.id 
-                            ? 'ring-2 ring-blue-500 bg-blue-50' 
-                            : 'hover:bg-gray-50'
+                            ? 'ring-2 ring-primary bg-primary/10' 
+                            : 'hover:bg-muted'
                         }`}
                         onClick={() => setSelectedTemplate(template.id)}
                       >
@@ -188,15 +188,15 @@ export function CreateReportDialog({ open, onOpenChange, templates }: CreateRepo
 
               {userTemplates.length > 0 && (
                 <div className="space-y-2">
-                  <h4 className="text-sm font-medium text-gray-700">My Templates</h4>
+                  <h4 className="text-sm font-medium text-foreground">My Templates</h4>
                   <div className="grid gap-2">
                     {userTemplates.map((template) => (
                       <Card 
                         key={template.id}
                         className={`cursor-pointer transition-colors ${
                           selectedTemplate === template.id 
-                            ? 'ring-2 ring-blue-500 bg-blue-50' 
-                            : 'hover:bg-gray-50'
+                            ? 'ring-2 ring-primary bg-primary/10' 
+                            : 'hover:bg-muted'
                         }`}
                         onClick={() => setSelectedTemplate(template.id)}
                       >
@@ -216,8 +216,8 @@ export function CreateReportDialog({ open, onOpenChange, templates }: CreateRepo
               )}
 
               {templates.length === 0 && (
-                <div className="text-center py-6 text-gray-500">
-                  <BarChart3 className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+                <div className="text-center py-6 text-muted-foreground">
+                  <BarChart3 className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
                   <p className="text-sm">No templates available</p>
                   <p className="text-xs">Try creating from scratch instead</p>
                 </div>

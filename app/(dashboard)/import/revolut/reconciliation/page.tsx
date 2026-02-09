@@ -148,7 +148,7 @@ export default function ReconciliationPage() {
     const variants = {
       matched: 'text-green-600 border-green-600 bg-green-50',
       potential: 'text-yellow-600 border-yellow-600 bg-yellow-50',
-      unmatched: 'text-gray-600 border-gray-600 bg-gray-50',
+      unmatched: 'text-muted-foreground border-muted-foreground bg-muted',
       reviewed: 'text-blue-600 border-blue-600 bg-blue-50',
       verified: 'text-purple-600 border-purple-600 bg-purple-50'
     };
@@ -170,10 +170,10 @@ export default function ReconciliationPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading imported transactions...</p>
+          <p className="text-muted-foreground">Loading imported transactions...</p>
         </div>
       </div>
     );
@@ -181,12 +181,12 @@ export default function ReconciliationPage() {
 
   if (!importedTransactions || importedTransactions.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-background">
         <div className="max-w-4xl mx-auto py-12 px-6">
           <div className="text-center space-y-4">
-            <AlertCircle className="h-12 w-12 text-gray-400 mx-auto" />
-            <h1 className="text-2xl font-bold text-gray-900">No Imported Transactions</h1>
-            <p className="text-gray-600">
+            <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto" />
+            <h1 className="text-2xl font-bold text-foreground">No Imported Transactions</h1>
+            <p className="text-muted-foreground">
               You need to import transactions first before you can reconcile them.
             </p>
             <Button asChild>
@@ -202,7 +202,7 @@ export default function ReconciliationPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto py-12 px-6 space-y-8">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -214,9 +214,9 @@ export default function ReconciliationPage() {
                   Back to Import
                 </Link>
               </Button>
-              <h1 className="text-3xl font-bold text-gray-900">Transaction Reconciliation</h1>
+              <h1 className="text-3xl font-bold text-foreground">Transaction Reconciliation</h1>
             </div>
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               Review and approve transaction matches. High confidence matches are likely correct.
             </p>
           </div>
@@ -236,14 +236,14 @@ export default function ReconciliationPage() {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
             <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
               <div className="flex items-center space-x-2">
-                <Filter className="h-4 w-4 text-gray-500" />
+                <Filter className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm font-medium">Filters:</span>
               </div>
               
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value as FilterType)}
-                className="px-3 py-1 border border-gray-300 rounded-md text-sm"
+                className="px-3 py-1 border border-border rounded-md text-sm"
               >
                 <option value="all">All Status</option>
                 <option value="matched">Matched</option>
@@ -255,7 +255,7 @@ export default function ReconciliationPage() {
               <select
                 value={confidenceFilter}
                 onChange={(e) => setConfidenceFilter(e.target.value as ConfidenceFilter)}
-                className="px-3 py-1 border border-gray-300 rounded-md text-sm"
+                className="px-3 py-1 border border-border rounded-md text-sm"
               >
                 <option value="all">All Confidence</option>
                 <option value="HIGH">High Confidence</option>
@@ -266,7 +266,7 @@ export default function ReconciliationPage() {
 
             {selectedTransactions.size > 0 && (
               <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-muted-foreground">
                   {selectedTransactions.size} selected
                 </span>
                 <Button
@@ -291,7 +291,7 @@ export default function ReconciliationPage() {
           </div>
 
           <div className="mt-4 flex items-center justify-between">
-            <div className="flex items-center space-x-4 text-sm text-gray-600">
+            <div className="flex items-center space-x-4 text-sm text-muted-foreground">
               <span>Showing {filteredTransactions.length} of {importedTransactions.length} transactions</span>
             </div>
             
@@ -322,7 +322,7 @@ export default function ReconciliationPage() {
                     {/* Imported Transaction */}
                     <div className="border-l-4 border-blue-500 pl-4">
                       <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-medium text-gray-900">Imported Transaction</h3>
+                        <h3 className="font-medium text-foreground">Imported Transaction</h3>
                         <div className="flex items-center space-x-2">
                           {getConfidenceBadge(transaction.match_confidence)}
                           {getStatusBadge(transaction.match_status)}
@@ -331,21 +331,21 @@ export default function ReconciliationPage() {
                       
                       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
                         <div>
-                          <span className="text-gray-500">Date:</span>
+                          <span className="text-muted-foreground">Date:</span>
                           <div className="font-medium">{formatDate(transaction.started_date)}</div>
                         </div>
                         <div>
-                          <span className="text-gray-500">Amount:</span>
+                          <span className="text-muted-foreground">Amount:</span>
                           <div className={`font-medium ${transaction.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>
                             {formatCurrency(transaction.amount)}
                           </div>
                         </div>
                         <div>
-                          <span className="text-gray-500">Type:</span>
+                          <span className="text-muted-foreground">Type:</span>
                           <div className="font-medium">{transaction.revolut_type}</div>
                         </div>
                         <div>
-                          <span className="text-gray-500">Description:</span>
+                          <span className="text-muted-foreground">Description:</span>
                           <div className="font-medium">{transaction.original_description}</div>
                         </div>
                       </div>
@@ -354,22 +354,22 @@ export default function ReconciliationPage() {
                     {/* Existing Transaction Match */}
                     {transaction.existing_description && (
                       <div className="border-l-4 border-green-500 pl-4">
-                        <h3 className="font-medium text-gray-900 mb-2">Matched Existing Transaction</h3>
+                        <h3 className="font-medium text-foreground mb-2">Matched Existing Transaction</h3>
                         
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
                           <div>
-                            <span className="text-gray-500">Date:</span>
+                            <span className="text-muted-foreground">Date:</span>
                             <div className="font-medium">{formatDate(transaction.existing_date || '')}</div>
                           </div>
                           <div>
-                            <span className="text-gray-500">Amount:</span>
+                            <span className="text-muted-foreground">Amount:</span>
                             <div className="font-medium text-green-600">
                               {/* Amount from existing transaction would be shown here */}
                               {formatCurrency(Math.abs(transaction.amount))}
                             </div>
                           </div>
                           <div>
-                            <span className="text-gray-500">Category:</span>
+                            <span className="text-muted-foreground">Category:</span>
                             <div className="font-medium">
                               {transaction.existing_category_name && (
                                 <Badge 
@@ -385,7 +385,7 @@ export default function ReconciliationPage() {
                             </div>
                           </div>
                           <div>
-                            <span className="text-gray-500">Description:</span>
+                            <span className="text-muted-foreground">Description:</span>
                             <div className="font-medium">{transaction.existing_description}</div>
                           </div>
                         </div>
@@ -393,7 +393,7 @@ export default function ReconciliationPage() {
                         {/* Match Reasons */}
                         {transaction.match_reasons && transaction.match_reasons.length > 0 && (
                           <div className="mt-3">
-                            <span className="text-gray-500 text-sm">Match Reasons:</span>
+                            <span className="text-muted-foreground text-sm">Match Reasons:</span>
                             <div className="flex flex-wrap gap-1 mt-1">
                               {transaction.match_reasons.map((reason, index) => (
                                 <Badge key={index} variant="outline" className="text-xs">
@@ -408,9 +408,9 @@ export default function ReconciliationPage() {
 
                     {/* No Match */}
                     {!transaction.existing_description && transaction.match_status === 'unmatched' && (
-                      <div className="border-l-4 border-gray-300 pl-4">
-                        <h3 className="font-medium text-gray-500 mb-2">No Match Found</h3>
-                        <p className="text-sm text-gray-600">
+                      <div className="border-l-4 border-border pl-4">
+                        <h3 className="font-medium text-muted-foreground mb-2">No Match Found</h3>
+                        <p className="text-sm text-muted-foreground">
                           {`This transaction doesn't match any existing manual entries.
                           It may be a new transaction that wasn't manually recorded.`}
                         </p>
@@ -489,40 +489,40 @@ export default function ReconciliationPage() {
 
               {/* Expanded Details */}
               {expandedTransaction === transaction.id && (
-                <div className="mt-6 pt-6 border-t border-gray-200">
-                  <h4 className="font-medium text-gray-900 mb-3">Additional Details</h4>
+                <div className="mt-6 pt-6 border-t border-border">
+                  <h4 className="font-medium text-foreground mb-3">Additional Details</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                     <div>
-                      <span className="text-gray-500">Revolut Product:</span>
+                      <span className="text-muted-foreground">Revolut Product:</span>
                       <div className="font-medium">{transaction.product}</div>
                     </div>
                     <div>
-                      <span className="text-gray-500">Currency:</span>
+                      <span className="text-muted-foreground">Currency:</span>
                       <div className="font-medium">{transaction.currency}</div>
                     </div>
                     <div>
-                      <span className="text-gray-500">Fee:</span>
+                      <span className="text-muted-foreground">Fee:</span>
                       <div className="font-medium">{formatCurrency(transaction.fee)}</div>
                     </div>
                     <div>
-                      <span className="text-gray-500">Balance After:</span>
+                      <span className="text-muted-foreground">Balance After:</span>
                       <div className="font-medium">{formatCurrency(transaction.balance)}</div>
                     </div>
                     {transaction.completed_date && (
                       <div>
-                        <span className="text-gray-500">Completed Date:</span>
+                        <span className="text-muted-foreground">Completed Date:</span>
                         <div className="font-medium">{formatDate(transaction.completed_date)}</div>
                       </div>
                     )}
                     <div>
-                      <span className="text-gray-500">State:</span>
+                      <span className="text-muted-foreground">State:</span>
                       <div className="font-medium">{transaction.state}</div>
                     </div>
                   </div>
                   
                   {transaction.notes && (
                     <div className="mt-4">
-                      <span className="text-gray-500">Notes:</span>
+                      <span className="text-muted-foreground">Notes:</span>
                       <div className="font-medium">{transaction.notes}</div>
                     </div>
                   )}
@@ -534,9 +534,9 @@ export default function ReconciliationPage() {
 
         {filteredTransactions.length === 0 && (
           <Card className="p-12 text-center">
-            <AlertCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No Transactions Found</h3>
-            <p className="text-gray-600">
+            <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-foreground mb-2">No Transactions Found</h3>
+            <p className="text-muted-foreground">
               No transactions match your current filters. Try adjusting the filters above.
             </p>
           </Card>

@@ -43,7 +43,7 @@ export function PLPreview({ incomeHierarchies, expenditureHierarchies }: PLPrevi
             <div className="space-y-1 ml-2">
               {incomeHierarchies.map((hierarchy, index) => (
                 <div key={`income-${hierarchy.id}-${index}`} className="flex justify-between">
-                  <span className="text-gray-700">
+                  <span className="text-foreground">
                     {index + 1}. {hierarchy.name}
                   </span>
                   <span className="font-medium text-green-600">
@@ -68,7 +68,7 @@ export function PLPreview({ incomeHierarchies, expenditureHierarchies }: PLPrevi
             <div className="space-y-1 ml-2">
               {expenditureHierarchies.map((hierarchy, index) => (
                 <div key={`expenditure-${hierarchy.id}-${index}`} className="flex justify-between">
-                  <span className="text-gray-700">
+                  <span className="text-foreground">
                     {index + 1}. {hierarchy.name}
                   </span>
                   <span className="font-medium text-red-600">
@@ -86,7 +86,7 @@ export function PLPreview({ incomeHierarchies, expenditureHierarchies }: PLPrevi
           </div>
 
           {/* Net Profit */}
-          <div className="border-t-2 border-gray-400 pt-2">
+          <div className="border-t-2 border-border pt-2">
             <div className={`flex justify-between font-bold text-lg ${
               netProfit >= 0 ? 'text-green-700' : 'text-red-700'
             }`}>

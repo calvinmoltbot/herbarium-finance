@@ -65,20 +65,20 @@ function SortableItem({
     <div
       ref={setNodeRef}
       style={style}
-      className={`border rounded-lg p-4 bg-white ${isDragging ? 'shadow-lg' : ''}`}
+      className={`border rounded-lg p-4 bg-card ${isDragging ? 'shadow-lg' : ''}`}
     >
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center space-x-3">
           <div
             {...attributes}
             {...listeners}
-            className="cursor-grab active:cursor-grabbing p-1 hover:bg-gray-100 rounded"
+            className="cursor-grab active:cursor-grabbing p-1 hover:bg-muted rounded"
           >
-            <GripVertical className="h-4 w-4 text-gray-400" />
+            <GripVertical className="h-4 w-4 text-muted-foreground" />
           </div>
           <div>
             <h4 className="font-medium text-lg">{hierarchy.name}</h4>
-            <p className="text-sm text-gray-500">Order: {hierarchy.display_order}</p>
+            <p className="text-sm text-muted-foreground">Order: {hierarchy.display_order}</p>
           </div>
         </div>
         <div className="flex items-center space-x-2">
@@ -116,7 +116,7 @@ function SortableItem({
           ))}
         </div>
       ) : (
-        <p className="text-sm text-gray-500 mb-3">No categories assigned</p>
+        <p className="text-sm text-muted-foreground mb-3">No categories assigned</p>
       )}
 
       <Select
@@ -207,8 +207,8 @@ export function SortableHierarchyList({
 
   if (hierarchies.length === 0) {
     return (
-      <div className="text-center py-8 text-gray-500">
-        <div className="h-12 w-12 mx-auto mb-4 text-gray-300">
+      <div className="text-center py-8 text-muted-foreground">
+        <div className="h-12 w-12 mx-auto mb-4 text-muted-foreground">
           <GripVertical className="h-full w-full" />
         </div>
         <p>No {type} hierarchies yet</p>

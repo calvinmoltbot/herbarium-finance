@@ -158,8 +158,8 @@ export function TransactionDrillDown({
         {/* Loading State */}
         {isLoading && (
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
-            <span className="ml-3 text-gray-600">Loading transactions...</span>
+            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            <span className="ml-3 text-muted-foreground">Loading transactions...</span>
           </div>
         )}
 
@@ -169,7 +169,7 @@ export function TransactionDrillDown({
             <div className="text-center">
               <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-3" />
               <p className="text-red-600 font-semibold">Failed to load transactions</p>
-              <p className="text-gray-600 text-sm mt-2">
+              <p className="text-muted-foreground text-sm mt-2">
                 {error instanceof Error ? error.message : 'An error occurred'}
               </p>
               <Button
@@ -194,7 +194,7 @@ export function TransactionDrillDown({
             {/* Pagination */}
             {data.pagination.totalPages > 1 && (
               <div className="flex items-center justify-between border-t pt-4 print:hidden">
-                <div className="text-sm text-gray-600">
+                <div className="text-sm text-muted-foreground">
                   Showing {((page - 1) * pageSize) + 1}-
                   {Math.min(page * pageSize, data.pagination.totalCount)} of {data.pagination.totalCount.toLocaleString()} transactions
                 </div>
@@ -208,7 +208,7 @@ export function TransactionDrillDown({
                     <ChevronLeft className="h-4 w-4 mr-1" />
                     Previous
                   </Button>
-                  <span className="text-sm text-gray-600">
+                  <span className="text-sm text-muted-foreground">
                     Page {page} of {data.pagination.totalPages}
                   </span>
                   <Button
@@ -229,9 +229,9 @@ export function TransactionDrillDown({
         {/* Empty State */}
         {!isLoading && !error && data && data.transactions.length === 0 && (
           <div className="text-center py-12">
-            <AlertCircle className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-            <p className="text-gray-600 font-semibold">No transactions found</p>
-            <p className="text-gray-500 text-sm mt-2">
+            <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+            <p className="text-muted-foreground font-semibold">No transactions found</p>
+            <p className="text-muted-foreground text-sm mt-2">
               There are no transactions matching your criteria.
             </p>
           </div>

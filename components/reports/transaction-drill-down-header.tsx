@@ -96,7 +96,7 @@ export function TransactionDrillDownHeader({
               {title}
             </h2>
             {subtitle && (
-              <p className="text-sm text-gray-600 mt-1">{subtitle}</p>
+              <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>
             )}
           </div>
           <FileText className={`h-6 w-6 ${textColorClass}`} />
@@ -105,19 +105,19 @@ export function TransactionDrillDownHeader({
         {/* Summary Stats */}
         <div className="grid grid-cols-3 gap-4 mt-4">
           <div>
-            <p className="text-xs text-gray-600 mb-1">Total</p>
+            <p className="text-xs text-muted-foreground mb-1">Total</p>
             <p className={`text-lg font-bold ${textColorClass}`}>
               {formatCurrency(total)}
             </p>
           </div>
           <div>
-            <p className="text-xs text-gray-600 mb-1">Transactions</p>
+            <p className="text-xs text-muted-foreground mb-1">Transactions</p>
             <p className={`text-lg font-bold ${textColorClass}`}>
               {count.toLocaleString()}
             </p>
           </div>
           <div>
-            <p className="text-xs text-gray-600 mb-1">Average</p>
+            <p className="text-xs text-muted-foreground mb-1">Average</p>
             <p className={`text-lg font-bold ${textColorClass}`}>
               {formatCurrency(average)}
             </p>

@@ -71,14 +71,14 @@ export default function TransactionsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-background">
         <div className="max-w-6xl mx-auto py-12 px-6">
           <div className="text-center space-y-4">
             <div className="flex items-center justify-center space-x-3">
-              <List className="h-12 w-12 text-blue-600" />
-              <h1 className="text-4xl font-bold tracking-tight text-gray-900">Transaction Management</h1>
+              <List className="h-12 w-12 text-primary" />
+              <h1 className="text-4xl font-bold tracking-tight text-foreground">Transaction Management</h1>
             </div>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               Manage and categorize your transactions
             </p>
             <div className="flex items-center justify-center">
@@ -92,15 +92,15 @@ export default function TransactionsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto py-12 px-6 space-y-8">
         {/* Professional Header */}
         <div className="text-center space-y-4">
           <div className="flex items-center justify-center space-x-3">
-            <List className="h-12 w-12 text-blue-600" />
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900">Transaction Management</h1>
+            <List className="h-12 w-12 text-primary" />
+            <h1 className="text-4xl font-bold tracking-tight text-foreground">Transaction Management</h1>
           </div>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Manage and categorize your transactions with enhanced notes functionality
           </p>
           <div className="flex justify-center">

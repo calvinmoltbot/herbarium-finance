@@ -154,10 +154,10 @@ export default function CategoriesPage() {
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <div className="h-8 bg-gray-200 rounded animate-pulse" />
+        <div className="h-8 bg-muted rounded animate-pulse" />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="h-64 bg-gray-200 rounded animate-pulse" />
-          <div className="h-64 bg-gray-200 rounded animate-pulse" />
+          <div className="h-64 bg-muted rounded animate-pulse" />
+          <div className="h-64 bg-muted rounded animate-pulse" />
         </div>
       </div>
     );
@@ -206,13 +206,13 @@ export default function CategoriesPage() {
     >
 
         {/* Tab Navigation */}
-        <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg w-fit mx-auto">
+        <div className="flex space-x-1 bg-muted p-1 rounded-lg w-fit mx-auto">
           <button
             onClick={() => setActiveTab('categories')}
             className={`px-6 py-2 rounded-md text-sm font-medium transition-colors ${
               activeTab === 'categories'
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-card text-foreground shadow-sm'
+                : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             <BarChart3 className="h-4 w-4 mr-2 inline" />
@@ -222,8 +222,8 @@ export default function CategoriesPage() {
             onClick={() => setActiveTab('unallocated')}
             className={`px-6 py-2 rounded-md text-sm font-medium transition-colors relative ${
               activeTab === 'unallocated'
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-card text-foreground shadow-sm'
+                : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             <AlertTriangle className="h-4 w-4 mr-2 inline" />
@@ -238,8 +238,8 @@ export default function CategoriesPage() {
             onClick={() => setActiveTab('hierarchies')}
             className={`px-6 py-2 rounded-md text-sm font-medium transition-colors ${
               activeTab === 'hierarchies'
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-card text-foreground shadow-sm'
+                : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             <Layers className="h-4 w-4 mr-2 inline" />
@@ -306,8 +306,8 @@ export default function CategoriesPage() {
           </CardHeader>
           <CardContent>
             {incomeCategories.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
-                <BarChart3 className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+              <div className="text-center py-8 text-muted-foreground">
+                <BarChart3 className="h-12 w-12 mx-auto mb-4 text-muted-foreground/50" />
                 <p>No income categories yet</p>
                 <p className="text-sm">Create your first income category above</p>
               </div>
@@ -318,7 +318,7 @@ export default function CategoriesPage() {
                   return (
                     <div
                       key={category.id}
-                      className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50"
+                      className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted"
                     >
                       <div className="flex items-center space-x-3">
                         <div
@@ -328,7 +328,7 @@ export default function CategoriesPage() {
                         <div>
                           <p className="font-medium">{category.name}</p>
                           {stats && (
-                            <p className="text-sm text-gray-500">
+                            <p className="text-sm text-muted-foreground">
                               {stats.transactionCount} transactions • £{stats.totalAmount.toFixed(2)}
                             </p>
                           )}
@@ -368,8 +368,8 @@ export default function CategoriesPage() {
           </CardHeader>
           <CardContent>
             {expenditureCategories.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
-                <BarChart3 className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+              <div className="text-center py-8 text-muted-foreground">
+                <BarChart3 className="h-12 w-12 mx-auto mb-4 text-muted-foreground/50" />
                 <p>No expenditure categories yet</p>
                 <p className="text-sm">Create your first expenditure category above</p>
               </div>
@@ -380,7 +380,7 @@ export default function CategoriesPage() {
                   return (
                     <div
                       key={category.id}
-                      className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50"
+                      className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted"
                     >
                       <div className="flex items-center space-x-3">
                         <div
@@ -390,7 +390,7 @@ export default function CategoriesPage() {
                         <div>
                           <p className="font-medium">{category.name}</p>
                           {stats && (
-                            <p className="text-sm text-gray-500">
+                            <p className="text-sm text-muted-foreground">
                               {stats.transactionCount} transactions • £{stats.totalAmount.toFixed(2)}
                             </p>
                           )}
@@ -430,8 +430,8 @@ export default function CategoriesPage() {
           </CardHeader>
           <CardContent>
             {capitalCategories.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
-                <BarChart3 className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+              <div className="text-center py-8 text-muted-foreground">
+                <BarChart3 className="h-12 w-12 mx-auto mb-4 text-muted-foreground/50" />
                 <p>No capital categories yet</p>
                 <p className="text-sm">Create your first capital category above</p>
               </div>
@@ -442,7 +442,7 @@ export default function CategoriesPage() {
                   return (
                     <div
                       key={category.id}
-                      className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50"
+                      className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted"
                     >
                       <div className="flex items-center space-x-3">
                         <div
@@ -452,7 +452,7 @@ export default function CategoriesPage() {
                         <div>
                           <p className="font-medium">{category.name}</p>
                           {stats && (
-                            <p className="text-sm text-gray-500">
+                            <p className="text-sm text-muted-foreground">
                               {stats.transactionCount} transactions • £{stats.totalAmount.toFixed(2)}
                             </p>
                           )}
@@ -503,7 +503,7 @@ export default function CategoriesPage() {
                             {stat.type}
                           </Badge>
                         </div>
-                        <div className="space-y-1 text-sm text-gray-600">
+                        <div className="space-y-1 text-sm text-muted-foreground">
                           <p>{stat.transactionCount} transactions</p>
                           <p className="font-medium">£{stat.totalAmount.toFixed(2)} total</p>
                         </div>
@@ -535,19 +535,19 @@ export default function CategoriesPage() {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="text-center p-4 bg-orange-50 rounded-lg">
                       <div className="text-2xl font-bold text-orange-600">{unallocatedStats.total}</div>
-                      <div className="text-sm text-gray-600">Total Unallocated</div>
+                      <div className="text-sm text-muted-foreground">Total Unallocated</div>
                     </div>
                     <div className="text-center p-4 bg-green-50 rounded-lg">
                       <div className="text-2xl font-bold text-green-600">{unallocatedStats.income}</div>
-                      <div className="text-sm text-gray-600">Income Categories</div>
+                      <div className="text-sm text-muted-foreground">Income Categories</div>
                     </div>
                     <div className="text-center p-4 bg-red-50 rounded-lg">
                       <div className="text-2xl font-bold text-red-600">{unallocatedStats.expenditure}</div>
-                      <div className="text-sm text-gray-600">Expenditure Categories</div>
+                      <div className="text-sm text-muted-foreground">Expenditure Categories</div>
                     </div>
                   </div>
                 ) : (
-                  <div className="text-center py-8 text-gray-500">
+                  <div className="text-center py-8 text-muted-foreground">
                     <div className="text-2xl font-bold text-green-600">✓</div>
                     <div className="text-sm">All categories are properly allocated</div>
                   </div>
@@ -579,13 +579,13 @@ export default function CategoriesPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center space-x-4 mb-4">
-                    <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
+                    <div className="flex space-x-1 bg-muted p-1 rounded-lg">
                       <button
                         onClick={() => setNewHierarchyType('expenditure')}
                         className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                           newHierarchyType === 'expenditure'
-                            ? 'bg-white text-gray-900 shadow-sm'
-                            : 'text-gray-600 hover:text-gray-900'
+                            ? 'bg-card text-foreground shadow-sm'
+                            : 'text-muted-foreground hover:text-foreground'
                         }`}
                       >
                         <TrendingDown className="h-4 w-4 mr-2 inline" />
@@ -595,8 +595,8 @@ export default function CategoriesPage() {
                         onClick={() => setNewHierarchyType('income')}
                         className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                           newHierarchyType === 'income'
-                            ? 'bg-white text-gray-900 shadow-sm'
-                            : 'text-gray-600 hover:text-gray-900'
+                            ? 'bg-card text-foreground shadow-sm'
+                            : 'text-muted-foreground hover:text-foreground'
                         }`}
                       >
                         <TrendingUp className="h-4 w-4 mr-2 inline" />
@@ -606,8 +606,8 @@ export default function CategoriesPage() {
                         onClick={() => setNewHierarchyType('capital')}
                         className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                           newHierarchyType === 'capital'
-                            ? 'bg-white text-gray-900 shadow-sm'
-                            : 'text-gray-600 hover:text-gray-900'
+                            ? 'bg-card text-foreground shadow-sm'
+                            : 'text-muted-foreground hover:text-foreground'
                         }`}
                       >
                         <Wallet className="h-4 w-4 mr-2 inline" />

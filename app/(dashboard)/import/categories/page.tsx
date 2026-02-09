@@ -7,12 +7,12 @@ import Link from 'next/link';
 
 export default function ImportCategoriesPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto py-12 px-6 space-y-8">
         {/* Header */}
         <div className="space-y-6">
           <Button variant="ghost" size="sm" asChild>
-            <Link href="/import" className="text-gray-600 hover:text-gray-900">
+            <Link href="/import" className="text-muted-foreground hover:text-foreground">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Import
             </Link>
@@ -20,10 +20,10 @@ export default function ImportCategoriesPage() {
           
           <div className="text-center space-y-4">
             <div className="flex items-center justify-center space-x-3">
-              <FileText className="h-12 w-12 text-blue-600" />
-              <h1 className="text-4xl font-bold tracking-tight text-gray-900">Import Categories</h1>
+              <FileText className="h-12 w-12 text-primary" />
+              <h1 className="text-4xl font-bold tracking-tight text-foreground">Import Categories</h1>
             </div>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               Upload and validate category data from CSV files to organize your transactions
             </p>
           </div>
@@ -38,12 +38,12 @@ export default function ImportCategoriesPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center hover:border-gray-400 transition-colors">
-              <Upload className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            <div className="border-2 border-dashed border-border rounded-lg p-12 text-center hover:border-muted-foreground transition-colors">
+              <Upload className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-foreground mb-2">
                 Drop your CSV file here, or click to browse
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="text-muted-foreground mb-6">
                 Maximum file size: 5MB. Supported format: CSV
               </p>
               <Button size="lg" className="px-8">
@@ -70,8 +70,8 @@ export default function ImportCategoriesPage() {
                 <div className="flex items-start space-x-3">
                   <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
                   <div>
-                    <h4 className="font-semibold text-gray-900">Header Row Required</h4>
-                    <p className="text-gray-600 text-sm mt-1">
+                    <h4 className="font-semibold text-foreground">Header Row Required</h4>
+                    <p className="text-muted-foreground text-sm mt-1">
                       {`First row should contain column headers (e.g., "Category Name", "Type", etc.)`}
                     </p>
                   </div>
@@ -79,8 +79,8 @@ export default function ImportCategoriesPage() {
                 <div className="flex items-start space-x-3">
                   <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
                   <div>
-                    <h4 className="font-semibold text-gray-900">One Category Per Row</h4>
-                    <p className="text-gray-600 text-sm mt-1">
+                    <h4 className="font-semibold text-foreground">One Category Per Row</h4>
+                    <p className="text-muted-foreground text-sm mt-1">
                       Each row should contain one category with its details
                     </p>
                   </div>
@@ -90,8 +90,8 @@ export default function ImportCategoriesPage() {
                 <div className="flex items-start space-x-3">
                   <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
                   <div>
-                    <h4 className="font-semibold text-gray-900">UTF-8 Encoding</h4>
-                    <p className="text-gray-600 text-sm mt-1">
+                    <h4 className="font-semibold text-foreground">UTF-8 Encoding</h4>
+                    <p className="text-muted-foreground text-sm mt-1">
                       Save your CSV with UTF-8 encoding to support special characters
                     </p>
                   </div>
@@ -99,8 +99,8 @@ export default function ImportCategoriesPage() {
                 <div className="flex items-start space-x-3">
                   <AlertCircle className="h-5 w-5 text-amber-500 mt-1 flex-shrink-0" />
                   <div>
-                    <h4 className="font-semibold text-gray-900">Duplicate Handling</h4>
-                    <p className="text-gray-600 text-sm mt-1">
+                    <h4 className="font-semibold text-foreground">Duplicate Handling</h4>
+                    <p className="text-muted-foreground text-sm mt-1">
                       Duplicate category names will be automatically skipped
                     </p>
                   </div>
@@ -114,7 +114,7 @@ export default function ImportCategoriesPage() {
         <Card className="shadow-lg">
           <CardHeader>
             <CardTitle className="text-xl flex items-center">
-              <FileText className="h-6 w-6 text-blue-600 mr-2" />
+              <FileText className="h-6 w-6 text-primary mr-2" />
               Example CSV Format
             </CardTitle>
             <CardDescription className="text-base">
@@ -122,14 +122,14 @@ export default function ImportCategoriesPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="bg-gray-50 rounded-lg p-4 font-mono text-sm">
-              <div className="text-gray-600 mb-2">Example CSV content:</div>
+            <div className="bg-muted rounded-lg p-4 font-mono text-sm">
+              <div className="text-muted-foreground mb-2">Example CSV content:</div>
               <div className="space-y-1">
-                <div className="text-gray-900">Category Name,Type,Color</div>
-                <div className="text-gray-700">Wholesale,income,#3B82F6</div>
-                <div className="text-gray-700">Personal Sale,income,#10B981</div>
-                <div className="text-gray-700">Shopify - Paypal,income,#8B5CF6</div>
-                <div className="text-gray-700">Office Supplies,expenditure,#EF4444</div>
+                <div className="text-foreground">Category Name,Type,Color</div>
+                <div className="text-foreground">Wholesale,income,#3B82F6</div>
+                <div className="text-foreground">Personal Sale,income,#10B981</div>
+                <div className="text-foreground">Shopify - Paypal,income,#8B5CF6</div>
+                <div className="text-foreground">Office Supplies,expenditure,#EF4444</div>
               </div>
             </div>
           </CardContent>

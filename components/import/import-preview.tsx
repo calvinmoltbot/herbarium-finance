@@ -171,7 +171,7 @@ export function ImportPreview({ data, fileName, onImport, onCancel }: ImportPrev
           </div>
 
           {selectedColumn && (
-            <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+            <div className="mt-4 p-4 bg-muted rounded-lg">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-medium">
                   Found {categoryValues.length} unique categories

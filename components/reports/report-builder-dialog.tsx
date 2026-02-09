@@ -101,7 +101,7 @@ export function ReportBuilderDialog({ open, onOpenChange }: ReportBuilderDialogP
       case 'Advanced':
         return 'bg-red-100 text-red-800';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-muted text-foreground';
     }
   };
 
@@ -127,8 +127,8 @@ export function ReportBuilderDialog({ open, onOpenChange }: ReportBuilderDialogP
                   className={`
                     flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium
                     ${currentStep >= step.id
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-200 text-gray-600'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-muted text-muted-foreground'
                     }
                   `}
                 >
@@ -138,7 +138,7 @@ export function ReportBuilderDialog({ open, onOpenChange }: ReportBuilderDialogP
                   <div
                     className={`
                       w-12 h-0.5 mx-2
-                      ${currentStep > step.id ? 'bg-blue-600' : 'bg-gray-200'}
+                      ${currentStep > step.id ? 'bg-blue-600' : 'bg-muted'}
                     `}
                   />
                 )}
@@ -151,7 +151,7 @@ export function ReportBuilderDialog({ open, onOpenChange }: ReportBuilderDialogP
             <h3 className="text-lg font-semibold">
               {steps[currentStep - 1]?.title}
             </h3>
-            <p className="text-gray-600 text-sm">
+            <p className="text-muted-foreground text-sm">
               {steps[currentStep - 1]?.description}
             </p>
           </div>
@@ -194,14 +194,14 @@ export function ReportBuilderDialog({ open, onOpenChange }: ReportBuilderDialogP
 
             {currentStep === 2 && (
               <div className="text-center py-12">
-                <Settings className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                <Settings className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+                <h3 className="text-lg font-medium text-foreground mb-2">
                   Data Sources Configuration
                 </h3>
-                <p className="text-gray-500 mb-6">
+                <p className="text-muted-foreground mb-6">
                   This step will allow you to select which data sources to include in your report.
                 </p>
-                <div className="text-sm text-gray-400">
+                <div className="text-sm text-muted-foreground">
                   Coming in the next development phase...
                 </div>
               </div>
@@ -209,14 +209,14 @@ export function ReportBuilderDialog({ open, onOpenChange }: ReportBuilderDialogP
 
             {currentStep === 3 && (
               <div className="text-center py-12">
-                <Settings className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                <Settings className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+                <h3 className="text-lg font-medium text-foreground mb-2">
                   Report Sections
                 </h3>
-                <p className="text-gray-500 mb-6">
+                <p className="text-muted-foreground mb-6">
                   Configure the sections and layout of your report.
                 </p>
-                <div className="text-sm text-gray-400">
+                <div className="text-sm text-muted-foreground">
                   Coming in the next development phase...
                 </div>
               </div>
@@ -224,14 +224,14 @@ export function ReportBuilderDialog({ open, onOpenChange }: ReportBuilderDialogP
 
             {currentStep === 4 && (
               <div className="text-center py-12">
-                <Settings className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                <Settings className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+                <h3 className="text-lg font-medium text-foreground mb-2">
                   Default Filters
                 </h3>
-                <p className="text-gray-500 mb-6">
+                <p className="text-muted-foreground mb-6">
                   Set up default filters and date ranges for your report.
                 </p>
-                <div className="text-sm text-gray-400">
+                <div className="text-sm text-muted-foreground">
                   Coming in the next development phase...
                 </div>
               </div>
@@ -239,14 +239,14 @@ export function ReportBuilderDialog({ open, onOpenChange }: ReportBuilderDialogP
 
             {currentStep === 5 && (
               <div className="text-center py-12">
-                <Settings className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                <Settings className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+                <h3 className="text-lg font-medium text-foreground mb-2">
                   Charts & Visualizations
                 </h3>
-                <p className="text-gray-500 mb-6">
+                <p className="text-muted-foreground mb-6">
                   Add charts and visualizations to make your report more engaging.
                 </p>
-                <div className="text-sm text-gray-400">
+                <div className="text-sm text-muted-foreground">
                   Coming in the next development phase...
                 </div>
               </div>
@@ -254,14 +254,14 @@ export function ReportBuilderDialog({ open, onOpenChange }: ReportBuilderDialogP
 
             {currentStep === 6 && (
               <div className="text-center py-12">
-                <Eye className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                <Eye className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+                <h3 className="text-lg font-medium text-foreground mb-2">
                   Preview & Save
                 </h3>
-                <p className="text-gray-500 mb-6">
+                <p className="text-muted-foreground mb-6">
                   Review your custom report and save it for future use.
                 </p>
-                <div className="text-sm text-gray-400">
+                <div className="text-sm text-muted-foreground">
                   Coming in the next development phase...
                 </div>
               </div>

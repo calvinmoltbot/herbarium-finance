@@ -124,17 +124,17 @@ export function FileUploader({ onFileUpload, acceptedTypes, maxSize, description
             className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
               isDragActive
                 ? 'border-blue-500 bg-blue-50'
-                : 'border-gray-300 hover:border-gray-400'
+                : 'border-border hover:border-border'
             } ${isProcessing ? 'pointer-events-none opacity-50' : ''}`}
           >
             <input {...getInputProps()} />
             
             <div className="flex flex-col items-center space-y-4">
               <div className={`p-3 rounded-full ${
-                isDragActive ? 'bg-blue-100' : 'bg-gray-100'
+                isDragActive ? 'bg-blue-100' : 'bg-muted'
               }`}>
                 <Upload className={`h-8 w-8 ${
-                  isDragActive ? 'text-blue-600' : 'text-gray-600'
+                  isDragActive ? 'text-blue-600' : 'text-muted-foreground'
                 }`} />
               </div>
               

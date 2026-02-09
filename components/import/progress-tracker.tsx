@@ -53,10 +53,10 @@ export function ProgressTracker({ isImporting, message, progress }: ProgressTrac
 
             {/* Message */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">
+              <h3 className="text-lg font-semibold text-foreground">
                 {message}
               </h3>
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="text-sm text-muted-foreground mt-1">
                 Please wait while we process your data
               </p>
             </div>
@@ -64,13 +64,13 @@ export function ProgressTracker({ isImporting, message, progress }: ProgressTrac
             {/* Progress Bar */}
             <div className="space-y-2">
               <Progress value={displayProgress} className="w-full" />
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 {Math.round(displayProgress)}% complete
               </p>
             </div>
 
             {/* Status Messages */}
-            <div className="text-xs text-gray-500 space-y-1">
+            <div className="text-xs text-muted-foreground space-y-1">
               {displayProgress < 30 && (
                 <p>Validating data...</p>
               )}

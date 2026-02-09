@@ -67,9 +67,9 @@ function CategoryModal({ isOpen, onClose, type, onSuccess }: CategoryModalProps)
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4 shadow-xl">
+      <div className="bg-card rounded-lg p-6 w-full max-w-md mx-4 shadow-xl">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">
+          <h3 className="text-lg font-semibold text-foreground">
             Create New {
               type === 'income' ? 'Income' : 
               type === 'capital' ? 'Capital' : 'Expenditure'
@@ -88,7 +88,7 @@ function CategoryModal({ isOpen, onClose, type, onSuccess }: CategoryModalProps)
 
         <div className="space-y-4">
           <div>
-            <Label htmlFor="category-name" className="text-sm font-medium text-gray-700">
+            <Label htmlFor="category-name" className="text-sm font-medium text-foreground">
               Category Name
             </Label>
             <Input
@@ -110,7 +110,7 @@ function CategoryModal({ isOpen, onClose, type, onSuccess }: CategoryModalProps)
           </div>
 
           <div>
-            <Label className="text-sm font-medium text-gray-700 mb-2 block">
+            <Label className="text-sm font-medium text-foreground mb-2 block">
               Category Color
             </Label>
             <div className="flex flex-wrap gap-2">
@@ -120,7 +120,7 @@ function CategoryModal({ isOpen, onClose, type, onSuccess }: CategoryModalProps)
                   type="button"
                   onClick={() => setColor(colorOption)}
                   className={`w-8 h-8 rounded-full border-2 hover:scale-110 transition-transform ${
-                    color === colorOption ? 'border-gray-600' : 'border-gray-300'
+                    color === colorOption ? 'border-border' : 'border-border'
                   }`}
                   style={{ backgroundColor: colorOption }}
                   title={`Select ${colorOption}`}
@@ -192,7 +192,7 @@ export function CategoryPicker({ type, value, onValueChange, placeholder, error 
   };
 
   if (isLoading) {
-    return <div className="h-10 bg-gray-100 rounded-md animate-pulse" />;
+    return <div className="h-10 bg-muted rounded-md animate-pulse" />;
   }
 
   if (!categories || categories.length === 0) {
@@ -234,11 +234,11 @@ export function CategoryPicker({ type, value, onValueChange, placeholder, error 
               </div>
             </SelectItem>
           ))}
-          <div className="border-t border-gray-200 mt-1 pt-1">
+          <div className="border-t border-border mt-1 pt-1">
             <button
               type="button"
               onClick={handleAddNewCategory}
-              className="flex items-center w-full px-2 py-1.5 text-sm text-gray-700 hover:bg-gray-100 rounded-sm"
+              className="flex items-center w-full px-2 py-1.5 text-sm text-foreground hover:bg-muted rounded-sm"
             >
               <Plus className="h-4 w-4 mr-2" />
               Add new category
@@ -306,7 +306,7 @@ export function CreateCategoryForm({ type, onSuccess, onCancel }: CreateCategory
       </div>
       
       <div>
-        <Label className="text-xs text-gray-600 mb-2 block">Color</Label>
+        <Label className="text-xs text-muted-foreground mb-2 block">Color</Label>
         <div className="flex flex-wrap gap-2">
           {DEFAULT_COLORS.map((colorOption) => (
             <button
@@ -314,7 +314,7 @@ export function CreateCategoryForm({ type, onSuccess, onCancel }: CreateCategory
               type="button"
               onClick={() => setColor(colorOption)}
               className={`w-6 h-6 rounded-full border-2 ${
-                color === colorOption ? 'border-gray-400' : 'border-gray-200'
+                color === colorOption ? 'border-border' : 'border-border'
               }`}
               style={{ backgroundColor: colorOption }}
             >

@@ -49,7 +49,12 @@ export default {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
-  			}
+  			},
+  			income: 'hsl(var(--income))',
+  			expenditure: 'hsl(var(--expenditure))',
+  			capital: 'hsl(var(--capital))',
+  			profit: 'hsl(var(--profit))',
+  			loss: 'hsl(var(--loss))',
   		},
   		borderRadius: {
   			lg: 'var(--radius)',

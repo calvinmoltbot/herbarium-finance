@@ -134,8 +134,8 @@ export function SimpleReportViewer({ initialConfig }: SimpleReportViewerProps) {
   return (
     <div className="space-y-6">
       {/* Report Controls */}
-      <div className="flex items-center justify-center gap-4 bg-white p-4 rounded-lg border border-gray-200">
-        <div className="text-sm text-gray-600">
+      <div className="flex items-center justify-center gap-4 bg-card p-4 rounded-lg border border-border">
+        <div className="text-sm text-muted-foreground">
           Period: {DateUtils.formatDateRange(config.dateRange.start, config.dateRange.end)}
         </div>
         
@@ -210,7 +210,7 @@ export function SimpleReportViewer({ initialConfig }: SimpleReportViewerProps) {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Transactions</CardTitle>
-              <TableIcon className="h-4 w-4 text-gray-600" />
+              <TableIcon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
@@ -239,8 +239,8 @@ export function SimpleReportViewer({ initialConfig }: SimpleReportViewerProps) {
                 className={`
                   py-2 px-1 border-b-2 font-medium text-sm transition-colors
                   ${isActive
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    ? 'border-primary text-primary'
+                    : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
                   }
                 `}
               >
@@ -265,16 +265,16 @@ export function SimpleReportViewer({ initialConfig }: SimpleReportViewerProps) {
                 {plStructure.data && plStructure.data.length > 0 ? (
                   <div className="space-y-3">
                     {plStructure.data.map((item) => (
-                      <div key={item.hierarchy_id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div key={item.hierarchy_id} className="flex items-center justify-between p-3 bg-muted rounded-lg">
                         <div>
                           <p className="font-medium">{item.hierarchy_name}</p>
-                          <p className="text-sm text-gray-600">{item.transaction_count} transactions</p>
+                          <p className="text-sm text-muted-foreground">{item.transaction_count} transactions</p>
                         </div>
                         <div className="text-right">
                           <p className={`font-bold ${item.total_amount >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                             £{Math.abs(item.total_amount).toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                           </p>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted-foreground">
                             {item.percentage_of_total.toFixed(1)}%
                           </p>
                         </div>
@@ -282,7 +282,7 @@ export function SimpleReportViewer({ initialConfig }: SimpleReportViewerProps) {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-gray-500 text-center py-8">No P&L data available for this period</p>
+                  <p className="text-muted-foreground text-center py-8">No P&L data available for this period</p>
                 )}
               </CardContent>
             </Card>
@@ -297,16 +297,16 @@ export function SimpleReportViewer({ initialConfig }: SimpleReportViewerProps) {
                 {categoryBreakdown.data && categoryBreakdown.data.length > 0 ? (
                   <div className="space-y-3">
                     {categoryBreakdown.data.slice(0, 5).map((item) => (
-                      <div key={item.category_id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div key={item.category_id} className="flex items-center justify-between p-3 bg-muted rounded-lg">
                         <div>
                           <p className="font-medium">{item.category_name}</p>
-                          <p className="text-sm text-gray-600">{item.transaction_count} transactions</p>
+                          <p className="text-sm text-muted-foreground">{item.transaction_count} transactions</p>
                         </div>
                         <div className="text-right">
                           <p className="font-bold">
                             £{Math.abs(item.total_amount).toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                           </p>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted-foreground">
                             {item.percentage_of_total.toFixed(1)}%
                           </p>
                         </div>
@@ -314,7 +314,7 @@ export function SimpleReportViewer({ initialConfig }: SimpleReportViewerProps) {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-gray-500 text-center py-8">No category data available for this period</p>
+                  <p className="text-muted-foreground text-center py-8">No category data available for this period</p>
                 )}
               </CardContent>
             </Card>
@@ -322,7 +322,7 @@ export function SimpleReportViewer({ initialConfig }: SimpleReportViewerProps) {
         )}
 
         {activeView === 'breakdown' && (
-          <Card className="border border-gray-200 rounded-lg">
+          <Card className="border border-border rounded-lg">
             <CardHeader className="pb-4">
               <CardTitle className="text-lg font-semibold">Category Breakdown ({categoryBreakdown.data?.length || 0})</CardTitle>
             </CardHeader>
@@ -333,28 +333,28 @@ export function SimpleReportViewer({ initialConfig }: SimpleReportViewerProps) {
                     <div
                       key={item.category_id}
                       className={`flex items-center justify-between p-4 ${
-                        index !== categoryBreakdown.data.length - 1 ? 'border-b border-gray-100' : ''
-                      } hover:bg-gray-50 transition-colors`}
+                        index !== categoryBreakdown.data.length - 1 ? 'border-b border-border' : ''
+                      } hover:bg-muted transition-colors`}
                     >
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
                           <div>
-                            <h3 className="font-medium text-gray-900">{item.category_name}</h3>
-                            <p className="text-sm text-gray-500">
+                            <h3 className="font-medium text-foreground">{item.category_name}</h3>
+                            <p className="text-sm text-muted-foreground">
                               {item.hierarchy_name || 'No hierarchy'} • {item.transaction_count} transactions
                             </p>
                           </div>
                           <div className="flex items-center gap-4">
                             <div className="text-right">
-                              <div className="font-semibold text-gray-900">
+                              <div className="font-semibold text-foreground">
                                 £{Math.abs(item.total_amount).toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                               </div>
-                              <div className="text-sm text-gray-500">
+                              <div className="text-sm text-muted-foreground">
                                 {item.percentage_of_total.toFixed(1)}% of total
                               </div>
                             </div>
                             <div className="text-right">
-                              <div className="text-sm text-gray-600">
+                              <div className="text-sm text-muted-foreground">
                                 Avg: £{Math.abs(item.average_amount).toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                               </div>
                             </div>
@@ -366,7 +366,7 @@ export function SimpleReportViewer({ initialConfig }: SimpleReportViewerProps) {
                 </div>
               ) : (
                 <div className="text-center py-12">
-                  <p className="text-gray-500">No category breakdown data available for this period</p>
+                  <p className="text-muted-foreground">No category breakdown data available for this period</p>
                 </div>
               )}
             </CardContent>
@@ -393,7 +393,7 @@ export function SimpleReportViewer({ initialConfig }: SimpleReportViewerProps) {
                     </thead>
                     <tbody>
                       {monthlyTrends.data.map((item) => (
-                        <tr key={item.month_year} className="border-b hover:bg-gray-50">
+                        <tr key={item.month_year} className="border-b hover:bg-muted">
                           <td className="p-2 font-medium">{item.month} {item.year}</td>
                           <td className="p-2 text-right font-mono text-green-600">
                             £{item.income_total.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
@@ -410,7 +410,7 @@ export function SimpleReportViewer({ initialConfig }: SimpleReportViewerProps) {
                   </table>
                 </div>
               ) : (
-                <p className="text-gray-500 text-center py-8">No monthly trend data available</p>
+                <p className="text-muted-foreground text-center py-8">No monthly trend data available</p>
               )}
             </CardContent>
           </Card>
@@ -438,7 +438,7 @@ export function SimpleReportViewer({ initialConfig }: SimpleReportViewerProps) {
                       </thead>
                       <tbody>
                         {periodComparison.data.map((item, index) => (
-                          <tr key={index} className="border-b hover:bg-gray-50">
+                          <tr key={index} className="border-b hover:bg-muted">
                             <td className="p-2 font-medium">
                               {item.hierarchy_name || item.category_name}
                             </td>
@@ -460,18 +460,18 @@ export function SimpleReportViewer({ initialConfig }: SimpleReportViewerProps) {
                     </table>
                   </div>
                 ) : (
-                  <p className="text-gray-500 text-center py-8">No comparison data available</p>
+                  <p className="text-muted-foreground text-center py-8">No comparison data available</p>
                 )}
               </CardContent>
             </Card>
           ) : (
             <Card>
               <CardContent className="text-center py-12">
-                <TrendingUp className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                <TrendingUp className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+                <h3 className="text-lg font-medium text-foreground mb-2">
                   Period Comparison Disabled
                 </h3>
-                <p className="text-gray-500 mb-6">
+                <p className="text-muted-foreground mb-6">
                   Enable period comparison to see how this period compares to the previous one.
                 </p>
                 <Button onClick={toggleComparison}>
