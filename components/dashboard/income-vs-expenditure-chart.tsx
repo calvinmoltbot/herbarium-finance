@@ -79,11 +79,11 @@ export function IncomeVsExpenditureChart() {
         <div className="space-y-4">
           <div className="flex items-center space-x-6 text-sm">
             <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-green-500 rounded" />
+              <div className="w-3 h-3 bg-emerald-500 rounded" />
               <span className="text-muted-foreground">Income</span>
             </div>
             <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-red-500 rounded" />
+              <div className="w-3 h-3 bg-rose-500 rounded" />
               <span className="text-muted-foreground">Expenditure</span>
             </div>
           </div>
@@ -105,8 +105,8 @@ export function IncomeVsExpenditureChart() {
                 width={50}
               />
               <Tooltip content={<CustomTooltip />} cursor={{ fill: 'hsl(var(--muted))', opacity: 0.5 }} />
-              <Bar dataKey="income" fill="#22c55e" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="expenditure" fill="#ef4444" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="income" fill="#10b981" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="expenditure" fill="#f43f5e" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

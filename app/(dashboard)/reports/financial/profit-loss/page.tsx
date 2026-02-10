@@ -14,7 +14,7 @@ import { format } from 'date-fns';
 export default function ProfitLossReport() {
   const [dateRange, setDateRange] = useState<DateRange>({ from: null, to: null, preset: 'all' });
   const [expandedHierarchies, setExpandedHierarchies] = useState<Record<string, boolean>>({});
-  
+
   const { data: allIncomeTransactions = [] } = useIncomeTransactions();
   const { data: allExpenditureTransactions = [] } = useExpenditureTransactions();
   const { data: allCapitalTransactions = [] } = useCapitalTransactions();
@@ -22,18 +22,18 @@ export default function ProfitLossReport() {
   const { data: expenditureHierarchies = [] } = useCategoryHierarchiesWithCategories('expenditure');
 
   // Filter transactions by date range
-  const incomeTransactions = useMemo(() => 
-    filterTransactionsByDateRange(allIncomeTransactions, dateRange), 
+  const incomeTransactions = useMemo(() =>
+    filterTransactionsByDateRange(allIncomeTransactions, dateRange),
     [allIncomeTransactions, dateRange]
   );
-  
-  const expenditureTransactions = useMemo(() => 
-    filterTransactionsByDateRange(allExpenditureTransactions, dateRange), 
+
+  const expenditureTransactions = useMemo(() =>
+    filterTransactionsByDateRange(allExpenditureTransactions, dateRange),
     [allExpenditureTransactions, dateRange]
   );
-  
-  const capitalTransactions = useMemo(() => 
-    filterTransactionsByDateRange(allCapitalTransactions, dateRange), 
+
+  const capitalTransactions = useMemo(() =>
+    filterTransactionsByDateRange(allCapitalTransactions, dateRange),
     [allCapitalTransactions, dateRange]
   );
 
@@ -45,19 +45,19 @@ export default function ProfitLossReport() {
     // Define capital movement hierarchies
     const CAPITAL_INJECTION_HIERARCHY = "Capital Injection";
     // Director Withdrawals hierarchy name: "Directors Drawings" (matches database)
-    
+
     // Use the directly fetched capital hierarchies
     // This ensures we get all hierarchies of type 'capital'
-    
+
     // Income breakdown by hierarchy (excluding capital hierarchies)
     const incomeByHierarchy = incomeHierarchies
       .filter(h => h.type === 'income')
       .map(hierarchy => {
       const categoryIds = hierarchy.categories.map(cat => cat.id);
-      const hierarchyTransactions = incomeTransactions.filter(t => 
+      const hierarchyTransactions = incomeTransactions.filter(t =>
         t.category_id && categoryIds.includes(t.category_id)
       );
-      
+
       const categoryBreakdown = hierarchy.categories.map(category => {
         const categoryTransactions = incomeTransactions.filter(t => t.category_id === category.id);
         const total = categoryTransactions.reduce((sum, t) => sum + t.amount, 0);
@@ -65,7 +65,7 @@ export default function ProfitLossReport() {
       }).filter(item => item.total > 0);
 
       const hierarchyTotal = hierarchyTransactions.reduce((sum, t) => sum + t.amount, 0);
-      
+
       return {
         name: hierarchy.name,
         total: hierarchyTotal,
@@ -94,10 +94,10 @@ export default function ProfitLossReport() {
       .filter(h => h.type === 'expenditure')
       .map(hierarchy => {
       const categoryIds = hierarchy.categories.map(cat => cat.id);
-      const hierarchyTransactions = expenditureTransactions.filter(t => 
+      const hierarchyTransactions = expenditureTransactions.filter(t =>
         t.category_id && categoryIds.includes(t.category_id)
       );
-      
+
       const categoryBreakdown = hierarchy.categories.map(category => {
         const categoryTransactions = expenditureTransactions.filter(t => t.category_id === category.id);
         const total = categoryTransactions.reduce((sum, t) => sum + t.amount, 0);
@@ -105,7 +105,7 @@ export default function ProfitLossReport() {
       }).filter(item => item.total > 0);
 
       const hierarchyTotal = hierarchyTransactions.reduce((sum, t) => sum + t.amount, 0);
-      
+
       return {
         name: hierarchy.name,
         total: hierarchyTotal,
@@ -129,18 +129,18 @@ export default function ProfitLossReport() {
 
     const totalExpenditure = expenditureByHierarchy.reduce((sum, h) => sum + h.total, 0);
     const netProfit = totalIncome - totalExpenditure;
-    
+
     // Prepare capital movements data
     const capitalMovements = capitalHierarchies.map(hierarchy => {
-      const isInjection = hierarchy.name === CAPITAL_INJECTION_HIERARCHY || 
+      const isInjection = hierarchy.name === CAPITAL_INJECTION_HIERARCHY ||
                          hierarchy.name.toLowerCase().includes('injection');
-      
+
       const categoryIds = hierarchy.categories.map(cat => cat.id);
-      const hierarchyTransactions = capitalTransactions.filter(t => 
+      const hierarchyTransactions = capitalTransactions.filter(t =>
         t.category_id && categoryIds.includes(t.category_id)
       );
-      
-      
+
+
       const categoryBreakdown = hierarchy.categories.map(category => {
         const categoryTransactions = capitalTransactions.filter(t => t.category_id === category.id);
         const total = categoryTransactions.reduce((sum, t) => sum + t.amount, 0);
@@ -148,7 +148,7 @@ export default function ProfitLossReport() {
       }).filter(item => item.total > 0);
 
       const hierarchyTotal = hierarchyTransactions.reduce((sum, t) => sum + t.amount, 0);
-      
+
       return {
         name: hierarchy.name,
         total: hierarchyTotal,
@@ -156,11 +156,11 @@ export default function ProfitLossReport() {
         categories: categoryBreakdown
       };
     }).filter(item => item.total > 0);
-    
+
     const totalCapitalInjection = capitalMovements
       .filter(m => m.type === 'injection')
       .reduce((sum, m) => sum + m.total, 0);
-      
+
     const totalCapitalWithdrawal = capitalMovements
       .filter(m => m.type === 'withdrawal')
       .reduce((sum, m) => sum + m.total, 0);
@@ -168,7 +168,7 @@ export default function ProfitLossReport() {
 
     // Calculate total after capital movements
     const totalAfterCapitalMovements = netProfit + totalCapitalInjection - totalCapitalWithdrawal;
-    
+
     return {
       incomeByHierarchy,
       totalIncome,
@@ -276,9 +276,9 @@ export default function ProfitLossReport() {
         </Card>
 
         {/* Revenue Section */}
-        <Card>
-          <CardHeader className="bg-green-50 border-b border-green-200">
-            <CardTitle className="text-xl text-green-900 flex items-center">
+        <Card className="overflow-hidden border-2 border-emerald-200 dark:border-emerald-800/60">
+          <CardHeader className="bg-emerald-600 dark:bg-emerald-800 border-b border-emerald-700 dark:border-emerald-700">
+            <CardTitle className="text-xl text-white flex items-center">
               <TrendingUp className="h-6 w-6 mr-2" />
               SALES/TURNOVER
             </CardTitle>
@@ -288,12 +288,12 @@ export default function ProfitLossReport() {
               {reportData.incomeByHierarchy.map((hierarchy, index) => (
                 <div key={`${hierarchy.name}-${index}`} className="border-b border-border">
                   {/* Hierarchy Header - Clickable */}
-                  <div 
-                    className="bg-green-100 px-6 py-3 border-b border-green-200 cursor-pointer hover:bg-green-150 transition-colors"
+                  <div
+                    className="bg-emerald-100 dark:bg-emerald-900/40 px-6 py-3 border-b border-emerald-200 dark:border-emerald-800 cursor-pointer hover:bg-emerald-150 dark:hover:bg-emerald-900/60 transition-colors"
                     onClick={() => toggleHierarchy(hierarchy.name)}
                   >
                     <div className="flex items-center justify-between">
-                      <h4 className="font-bold text-green-900 uppercase tracking-wide text-sm flex items-center">
+                      <h4 className="font-bold text-emerald-900 dark:text-emerald-200 uppercase tracking-wide text-sm flex items-center">
                         {isHierarchyExpanded(hierarchy.name) ? (
                           <ChevronDown className="h-4 w-4 mr-2" />
                         ) : (
@@ -301,12 +301,12 @@ export default function ProfitLossReport() {
                         )}
                         {hierarchy.name}
                       </h4>
-                      <span className="font-semibold text-green-900">
+                      <span className="font-semibold text-emerald-900 dark:text-emerald-200 tabular-nums">
                         £{hierarchy.total.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                       </span>
                     </div>
                   </div>
-                  
+
                   {/* Categories - Collapsible */}
                   {isHierarchyExpanded(hierarchy.name) && (
                     <table className="w-full">
@@ -314,14 +314,14 @@ export default function ProfitLossReport() {
                         {hierarchy.categories.map((item) => (
                           <tr key={item.category} className="border-b border-border">
                             <td className="py-2 px-6 pl-8 text-foreground">{item.category}</td>
-                            <td className="py-2 px-6 text-right text-foreground">
+                            <td className="py-2 px-6 text-right text-foreground tabular-nums">
                               {item.total.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                             </td>
                           </tr>
                         ))}
-                        <tr className="bg-green-50 border-b-2 border-green-300">
-                          <td className="py-3 px-6 font-semibold text-green-900">Sub-total</td>
-                          <td className="py-3 px-6 text-right font-semibold text-green-900">
+                        <tr className="bg-emerald-50 dark:bg-emerald-950/30 border-b-2 border-emerald-300 dark:border-emerald-700">
+                          <td className="py-3 px-6 font-semibold text-emerald-900 dark:text-emerald-200">Sub-total</td>
+                          <td className="py-3 px-6 text-right font-semibold text-emerald-900 dark:text-emerald-200 tabular-nums">
                             £{hierarchy.total.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                           </td>
                         </tr>
@@ -330,14 +330,14 @@ export default function ProfitLossReport() {
                   )}
                 </div>
               ))}
-              
+
               {/* Total Sales */}
-              <div className="bg-green-50 border-t-2 border-green-300">
+              <div className="bg-emerald-100 dark:bg-emerald-900/50 border-t-2 border-emerald-300 dark:border-emerald-700">
                 <table className="w-full">
                   <tbody>
                     <tr>
-                      <td className="py-4 px-6 font-bold text-green-900">TOTAL SALES</td>
-                      <td className="py-4 px-6 text-right font-bold text-green-900">
+                      <td className="py-4 px-6 font-bold text-emerald-900 dark:text-emerald-200">TOTAL SALES</td>
+                      <td className="py-4 px-6 text-right font-bold text-emerald-900 dark:text-emerald-200 tabular-nums">
                         £{reportData.totalIncome.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                       </td>
                     </tr>
@@ -349,9 +349,9 @@ export default function ProfitLossReport() {
         </Card>
 
         {/* Expenditure Section */}
-        <Card>
-          <CardHeader className="bg-red-50 border-b border-red-200">
-            <CardTitle className="text-xl text-red-900 flex items-center">
+        <Card className="overflow-hidden border-2 border-rose-200 dark:border-rose-800/60">
+          <CardHeader className="bg-rose-600 dark:bg-rose-800 border-b border-rose-700 dark:border-rose-700">
+            <CardTitle className="text-xl text-white flex items-center">
               <TrendingDown className="h-6 w-6 mr-2" />
               EXPENDITURE
             </CardTitle>
@@ -361,12 +361,12 @@ export default function ProfitLossReport() {
               {reportData.expenditureByHierarchy.map((hierarchy, index) => (
                 <div key={`${hierarchy.name}-${index}`} className="border-b border-border">
                   {/* Hierarchy Header - Clickable */}
-                  <div 
-                    className="bg-muted px-6 py-3 border-b border-border cursor-pointer hover:bg-muted/80 transition-colors"
+                  <div
+                    className="bg-rose-100 dark:bg-rose-900/40 px-6 py-3 border-b border-rose-200 dark:border-rose-800 cursor-pointer hover:bg-rose-150 dark:hover:bg-rose-900/60 transition-colors"
                     onClick={() => toggleHierarchy(hierarchy.name)}
                   >
                     <div className="flex items-center justify-between">
-                      <h4 className="font-bold text-foreground uppercase tracking-wide text-sm flex items-center">
+                      <h4 className="font-bold text-rose-900 dark:text-rose-200 uppercase tracking-wide text-sm flex items-center">
                         {isHierarchyExpanded(hierarchy.name) ? (
                           <ChevronDown className="h-4 w-4 mr-2" />
                         ) : (
@@ -374,12 +374,12 @@ export default function ProfitLossReport() {
                         )}
                         {hierarchy.name}
                       </h4>
-                      <span className="font-semibold text-foreground">
+                      <span className="font-semibold text-rose-900 dark:text-rose-200 tabular-nums">
                         £{hierarchy.total.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                       </span>
                     </div>
                   </div>
-                  
+
                   {/* Categories - Collapsible */}
                   {isHierarchyExpanded(hierarchy.name) && (
                     <table className="w-full">
@@ -387,14 +387,14 @@ export default function ProfitLossReport() {
                         {hierarchy.categories.map((item) => (
                           <tr key={item.category} className="border-b border-border">
                             <td className="py-2 px-6 pl-8 text-foreground">- {item.category}</td>
-                            <td className="py-2 px-6 text-right text-foreground">
+                            <td className="py-2 px-6 text-right text-foreground tabular-nums">
                               {item.total.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                             </td>
                           </tr>
                         ))}
-                        <tr className="bg-muted border-b-2 border-border">
-                          <td className="py-3 px-6 font-semibold text-foreground">Sub-total</td>
-                          <td className="py-3 px-6 text-right font-semibold text-foreground">
+                        <tr className="bg-rose-50 dark:bg-rose-950/30 border-b-2 border-rose-300 dark:border-rose-700">
+                          <td className="py-3 px-6 font-semibold text-rose-900 dark:text-rose-200">Sub-total</td>
+                          <td className="py-3 px-6 text-right font-semibold text-rose-900 dark:text-rose-200 tabular-nums">
                             £{hierarchy.total.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                           </td>
                         </tr>
@@ -403,14 +403,14 @@ export default function ProfitLossReport() {
                   )}
                 </div>
               ))}
-              
+
               {/* Total Expenditure */}
-              <div className="bg-red-50 border-t-2 border-red-300">
+              <div className="bg-rose-100 dark:bg-rose-900/50 border-t-2 border-rose-300 dark:border-rose-700">
                 <table className="w-full">
                   <tbody>
                     <tr>
-                      <td className="py-4 px-6 font-bold text-red-900">TOTAL EXPENDITURE</td>
-                      <td className="py-4 px-6 text-right font-bold text-red-900">
+                      <td className="py-4 px-6 font-bold text-rose-900 dark:text-rose-200">TOTAL EXPENDITURE</td>
+                      <td className="py-4 px-6 text-right font-bold text-rose-900 dark:text-rose-200 tabular-nums">
                         £{reportData.totalExpenditure.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                       </td>
                     </tr>
@@ -423,9 +423,9 @@ export default function ProfitLossReport() {
 
         {/* Capital Movements Section */}
         {reportData.capitalMovements && reportData.capitalMovements.length > 0 && (
-          <Card>
-            <CardHeader className="bg-purple-50 border-b border-purple-200">
-              <CardTitle className="text-xl text-purple-900 flex items-center">
+          <Card className="overflow-hidden border-2 border-violet-200 dark:border-violet-800/60">
+            <CardHeader className="bg-violet-600 dark:bg-violet-800 border-b border-violet-700 dark:border-violet-700">
+              <CardTitle className="text-xl text-white flex items-center">
                 <Wallet className="h-6 w-6 mr-2" />
                 CAPITAL MOVEMENTS
               </CardTitle>
@@ -435,17 +435,17 @@ export default function ProfitLossReport() {
                 {reportData.capitalMovements.map((movement, index) => (
                   <div key={`${movement.name}-${index}`} className="border-b border-border">
                     {/* Movement Header - Clickable */}
-                    <div 
-                      className={`px-6 py-3 border-b cursor-pointer hover:bg-opacity-80 transition-colors ${
-                        movement.type === 'injection' 
-                          ? 'bg-blue-100 border-blue-200' 
-                          : 'bg-orange-100 border-orange-200'
+                    <div
+                      className={`px-6 py-3 border-b cursor-pointer transition-colors ${
+                        movement.type === 'injection'
+                          ? 'bg-blue-100 dark:bg-blue-900/40 border-blue-200 dark:border-blue-800 hover:bg-blue-150 dark:hover:bg-blue-900/60'
+                          : 'bg-orange-100 dark:bg-orange-900/40 border-orange-200 dark:border-orange-800 hover:bg-orange-150 dark:hover:bg-orange-900/60'
                       }`}
                       onClick={() => toggleHierarchy(movement.name)}
                     >
                       <div className="flex items-center justify-between">
                         <h4 className={`font-bold uppercase tracking-wide text-sm flex items-center ${
-                          movement.type === 'injection' ? 'text-blue-900' : 'text-orange-900'
+                          movement.type === 'injection' ? 'text-blue-900 dark:text-blue-200' : 'text-orange-900 dark:text-orange-200'
                         }`}>
                           {isHierarchyExpanded(movement.name) ? (
                             <ChevronDown className="h-4 w-4 mr-2" />
@@ -454,14 +454,14 @@ export default function ProfitLossReport() {
                           )}
                           {movement.name}
                         </h4>
-                        <span className={`font-semibold ${
-                          movement.type === 'injection' ? 'text-blue-900' : 'text-orange-900'
+                        <span className={`font-semibold tabular-nums ${
+                          movement.type === 'injection' ? 'text-blue-900 dark:text-blue-200' : 'text-orange-900 dark:text-orange-200'
                         }`}>
                           £{movement.total.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                         </span>
                       </div>
                     </div>
-                    
+
                     {/* Categories - Collapsible */}
                     {isHierarchyExpanded(movement.name) && (
                       <table className="w-full">
@@ -469,21 +469,21 @@ export default function ProfitLossReport() {
                           {movement.categories.map((item) => (
                             <tr key={item.category} className="border-b border-border">
                               <td className="py-2 px-6 pl-8 text-foreground">{item.category}</td>
-                              <td className="py-2 px-6 text-right text-foreground">
+                              <td className="py-2 px-6 text-right text-foreground tabular-nums">
                                 {item.total.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                               </td>
                             </tr>
                           ))}
                           <tr className={`border-b-2 ${
-                            movement.type === 'injection' 
-                              ? 'bg-blue-50 border-blue-300' 
-                              : 'bg-orange-50 border-orange-300'
+                            movement.type === 'injection'
+                              ? 'bg-blue-50 dark:bg-blue-950/30 border-blue-300 dark:border-blue-700'
+                              : 'bg-orange-50 dark:bg-orange-950/30 border-orange-300 dark:border-orange-700'
                           }`}>
                             <td className={`py-3 px-6 font-semibold ${
-                              movement.type === 'injection' ? 'text-blue-900' : 'text-orange-900'
+                              movement.type === 'injection' ? 'text-blue-900 dark:text-blue-200' : 'text-orange-900 dark:text-orange-200'
                             }`}>Sub-total</td>
-                            <td className={`py-3 px-6 text-right font-semibold ${
-                              movement.type === 'injection' ? 'text-blue-900' : 'text-orange-900'
+                            <td className={`py-3 px-6 text-right font-semibold tabular-nums ${
+                              movement.type === 'injection' ? 'text-blue-900 dark:text-blue-200' : 'text-orange-900 dark:text-orange-200'
                             }`}>
                               £{movement.total.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                             </td>
@@ -493,30 +493,30 @@ export default function ProfitLossReport() {
                     )}
                   </div>
                 ))}
-                
+
                 {/* Capital Movements Summary */}
-                <div className="bg-purple-50 border-t-2 border-purple-300">
+                <div className="bg-violet-100 dark:bg-violet-900/50 border-t-2 border-violet-300 dark:border-violet-700">
                   <table className="w-full">
                     <tbody>
                       {reportData.totalCapitalInjection > 0 && (
-                        <tr className="border-b border-purple-200">
-                          <td className="py-3 px-6 font-semibold text-blue-900">Total Capital Injection</td>
-                          <td className="py-3 px-6 text-right font-semibold text-blue-900">
+                        <tr className="border-b border-violet-200 dark:border-violet-700">
+                          <td className="py-3 px-6 font-semibold text-blue-900 dark:text-blue-300">Total Capital Injection</td>
+                          <td className="py-3 px-6 text-right font-semibold text-blue-900 dark:text-blue-300 tabular-nums">
                             £{reportData.totalCapitalInjection.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                           </td>
                         </tr>
                       )}
                       {reportData.totalCapitalWithdrawal > 0 && (
-                        <tr className="border-b border-purple-200">
-                          <td className="py-3 px-6 font-semibold text-orange-900">Total Director Withdrawals</td>
-                          <td className="py-3 px-6 text-right font-semibold text-orange-900">
+                        <tr className="border-b border-violet-200 dark:border-violet-700">
+                          <td className="py-3 px-6 font-semibold text-orange-900 dark:text-orange-300">Total Director Withdrawals</td>
+                          <td className="py-3 px-6 text-right font-semibold text-orange-900 dark:text-orange-300 tabular-nums">
                             £{reportData.totalCapitalWithdrawal.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                           </td>
                         </tr>
                       )}
                       <tr>
-                        <td className="py-4 px-6 font-bold text-purple-900">NET CAPITAL MOVEMENT</td>
-                        <td className="py-4 px-6 text-right font-bold text-purple-900">
+                        <td className="py-4 px-6 font-bold text-violet-900 dark:text-violet-200">NET CAPITAL MOVEMENT</td>
+                        <td className="py-4 px-6 text-right font-bold text-violet-900 dark:text-violet-200 tabular-nums">
                           £{(reportData.totalCapitalInjection - reportData.totalCapitalWithdrawal).toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                         </td>
                       </tr>
@@ -529,9 +529,9 @@ export default function ProfitLossReport() {
         )}
 
         {/* Operating Profit Section */}
-        <Card>
-          <CardHeader className={`border-b ${reportData.netProfit >= 0 ? 'bg-blue-50 border-blue-200' : 'bg-red-50 border-red-200'}`}>
-            <CardTitle className={`text-xl flex items-center ${reportData.netProfit >= 0 ? 'text-blue-900' : 'text-red-900'}`}>
+        <Card className={`overflow-hidden border-2 ${reportData.netProfit >= 0 ? 'border-emerald-300 dark:border-emerald-700' : 'border-rose-300 dark:border-rose-700'}`}>
+          <CardHeader className={`border-b ${reportData.netProfit >= 0 ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800' : 'bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-800'}`}>
+            <CardTitle className={`text-xl flex items-center ${reportData.netProfit >= 0 ? 'text-emerald-900 dark:text-emerald-200' : 'text-rose-900 dark:text-rose-200'}`}>
               <Calculator className="h-6 w-6 mr-2" />
               OPERATING PROFIT (BEFORE CAPITAL MOVEMENTS)
             </CardTitle>
@@ -539,11 +539,11 @@ export default function ProfitLossReport() {
           <CardContent className="p-0">
             <table className="w-full">
               <tbody>
-                <tr className={`${reportData.netProfit >= 0 ? 'bg-blue-50' : 'bg-red-50'}`}>
-                  <td className={`py-6 px-6 text-2xl font-bold ${reportData.netProfit >= 0 ? 'text-blue-900' : 'text-red-900'}`}>
+                <tr className={`${reportData.netProfit >= 0 ? 'bg-emerald-50 dark:bg-emerald-950/30' : 'bg-rose-50 dark:bg-rose-950/30'}`}>
+                  <td className={`py-6 px-6 text-2xl font-bold ${reportData.netProfit >= 0 ? 'text-emerald-900 dark:text-emerald-200' : 'text-rose-900 dark:text-rose-200'}`}>
                     {reportData.netProfit >= 0 ? 'PROFIT' : 'LOSS'}
                   </td>
-                  <td className={`py-6 px-6 text-right text-2xl font-bold ${reportData.netProfit >= 0 ? 'text-blue-900' : 'text-red-900'}`}>
+                  <td className={`py-6 px-6 text-right text-2xl font-bold tabular-nums ${reportData.netProfit >= 0 ? 'text-emerald-900 dark:text-emerald-200' : 'text-rose-900 dark:text-rose-200'}`}>
                     £{Math.abs(reportData.netProfit).toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                   </td>
                 </tr>
@@ -554,9 +554,9 @@ export default function ProfitLossReport() {
 
         {/* Total After Capital Movements Section */}
         {reportData.capitalMovements && reportData.capitalMovements.length > 0 && (
-          <Card>
-            <CardHeader className={`border-b ${reportData.totalAfterCapitalMovements >= 0 ? 'bg-indigo-50 border-indigo-200' : 'bg-red-50 border-red-200'}`}>
-              <CardTitle className={`text-xl flex items-center ${reportData.totalAfterCapitalMovements >= 0 ? 'text-indigo-900' : 'text-red-900'}`}>
+          <Card className={`overflow-hidden border-4 ${reportData.totalAfterCapitalMovements >= 0 ? 'border-emerald-400 dark:border-emerald-600' : 'border-rose-400 dark:border-rose-600'}`}>
+            <CardHeader className={`border-b ${reportData.totalAfterCapitalMovements >= 0 ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800' : 'bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-800'}`}>
+              <CardTitle className={`text-xl flex items-center ${reportData.totalAfterCapitalMovements >= 0 ? 'text-emerald-900 dark:text-emerald-200' : 'text-rose-900 dark:text-rose-200'}`}>
                 <Calculator className="h-6 w-6 mr-2" />
                 TOTAL AFTER CAPITAL MOVEMENTS
               </CardTitle>
@@ -564,33 +564,33 @@ export default function ProfitLossReport() {
             <CardContent className="p-0">
               <table className="w-full">
                 <tbody>
-                  <tr className={`${reportData.totalAfterCapitalMovements >= 0 ? 'bg-indigo-50' : 'bg-red-50'}`}>
+                  <tr className={`${reportData.totalAfterCapitalMovements >= 0 ? 'bg-emerald-50/50 dark:bg-emerald-950/20' : 'bg-rose-50/50 dark:bg-rose-950/20'}`}>
                     <td className="py-3 px-6 text-foreground">Operating Profit</td>
-                    <td className="py-3 px-6 text-right text-foreground">
+                    <td className="py-3 px-6 text-right text-foreground tabular-nums">
                       £{reportData.netProfit.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                     </td>
                   </tr>
                   {reportData.totalCapitalInjection > 0 && (
-                    <tr className={`${reportData.totalAfterCapitalMovements >= 0 ? 'bg-indigo-50' : 'bg-red-50'}`}>
+                    <tr className={`${reportData.totalAfterCapitalMovements >= 0 ? 'bg-emerald-50/50 dark:bg-emerald-950/20' : 'bg-rose-50/50 dark:bg-rose-950/20'}`}>
                       <td className="py-3 px-6 text-foreground">Add: Capital Injection</td>
-                      <td className="py-3 px-6 text-right text-foreground">
+                      <td className="py-3 px-6 text-right text-foreground tabular-nums">
                         £{reportData.totalCapitalInjection.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                       </td>
                     </tr>
                   )}
                   {reportData.totalCapitalWithdrawal > 0 && (
-                    <tr className={`${reportData.totalAfterCapitalMovements >= 0 ? 'bg-indigo-50' : 'bg-red-50'}`}>
+                    <tr className={`${reportData.totalAfterCapitalMovements >= 0 ? 'bg-emerald-50/50 dark:bg-emerald-950/20' : 'bg-rose-50/50 dark:bg-rose-950/20'}`}>
                       <td className="py-3 px-6 text-foreground">Less: Director Withdrawals</td>
-                      <td className="py-3 px-6 text-right text-foreground">
+                      <td className="py-3 px-6 text-right text-foreground tabular-nums">
                         £{reportData.totalCapitalWithdrawal.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                       </td>
                     </tr>
                   )}
-                  <tr className={`border-t-2 ${reportData.totalAfterCapitalMovements >= 0 ? 'border-indigo-300 bg-indigo-50' : 'border-red-300 bg-red-50'}`}>
-                    <td className={`py-6 px-6 text-2xl font-bold ${reportData.totalAfterCapitalMovements >= 0 ? 'text-indigo-900' : 'text-red-900'}`}>
+                  <tr className={`border-t-2 ${reportData.totalAfterCapitalMovements >= 0 ? 'border-emerald-300 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-950/40' : 'border-rose-300 dark:border-rose-700 bg-rose-50 dark:bg-rose-950/40'}`}>
+                    <td className={`py-6 px-6 text-2xl font-bold ${reportData.totalAfterCapitalMovements >= 0 ? 'text-emerald-900 dark:text-emerald-200' : 'text-rose-900 dark:text-rose-200'}`}>
                       {reportData.totalAfterCapitalMovements >= 0 ? 'NET POSITION' : 'NET DEFICIT'}
                     </td>
-                    <td className={`py-6 px-6 text-right text-2xl font-bold ${reportData.totalAfterCapitalMovements >= 0 ? 'text-indigo-900' : 'text-red-900'}`}>
+                    <td className={`py-6 px-6 text-right text-2xl font-bold tabular-nums ${reportData.totalAfterCapitalMovements >= 0 ? 'text-emerald-900 dark:text-emerald-200' : 'text-rose-900 dark:text-rose-200'}`}>
                       £{Math.abs(reportData.totalAfterCapitalMovements).toLocaleString('en-GB', { minimumFractionDigits: 2 })}
                     </td>
                   </tr>
@@ -613,19 +613,19 @@ export default function ProfitLossReport() {
                 <div className="space-y-2">
                   <div className="flex justify-between items-center p-3 bg-muted rounded-lg">
                     <span className="text-sm text-foreground">Net Profit Margin:</span>
-                    <span className={`font-medium ${reportData.grossProfitMargin >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    <span className={`font-medium ${reportData.grossProfitMargin >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
                       {reportData.grossProfitMargin.toFixed(1)}%
                     </span>
                   </div>
                   <div className="flex justify-between items-center p-3 bg-muted rounded-lg">
                     <span className="text-sm text-foreground">Total Revenue:</span>
-                    <span className="font-medium text-foreground">
+                    <span className="font-medium text-foreground tabular-nums">
                       £{reportData.totalIncome.toLocaleString('en-GB')}
                     </span>
                   </div>
                 </div>
               </div>
-              
+
               <div className="space-y-3">
                 <h4 className="font-medium text-foreground">Expenditure Analysis</h4>
                 <div className="space-y-2">
@@ -642,25 +642,25 @@ export default function ProfitLossReport() {
                     })}
                 </div>
               </div>
-              
+
               <div className="space-y-3">
                 <h4 className="font-medium text-foreground">Financial Summary</h4>
                 <div className="space-y-2">
-                  <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
-                    <span className="text-sm text-green-700">Total Income:</span>
-                    <span className="font-medium text-green-800">
+                  <div className="flex justify-between items-center p-3 bg-emerald-50 dark:bg-emerald-950/30 rounded-lg">
+                    <span className="text-sm text-emerald-700 dark:text-emerald-300">Total Income:</span>
+                    <span className="font-medium text-emerald-800 dark:text-emerald-200 tabular-nums">
                       £{reportData.totalIncome.toLocaleString('en-GB')}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center p-3 bg-red-50 rounded-lg">
-                    <span className="text-sm text-red-700">Total Expenditure:</span>
-                    <span className="font-medium text-red-800">
+                  <div className="flex justify-between items-center p-3 bg-rose-50 dark:bg-rose-950/30 rounded-lg">
+                    <span className="text-sm text-rose-700 dark:text-rose-300">Total Expenditure:</span>
+                    <span className="font-medium text-rose-800 dark:text-rose-200 tabular-nums">
                       £{reportData.totalExpenditure.toLocaleString('en-GB')}
                     </span>
                   </div>
-                  <div className={`flex justify-between items-center p-3 rounded-lg ${reportData.netProfit >= 0 ? 'bg-blue-50' : 'bg-red-50'}`}>
-                    <span className={`text-sm ${reportData.netProfit >= 0 ? 'text-blue-700' : 'text-red-700'}`}>Net Result:</span>
-                    <span className={`font-medium ${reportData.netProfit >= 0 ? 'text-blue-800' : 'text-red-800'}`}>
+                  <div className={`flex justify-between items-center p-3 rounded-lg ${reportData.netProfit >= 0 ? 'bg-emerald-50 dark:bg-emerald-950/30' : 'bg-rose-50 dark:bg-rose-950/30'}`}>
+                    <span className={`text-sm ${reportData.netProfit >= 0 ? 'text-emerald-700 dark:text-emerald-300' : 'text-rose-700 dark:text-rose-300'}`}>Net Result:</span>
+                    <span className={`font-medium tabular-nums ${reportData.netProfit >= 0 ? 'text-emerald-800 dark:text-emerald-200' : 'text-rose-800 dark:text-rose-200'}`}>
                       £{Math.abs(reportData.netProfit).toLocaleString('en-GB')}
                     </span>
                   </div>

@@ -50,19 +50,19 @@ function VarianceIndicator({ trend, variance, variancePercentage, type }: Varian
   const isNegativeChange = type === 'income' ? trend === 'down' : trend === 'up';
 
   const colorClass = trend === 'flat' ? 'text-muted-foreground' :
-    isPositiveChange ? 'text-green-600' :
-    isNegativeChange ? 'text-red-600' : 'text-muted-foreground';
+    isPositiveChange ? 'text-emerald-600 dark:text-emerald-400' :
+    isNegativeChange ? 'text-rose-600 dark:text-rose-400' : 'text-muted-foreground';
 
   const bgColorClass = trend === 'flat' ? 'bg-muted' :
-    isPositiveChange ? 'bg-green-50' :
-    isNegativeChange ? 'bg-red-50' : 'bg-muted';
+    isPositiveChange ? 'bg-emerald-50 dark:bg-emerald-950/40' :
+    isNegativeChange ? 'bg-rose-50 dark:bg-rose-950/40' : 'bg-muted';
 
   const Icon = trend === 'up' ? ArrowUp : trend === 'down' ? ArrowDown : Equal;
 
   return (
     <div className={cn('flex items-center gap-2 px-2 py-1 rounded-md', bgColorClass)}>
       <Icon className={cn('h-4 w-4', colorClass)} />
-      <div className={cn('font-semibold', colorClass)}>
+      <div className={cn('font-semibold tabular-nums', colorClass)}>
         {formatCurrency(Math.abs(variance))}
       </div>
       <div className={cn('text-sm', colorClass)}>
@@ -102,15 +102,19 @@ function ComparisonRow({
   hasChildren = false
 }: ComparisonRowProps) {
   const bgColor = !isCategory
-    ? type === 'income' ? 'bg-green-50/50 hover:bg-green-100/50' :
-      type === 'expenditure' ? 'bg-red-50/50 hover:bg-red-100/50' :
-      'bg-purple-50/50 hover:bg-purple-100/50'
-    : 'bg-card hover:bg-muted';
+    ? type === 'income'
+      ? 'bg-emerald-50/50 dark:bg-emerald-950/20 hover:bg-emerald-100/50 dark:hover:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/50'
+      : type === 'expenditure'
+        ? 'bg-rose-50/50 dark:bg-rose-950/20 hover:bg-rose-100/50 dark:hover:bg-rose-950/40 border-rose-200 dark:border-rose-800/50'
+        : 'bg-violet-50/50 dark:bg-violet-950/20 hover:bg-violet-100/50 dark:hover:bg-violet-950/40 border-violet-200 dark:border-violet-800/50'
+    : 'bg-card hover:bg-muted border-border';
 
   const textColor = !isCategory
-    ? type === 'income' ? 'text-green-900' :
-      type === 'expenditure' ? 'text-red-900' :
-      'text-purple-900'
+    ? type === 'income'
+      ? 'text-emerald-900 dark:text-emerald-200'
+      : type === 'expenditure'
+        ? 'text-rose-900 dark:text-rose-200'
+        : 'text-violet-900 dark:text-violet-200'
     : 'text-foreground';
 
   return (
@@ -127,25 +131,25 @@ function ComparisonRow({
       <div className={cn('col-span-2 flex items-center gap-2', textColor)}>
         {hasChildren && (
           isExpanded ? (
-            <ChevronDown className="h-4 w-4 text-muted-foreground" />
+            <ChevronDown className="h-4 w-4 opacity-60" />
           ) : (
-            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            <ChevronRight className="h-4 w-4 opacity-60" />
           )
         )}
         {isCategory && color && (
           <div
-            className="w-3 h-3 rounded-full"
+            className="w-3 h-3 rounded-full shrink-0"
             style={{ backgroundColor: color }}
           />
         )}
         <span>{name}</span>
       </div>
 
-      <div className="text-right">
+      <div className="text-right tabular-nums">
         {formatCurrency(Math.abs(current))}
       </div>
 
-      <div className="text-right text-muted-foreground">
+      <div className="text-right text-muted-foreground tabular-nums">
         {formatCurrency(Math.abs(previous))}
       </div>
 
@@ -254,12 +258,12 @@ export function PeriodComparisonReport({
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-2">
-          <GitCompare className="h-5 w-5 text-blue-600" />
-          <h3 className="text-lg font-semibold">Period Comparison Analysis</h3>
+          <GitCompare className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+          <h3 className="text-lg font-semibold text-foreground">Period Comparison Analysis</h3>
         </div>
         <div className="flex items-center gap-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-blue-600 rounded-full" />
+            <div className="w-3 h-3 bg-blue-600 dark:bg-blue-400 rounded-full" />
             <span>Current: {currentLabel}</span>
           </div>
           <div className="flex items-center gap-2">
@@ -280,7 +284,7 @@ export function PeriodComparisonReport({
       {/* Income Section */}
       {incomeData.length > 0 && (
         <div className="mb-6">
-          <h4 className="text-sm font-semibold text-green-800 mb-2 uppercase tracking-wide">
+          <h4 className="text-sm font-semibold text-emerald-800 dark:text-emerald-300 mb-2 uppercase tracking-wide">
             Income
           </h4>
           <div className="space-y-1">
@@ -292,7 +296,7 @@ export function PeriodComparisonReport({
       {/* Expenditure Section */}
       {expenditureData.length > 0 && (
         <div className="mb-6">
-          <h4 className="text-sm font-semibold text-red-800 mb-2 uppercase tracking-wide">
+          <h4 className="text-sm font-semibold text-rose-800 dark:text-rose-300 mb-2 uppercase tracking-wide">
             Expenditure
           </h4>
           <div className="space-y-1">
@@ -304,7 +308,7 @@ export function PeriodComparisonReport({
       {/* Capital Section */}
       {capitalData.length > 0 && (
         <div className="mb-6">
-          <h4 className="text-sm font-semibold text-purple-800 mb-2 uppercase tracking-wide">
+          <h4 className="text-sm font-semibold text-violet-800 dark:text-violet-300 mb-2 uppercase tracking-wide">
             Capital Movements
           </h4>
           <div className="space-y-1">
@@ -314,7 +318,7 @@ export function PeriodComparisonReport({
       )}
 
       {/* Totals */}
-      <div className="border-t-2 pt-4 mt-6 space-y-3">
+      <div className="border-t-2 border-border pt-4 mt-6 space-y-3">
         <ComparisonRow
           name="Total Income"
           type="income"
@@ -335,7 +339,7 @@ export function PeriodComparisonReport({
           trend={expenditureVariance > 0 ? 'up' : expenditureVariance < 0 ? 'down' : 'flat'}
         />
 
-        <div className="border-t-2 pt-3">
+        <div className="border-t-2 border-border pt-3">
           <ComparisonRow
             name="Net Operating Profit"
             type="income"

@@ -65,16 +65,26 @@ function HierarchyItem({ hierarchy, isExpanded, onToggleExpand, onHierarchyClick
   const isUncategorized = hierarchy.id.startsWith('uncategorized-');
 
   const bgColorClass = isUncategorized
-    ? 'bg-orange-50 hover:bg-orange-100 border-2 border-orange-200'
-    : type === 'income' ? 'bg-green-50 hover:bg-green-100' :
-      type === 'expenditure' ? 'bg-red-50 hover:bg-red-100' :
-      'bg-purple-50 hover:bg-purple-100';
+    ? 'bg-orange-50 dark:bg-orange-950/40 hover:bg-orange-100 dark:hover:bg-orange-950/60 border-2 border-orange-200 dark:border-orange-800'
+    : type === 'income'
+      ? 'bg-emerald-50 dark:bg-emerald-950/30 hover:bg-emerald-100 dark:hover:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800/50'
+      : type === 'expenditure'
+        ? 'bg-rose-50 dark:bg-rose-950/30 hover:bg-rose-100 dark:hover:bg-rose-950/50 border border-rose-200 dark:border-rose-800/50'
+        : 'bg-violet-50 dark:bg-violet-950/30 hover:bg-violet-100 dark:hover:bg-violet-950/50 border border-violet-200 dark:border-violet-800/50';
 
   const textColorClass = isUncategorized
-    ? 'text-orange-800'
-    : type === 'income' ? 'text-green-800' :
-      type === 'expenditure' ? 'text-red-800' :
-      'text-purple-800';
+    ? 'text-orange-800 dark:text-orange-300'
+    : type === 'income'
+      ? 'text-emerald-800 dark:text-emerald-300'
+      : type === 'expenditure'
+        ? 'text-rose-800 dark:text-rose-300'
+        : 'text-violet-800 dark:text-violet-300';
+
+  const borderLeftClass = type === 'income'
+    ? 'border-l-emerald-400 dark:border-l-emerald-600'
+    : type === 'expenditure'
+      ? 'border-l-rose-400 dark:border-l-rose-600'
+      : 'border-l-violet-400 dark:border-l-violet-600';
 
   const amount = Math.abs(hierarchy.total_amount);
   const isNegative = hierarchy.total_amount < 0;
@@ -82,10 +92,8 @@ function HierarchyItem({ hierarchy, isExpanded, onToggleExpand, onHierarchyClick
   const handleHierarchyClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (e.detail === 2) {
-      // Double-click opens drill-down
       onHierarchyClick(hierarchy.id, hierarchy.name, type);
     } else if (hasCategories) {
-      // Single-click toggles expand
       onToggleExpand(hierarchy.id, !isExpanded);
     }
   };
@@ -94,16 +102,16 @@ function HierarchyItem({ hierarchy, isExpanded, onToggleExpand, onHierarchyClick
     <div className="space-y-1">
       {/* Hierarchy Header */}
       <div
-        className={`flex items-center justify-between p-3 rounded-lg cursor-pointer transition-colors ${bgColorClass}`}
+        className={`flex items-center justify-between p-3 rounded-lg cursor-pointer transition-colors border-l-4 ${borderLeftClass} ${bgColorClass}`}
         onClick={handleHierarchyClick}
         title="Double-click to view transactions"
       >
         <div className="flex items-center space-x-3">
           {hasCategories ? (
             isExpanded ? (
-              <ChevronDown className="h-4 w-4 text-muted-foreground" />
+              <ChevronDown className={`h-4 w-4 ${textColorClass} opacity-60`} />
             ) : (
-              <ChevronRight className="h-4 w-4 text-muted-foreground" />
+              <ChevronRight className={`h-4 w-4 ${textColorClass} opacity-60`} />
             )
           ) : (
             <div className="w-4 h-4" />
@@ -119,7 +127,7 @@ function HierarchyItem({ hierarchy, isExpanded, onToggleExpand, onHierarchyClick
         </div>
         <div className="flex items-center space-x-2">
           {isNegative && <Minus className="h-4 w-4 text-red-500" />}
-          <span className={`font-bold text-lg ${textColorClass}`}>
+          <span className={`font-bold text-lg tabular-nums ${textColorClass}`}>
             {formatCurrency(amount)}
           </span>
         </div>
@@ -127,27 +135,31 @@ function HierarchyItem({ hierarchy, isExpanded, onToggleExpand, onHierarchyClick
 
       {/* Category Details (Collapsible) */}
       {hasCategories && isExpanded && (
-        <div className="ml-6 space-y-2 border-l-2 border-border pl-4">
+        <div className={`ml-6 space-y-1.5 border-l-2 pl-4 ${
+          type === 'income' ? 'border-emerald-200 dark:border-emerald-800' :
+          type === 'expenditure' ? 'border-rose-200 dark:border-rose-800' :
+          'border-violet-200 dark:border-violet-800'
+        }`}>
           {hierarchy.categories.map((category) => (
             <div
               key={category.id}
-              className="flex items-center justify-between py-2 px-3 bg-card rounded border cursor-pointer hover:bg-muted transition-colors"
+              className="flex items-center justify-between py-2 px-3 bg-card rounded border border-border cursor-pointer hover:bg-muted transition-colors"
               onClick={() => onCategoryClick(category.id, category.name, hierarchy.name, type)}
               title="Click to view transactions"
             >
               <div className="flex items-center space-x-3">
                 <div
-                  className="w-3 h-3 rounded-full"
+                  className="w-3 h-3 rounded-full shrink-0"
                   style={{ backgroundColor: category.color || '#6B7280' }}
                 />
                 <span className="text-foreground font-medium">{category.name}</span>
                 <Badge variant="outline" className="text-xs">
-                  {category.transaction_count} transactions
+                  {category.transaction_count} txns
                 </Badge>
               </div>
               <div className="flex items-center space-x-2">
                 {category.total_amount < 0 && <Minus className="h-3 w-3 text-red-500" />}
-                <span className="font-semibold text-foreground">
+                <span className="font-semibold text-foreground tabular-nums">
                   {formatCurrency(Math.abs(category.total_amount))}
                 </span>
               </div>
@@ -412,198 +424,212 @@ export function HierarchicalPLReport({ className }: HierarchicalPLReportProps) {
             previousLabel={comparisonConfig.comparisonPeriod.label || formatDateRange(comparisonConfig.comparisonPeriod.start, comparisonConfig.comparisonPeriod.end)}
           />
         ) : (
-          <div className="space-y-6 font-mono text-sm">
-            {/* Income Section */}
-          <div>
-            <div className="flex items-center justify-between mb-4 pb-2 border-b-2 border-green-200">
-              <h3 className="font-bold text-green-700 text-lg">INCOME</h3>
-              <span className="text-xs text-muted-foreground">
-                {plData.income.length} hierarchies
-              </span>
-            </div>
-            <div className="space-y-2">
-              {plData.income.length === 0 ? (
-                <div className="text-center py-6 text-muted-foreground">
-                  No income hierarchies for this period
+          <div className="space-y-8 font-mono text-sm">
+            {/* ═══════════════ INCOME SECTION ═══════════════ */}
+            <div className="rounded-xl border-2 border-emerald-200 dark:border-emerald-800/60 overflow-hidden">
+              {/* Income Section Header */}
+              <div className="flex items-center justify-between px-5 py-3 bg-emerald-600 dark:bg-emerald-800">
+                <div className="flex items-center space-x-3">
+                  <TrendingUp className="h-5 w-5 text-white" />
+                  <h3 className="font-bold text-white text-lg tracking-wide">INCOME</h3>
                 </div>
-              ) : (
-                plData.income.map((hierarchy) => (
-                  <HierarchyItem
-                    key={hierarchy.id}
-                    hierarchy={hierarchy}
-                    isExpanded={expandedHierarchies[hierarchy.id] || false}
-                    onToggleExpand={handleToggleExpand}
-                    onHierarchyClick={handleHierarchyClick}
-                    onCategoryClick={handleCategoryClick}
-                    type="income"
-                  />
-                ))
-              )}
-              <div className="border-t-2 border-green-300 pt-3 mt-4">
-                <div className="flex items-center justify-between p-3 bg-green-100 rounded-lg">
-                  <span className="text-green-800 font-bold text-lg">TOTAL INCOME</span>
-                  <span className="text-green-800 font-bold text-xl">
-                    {formatCurrency(totals.total_income)}
-                  </span>
-                </div>
+                <span className="text-xs text-emerald-100">
+                  {plData.income.length} {plData.income.length === 1 ? 'hierarchy' : 'hierarchies'}
+                </span>
+              </div>
+              {/* Income Body */}
+              <div className="p-4 space-y-2 bg-emerald-50/50 dark:bg-emerald-950/20">
+                {plData.income.length === 0 ? (
+                  <div className="text-center py-6 text-muted-foreground">
+                    No income hierarchies for this period
+                  </div>
+                ) : (
+                  plData.income.map((hierarchy) => (
+                    <HierarchyItem
+                      key={hierarchy.id}
+                      hierarchy={hierarchy}
+                      isExpanded={expandedHierarchies[hierarchy.id] || false}
+                      onToggleExpand={handleToggleExpand}
+                      onHierarchyClick={handleHierarchyClick}
+                      onCategoryClick={handleCategoryClick}
+                      type="income"
+                    />
+                  ))
+                )}
+              </div>
+              {/* Income Total */}
+              <div className="flex items-center justify-between px-5 py-3 bg-emerald-100 dark:bg-emerald-900/50 border-t-2 border-emerald-300 dark:border-emerald-700">
+                <span className="text-emerald-800 dark:text-emerald-200 font-bold text-lg">TOTAL INCOME</span>
+                <span className="text-emerald-800 dark:text-emerald-200 font-bold text-xl tabular-nums">
+                  {formatCurrency(totals.total_income)}
+                </span>
               </div>
             </div>
-          </div>
 
-          {/* Expenditure Section */}
-          <div>
-            <div className="flex items-center justify-between mb-4 pb-2 border-b-2 border-red-200">
-              <h3 className="font-bold text-red-700 text-lg">EXPENDITURE</h3>
-              <span className="text-xs text-muted-foreground">
-                {plData.expenditure.length} hierarchies
-              </span>
-            </div>
-            <div className="space-y-2">
-              {plData.expenditure.length === 0 ? (
-                <div className="text-center py-6 text-muted-foreground">
-                  No expenditure hierarchies for this period
+            {/* ═══════════════ EXPENDITURE SECTION ═══════════════ */}
+            <div className="rounded-xl border-2 border-rose-200 dark:border-rose-800/60 overflow-hidden">
+              {/* Expenditure Section Header */}
+              <div className="flex items-center justify-between px-5 py-3 bg-rose-600 dark:bg-rose-800">
+                <div className="flex items-center space-x-3">
+                  <TrendingDown className="h-5 w-5 text-white" />
+                  <h3 className="font-bold text-white text-lg tracking-wide">EXPENDITURE</h3>
                 </div>
-              ) : (
-                plData.expenditure.map((hierarchy) => (
-                  <HierarchyItem
-                    key={hierarchy.id}
-                    hierarchy={hierarchy}
-                    isExpanded={expandedHierarchies[hierarchy.id] || false}
-                    onToggleExpand={handleToggleExpand}
-                    onHierarchyClick={handleHierarchyClick}
-                    onCategoryClick={handleCategoryClick}
-                    type="expenditure"
-                  />
-                ))
-              )}
-              <div className="border-t-2 border-red-300 pt-3 mt-4">
-                <div className="flex items-center justify-between p-3 bg-red-100 rounded-lg">
-                  <span className="text-red-800 font-bold text-lg">TOTAL EXPENDITURE</span>
-                  <span className="text-red-800 font-bold text-xl">
-                    {formatCurrency(totals.total_expenditure)}
-                  </span>
-                </div>
+                <span className="text-xs text-rose-100">
+                  {plData.expenditure.length} {plData.expenditure.length === 1 ? 'hierarchy' : 'hierarchies'}
+                </span>
+              </div>
+              {/* Expenditure Body */}
+              <div className="p-4 space-y-2 bg-rose-50/50 dark:bg-rose-950/20">
+                {plData.expenditure.length === 0 ? (
+                  <div className="text-center py-6 text-muted-foreground">
+                    No expenditure hierarchies for this period
+                  </div>
+                ) : (
+                  plData.expenditure.map((hierarchy) => (
+                    <HierarchyItem
+                      key={hierarchy.id}
+                      hierarchy={hierarchy}
+                      isExpanded={expandedHierarchies[hierarchy.id] || false}
+                      onToggleExpand={handleToggleExpand}
+                      onHierarchyClick={handleHierarchyClick}
+                      onCategoryClick={handleCategoryClick}
+                      type="expenditure"
+                    />
+                  ))
+                )}
+              </div>
+              {/* Expenditure Total */}
+              <div className="flex items-center justify-between px-5 py-3 bg-rose-100 dark:bg-rose-900/50 border-t-2 border-rose-300 dark:border-rose-700">
+                <span className="text-rose-800 dark:text-rose-200 font-bold text-lg">TOTAL EXPENDITURE</span>
+                <span className="text-rose-800 dark:text-rose-200 font-bold text-xl tabular-nums">
+                  {formatCurrency(totals.total_expenditure)}
+                </span>
               </div>
             </div>
-          </div>
 
-          {/* Net Operating Profit/Loss */}
-          <div className="border-t-4 border-border pt-4">
-            <div className={`flex items-center justify-between p-4 rounded-lg ${
-              totals.net_operating_profit >= 0 ? 'bg-green-50 border-2 border-green-200' : 'bg-red-50 border-2 border-red-200'
+            {/* ═══════════════ NET OPERATING PROFIT/LOSS ═══════════════ */}
+            <div className={`flex items-center justify-between p-5 rounded-xl border-2 ${
+              totals.net_operating_profit >= 0
+                ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-700'
+                : 'bg-rose-50 dark:bg-rose-950/40 border-rose-300 dark:border-rose-700'
             }`}>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-3">
+                {totals.net_operating_profit >= 0 ? (
+                  <TrendingUp className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
+                ) : (
+                  <TrendingDown className="h-6 w-6 text-rose-600 dark:text-rose-400" />
+                )}
                 <span className={`font-bold text-xl ${
-                  totals.net_operating_profit >= 0 ? 'text-green-800' : 'text-red-800'
+                  totals.net_operating_profit >= 0
+                    ? 'text-emerald-800 dark:text-emerald-200'
+                    : 'text-rose-800 dark:text-rose-200'
                 }`}>
                   {totals.net_operating_profit >= 0 ? 'NET OPERATING PROFIT' : 'NET OPERATING LOSS'}
                 </span>
-                {totals.net_operating_profit >= 0 ? (
-                  <TrendingUp className="h-5 w-5 text-green-600" />
-                ) : (
-                  <TrendingDown className="h-5 w-5 text-red-600" />
-                )}
               </div>
-              <span className={`font-bold text-2xl ${
-                totals.net_operating_profit >= 0 ? 'text-green-800' : 'text-red-800'
+              <span className={`font-bold text-2xl tabular-nums ${
+                totals.net_operating_profit >= 0
+                  ? 'text-emerald-800 dark:text-emerald-200'
+                  : 'text-rose-800 dark:text-rose-200'
               }`}>
                 {formatCurrency(Math.abs(totals.net_operating_profit))}
               </span>
             </div>
-          </div>
 
-          {/* Capital Movements Section */}
-          {plData.capital.length > 0 && (
-            <div>
-              <div className="flex items-center justify-between mb-4 pb-2 border-b-2 border-purple-200">
-                <h3 className="font-bold text-purple-700 text-lg">CAPITAL MOVEMENTS</h3>
-                <span className="text-xs text-muted-foreground">
-                  {plData.capital.length} hierarchies
-                </span>
-              </div>
-              <div className="space-y-2">
-                {plData.capital.map((hierarchy) => (
-                  <HierarchyItem
-                    key={hierarchy.id}
-                    hierarchy={hierarchy}
-                    isExpanded={expandedHierarchies[hierarchy.id] || false}
-                    onToggleExpand={handleToggleExpand}
-                    onHierarchyClick={handleHierarchyClick}
-                    onCategoryClick={handleCategoryClick}
-                    type="capital"
-                  />
-                ))}
-                <div className="border-t-2 border-purple-300 pt-3 mt-4">
-                  <div className="flex items-center justify-between p-3 bg-purple-100 rounded-lg">
-                    <span className="text-purple-800 font-bold text-lg">TOTAL CAPITAL MOVEMENTS</span>
-                    <div className="flex items-center space-x-2">
-                      {totals.total_capital_movements < 0 && <Minus className="h-4 w-4 text-red-500" />}
-                      <span className="text-purple-800 font-bold text-xl">
-                        {formatCurrency(Math.abs(totals.total_capital_movements))}
-                      </span>
-                    </div>
+            {/* ═══════════════ CAPITAL MOVEMENTS SECTION ═══════════════ */}
+            {plData.capital.length > 0 && (
+              <div className="rounded-xl border-2 border-violet-200 dark:border-violet-800/60 overflow-hidden">
+                {/* Capital Section Header */}
+                <div className="flex items-center justify-between px-5 py-3 bg-violet-600 dark:bg-violet-800">
+                  <div className="flex items-center space-x-3">
+                    <Minus className="h-5 w-5 text-white" />
+                    <h3 className="font-bold text-white text-lg tracking-wide">CAPITAL MOVEMENTS</h3>
+                  </div>
+                  <span className="text-xs text-violet-100">
+                    {plData.capital.length} {plData.capital.length === 1 ? 'hierarchy' : 'hierarchies'}
+                  </span>
+                </div>
+                {/* Capital Body */}
+                <div className="p-4 space-y-2 bg-violet-50/50 dark:bg-violet-950/20">
+                  {plData.capital.map((hierarchy) => (
+                    <HierarchyItem
+                      key={hierarchy.id}
+                      hierarchy={hierarchy}
+                      isExpanded={expandedHierarchies[hierarchy.id] || false}
+                      onToggleExpand={handleToggleExpand}
+                      onHierarchyClick={handleHierarchyClick}
+                      onCategoryClick={handleCategoryClick}
+                      type="capital"
+                    />
+                  ))}
+                </div>
+                {/* Capital Total */}
+                <div className="flex items-center justify-between px-5 py-3 bg-violet-100 dark:bg-violet-900/50 border-t-2 border-violet-300 dark:border-violet-700">
+                  <span className="text-violet-800 dark:text-violet-200 font-bold text-lg">TOTAL CAPITAL MOVEMENTS</span>
+                  <div className="flex items-center space-x-2">
+                    {totals.total_capital_movements < 0 && <Minus className="h-4 w-4 text-red-500" />}
+                    <span className="text-violet-800 dark:text-violet-200 font-bold text-xl tabular-nums">
+                      {formatCurrency(Math.abs(totals.total_capital_movements))}
+                    </span>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Final Result */}
-          <div className="border-t-4 border-border pt-4">
-            <div className={`flex items-center justify-between p-6 rounded-lg border-4 ${
-              isProfit ? 'bg-green-50 border-green-300' : 'bg-red-50 border-red-300'
+            {/* ═══════════════ NET BANK POSITION ═══════════════ */}
+            <div className={`flex items-center justify-between p-6 rounded-xl border-4 ${
+              isProfit
+                ? 'bg-emerald-50 dark:bg-emerald-950/50 border-emerald-400 dark:border-emerald-600'
+                : 'bg-rose-50 dark:bg-rose-950/50 border-rose-400 dark:border-rose-600'
             }`}>
               <div className="flex items-center space-x-3">
+                {isProfit ? (
+                  <TrendingUp className="h-7 w-7 text-emerald-600 dark:text-emerald-400" />
+                ) : (
+                  <TrendingDown className="h-7 w-7 text-rose-600 dark:text-rose-400" />
+                )}
                 <span className={`font-bold text-2xl ${
-                  isProfit ? 'text-green-800' : 'text-red-800'
+                  isProfit ? 'text-emerald-800 dark:text-emerald-200' : 'text-rose-800 dark:text-rose-200'
                 }`}>
                   NET BANK POSITION
                 </span>
-                {isProfit ? (
-                  <TrendingUp className="h-6 w-6 text-green-600" />
-                ) : (
-                  <TrendingDown className="h-6 w-6 text-red-600" />
-                )}
               </div>
-              <span className={`font-bold text-3xl ${
-                isProfit ? 'text-green-800' : 'text-red-800'
+              <span className={`font-bold text-3xl tabular-nums ${
+                isProfit ? 'text-emerald-800 dark:text-emerald-200' : 'text-rose-800 dark:text-rose-200'
               }`}>
                 {formatCurrency(Math.abs(totals.profit_after_capital_movements))}
               </span>
             </div>
-          </div>
 
-          {/* Summary Info */}
-          <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-            <h4 className="font-semibold text-blue-800 mb-2">📊 Report Summary</h4>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-blue-700">
-              <div>
-                <span className="font-medium">Period:</span>
-                <br />
-                {plData.dateRange.label}
-              </div>
-              <div>
-                <span className="font-medium">Total Hierarchies:</span>
-                <br />
-                {plData.income.length + plData.expenditure.length + plData.capital.length}
-              </div>
-              <div>
-                <span className="font-medium">Operating Margin:</span>
-                <br />
-                {totals.total_income > 0 
-                  ? `${((totals.net_operating_profit / totals.total_income) * 100).toFixed(1)}%`
-                  : 'N/A'
-                }
-              </div>
-              <div>
-                <span className="font-medium">Final Result:</span>
-                <br />
-                <span className={isProfit ? 'text-green-700 font-semibold' : 'text-red-700 font-semibold'}>
-                  {isProfit ? 'Profit' : 'Loss'}
-                </span>
+            {/* ═══════════════ REPORT SUMMARY ═══════════════ */}
+            <div className="p-4 bg-muted/50 dark:bg-muted/20 rounded-xl border border-border">
+              <h4 className="font-semibold text-foreground mb-3 text-sm uppercase tracking-wider">Report Summary</h4>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                <div>
+                  <span className="font-medium text-muted-foreground">Period</span>
+                  <p className="text-foreground mt-0.5">{plData.dateRange.label}</p>
+                </div>
+                <div>
+                  <span className="font-medium text-muted-foreground">Hierarchies</span>
+                  <p className="text-foreground mt-0.5">{plData.income.length + plData.expenditure.length + plData.capital.length}</p>
+                </div>
+                <div>
+                  <span className="font-medium text-muted-foreground">Operating Margin</span>
+                  <p className="text-foreground mt-0.5">
+                    {totals.total_income > 0
+                      ? `${((totals.net_operating_profit / totals.total_income) * 100).toFixed(1)}%`
+                      : 'N/A'
+                    }
+                  </p>
+                </div>
+                <div>
+                  <span className="font-medium text-muted-foreground">Result</span>
+                  <p className={`mt-0.5 font-semibold ${isProfit ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
+                    {isProfit ? 'Profit' : 'Loss'}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
           </div>
         )}
       </CardContent>

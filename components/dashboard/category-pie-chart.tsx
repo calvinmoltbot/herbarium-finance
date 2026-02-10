@@ -72,8 +72,8 @@ export function IncomeExpenditurePieChart() {
   const expenditurePercentage = (expenditure / total) * 100;
 
   const data = [
-    { name: 'Income', value: income, fill: '#22c55e' },
-    { name: 'Expenditure', value: expenditure, fill: '#ef4444' },
+    { name: 'Income', value: income, fill: '#10b981' },
+    { name: 'Expenditure', value: expenditure, fill: '#f43f5e' },
   ];
 
   return (
@@ -107,11 +107,11 @@ export function IncomeExpenditurePieChart() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <div className="w-4 h-4 bg-green-500 rounded-full" />
+                <div className="w-4 h-4 bg-emerald-500 rounded-full" />
                 <span className="text-sm font-medium">Income</span>
               </div>
               <div className="text-right">
-                <div className="text-sm font-semibold text-green-600">
+                <div className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
                   {formatGBP(income)}
                 </div>
                 <div className="text-xs text-muted-foreground">
@@ -122,11 +122,11 @@ export function IncomeExpenditurePieChart() {
 
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <div className="w-4 h-4 bg-red-500 rounded-full" />
+                <div className="w-4 h-4 bg-rose-500 rounded-full" />
                 <span className="text-sm font-medium">Expenditure</span>
               </div>
               <div className="text-right">
-                <div className="text-sm font-semibold text-red-600">
+                <div className="text-sm font-semibold text-rose-600 dark:text-rose-400">
                   {formatGBP(expenditure)}
                 </div>
                 <div className="text-xs text-muted-foreground">
