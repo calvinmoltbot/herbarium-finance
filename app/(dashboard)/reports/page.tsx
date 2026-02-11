@@ -158,26 +158,30 @@ export default function ReportsPage() {
             </Link>
           </PageCard>
 
-          <PageCard className="hover:shadow-md transition-shadow cursor-pointer opacity-60">
-            <div className="flex items-start gap-4">
-              <div className="p-3 bg-blue-50 rounded-lg">
-                <BarChart3 className="h-6 w-6 text-blue-600" />
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-1">
-                  <h3 className="font-semibold text-foreground">Cash Flow Statement</h3>
-                  <Badge variant="outline" className="text-xs">
-                    Coming Soon
-                  </Badge>
+          <PageCard className="hover:shadow-md transition-shadow cursor-pointer">
+            <Link href="/reports/cash-flow" className="block">
+              <div className="flex items-start gap-4">
+                <div className="p-3 bg-blue-50 rounded-lg">
+                  <BarChart3 className="h-6 w-6 text-blue-600" />
                 </div>
-                <p className="text-sm text-muted-foreground mb-3">
-                  Comprehensive cash flow analysis with operating, investing, and financing activities
-                </p>
-                <div className="flex items-center text-sm text-muted-foreground font-medium">
-                  <span>Available Soon</span>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="font-semibold text-foreground">Cash Flow Statement</h3>
+                    <Badge variant="secondary" className="text-xs">
+                      <Star className="w-3 h-3 mr-1" />
+                      New
+                    </Badge>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Daily cash flow analysis showing income, expenditure, and running balance over time
+                  </p>
+                  <div className="flex items-center text-sm text-primary font-medium">
+                    <span>View Report</span>
+                    <ArrowRight className="w-4 h-4 ml-1" />
+                  </div>
                 </div>
               </div>
-            </div>
+            </Link>
           </PageCard>
 
           <PageCard className="hover:shadow-md transition-shadow cursor-pointer opacity-60">

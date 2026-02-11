@@ -57,11 +57,17 @@ export function StatsCards() {
           expenditure: 'Total Expenditure',
           balance: 'Net Balance',
         };
+      case 'year-to-date':
+        return {
+          income: 'YTD Income',
+          expenditure: 'YTD Expenditure',
+          balance: 'YTD Balance',
+        };
       case 'this-year':
         return {
-          income: 'This Year\'s Income',
-          expenditure: 'This Year\'s Expenditure',
-          balance: 'This Year\'s Balance',
+          income: 'FY Income',
+          expenditure: 'FY Expenditure',
+          balance: 'FY Balance',
         };
       case 'this-month':
         return {

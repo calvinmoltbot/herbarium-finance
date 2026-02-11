@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useLastThreeMonths } from '@/hooks/use-last-three-months';
+import { useDateFilter } from '@/lib/date-filter-context';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 
 function formatGBP(value: number): string {
@@ -22,14 +23,25 @@ function CustomTooltip({ active, payload, label }: { active?: boolean; payload?:
   );
 }
 
+const chartTitleMap: Record<string, string> = {
+  'all-time': 'Monthly Breakdown',
+  'year-to-date': 'Monthly Breakdown (YTD)',
+  'this-year': 'Monthly Breakdown (FY)',
+  'this-month': 'This Month',
+  'last-month': 'Last Month',
+  'last-3-months': 'Last 3 Months',
+};
+
 export function IncomeVsExpenditureChart() {
   const { data: monthlyData, isLoading, error } = useLastThreeMonths();
+  const { dateFilter } = useDateFilter();
+  const chartTitle = chartTitleMap[dateFilter] || 'Income vs. Expenditure';
 
   if (isLoading) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Last 3 Months</CardTitle>
+          <CardTitle>{chartTitle}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -48,7 +60,7 @@ export function IncomeVsExpenditureChart() {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Income vs. Expenditure</CardTitle>
+          <CardTitle>{chartTitle}</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-red-600">Error loading chart data: {error.message}</p>
@@ -61,7 +73,7 @@ export function IncomeVsExpenditureChart() {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Income vs. Expenditure</CardTitle>
+          <CardTitle>{chartTitle}</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground text-center py-8">No data available for chart</p>
@@ -73,7 +85,7 @@ export function IncomeVsExpenditureChart() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Income vs. Expenditure</CardTitle>
+        <CardTitle>{chartTitle}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">

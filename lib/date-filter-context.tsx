@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
-export type DateFilter = 'all-time' | 'this-year' | 'this-month' | 'last-month' | 'last-3-months';
+export type DateFilter = 'all-time' | 'year-to-date' | 'this-year' | 'this-month' | 'last-month' | 'last-3-months';
 
 interface DateFilterContextType {
   dateFilter: DateFilter;
@@ -14,7 +14,7 @@ interface DateFilterContextType {
 const DateFilterContext = createContext<DateFilterContextType | undefined>(undefined);
 
 export function DateFilterProvider({ children }: { children: ReactNode }) {
-  const [dateFilter, setDateFilter] = useState<DateFilter>('this-month');
+  const [dateFilter, setDateFilter] = useState<DateFilter>('year-to-date');
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -31,34 +31,50 @@ export function DateFilterProvider({ children }: { children: ReactNode }) {
     const year = now.getFullYear();
     const month = now.getMonth();
     
+    // UK financial year starts April 1st
+    const ukFyStart = month >= 3
+      ? new Date(year, 3, 1)       // April 1st of current calendar year
+      : new Date(year - 1, 3, 1);  // April 1st of previous calendar year
+    const ukFyEnd = month >= 3
+      ? new Date(year + 1, 2, 31)  // March 31st of next calendar year
+      : new Date(year, 2, 31);     // March 31st of current calendar year
+
     switch (dateFilter) {
       case 'all-time':
         return { start: null, end: null };
-        
-      case 'this-year':
+
+      case 'year-to-date':
+        // UK FY start to today
         return {
-          start: new Date(year, 0, 1),
-          end: new Date(year, 11, 31),
+          start: ukFyStart,
+          end: now,
         };
-        
+
+      case 'this-year':
+        // Full UK financial year (April 1 - March 31)
+        return {
+          start: ukFyStart,
+          end: ukFyEnd,
+        };
+
       case 'this-month':
         return {
           start: new Date(year, month, 1),
           end: new Date(year, month + 1, 0),
         };
-        
+
       case 'last-month':
         return {
           start: new Date(year, month - 1, 1),
           end: new Date(year, month, 0),
         };
-        
+
       case 'last-3-months':
         return {
           start: new Date(year, month - 3, 1),
           end: new Date(year, month + 1, 0),
         };
-        
+
       default:
         return { start: null, end: null };
     }

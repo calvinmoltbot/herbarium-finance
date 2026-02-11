@@ -3,22 +3,29 @@
 import { useQuery } from '@tanstack/react-query';
 import { createClient } from '@/supabase/client';
 import { useAuth } from '@/lib/auth-context';
+import { useDateFilter } from '@/lib/date-filter-context';
 import type { Transaction } from '@/lib/types';
+
+function toDateString(date: Date): string {
+  return date.toISOString().split('T')[0];
+}
 
 export function useRecentTransactions() {
   const { user } = useAuth();
+  const { dateFilter, getDateRange, isClient } = useDateFilter();
 
   return useQuery({
-    queryKey: ['recent-transactions', user?.id],
+    queryKey: ['recent-transactions', user?.id, dateFilter],
     queryFn: async (): Promise<Transaction[]> => {
       if (!user?.id) {
         throw new Error('User not authenticated');
       }
 
       const supabase = createClient();
-      
-      // Get the 10 most recent transactions (shared data model)
-      const { data, error } = await supabase
+      const { start, end } = getDateRange();
+
+      // Build query
+      let query = supabase
         .from('transactions')
         .select(`
           id,
@@ -34,6 +41,16 @@ export function useRecentTransactions() {
         `)
         .order('transaction_date', { ascending: false })
         .limit(5);
+
+      // Apply date range filter if set
+      if (start) {
+        query = query.gte('transaction_date', toDateString(start));
+      }
+      if (end) {
+        query = query.lte('transaction_date', toDateString(end));
+      }
+
+      const { data, error } = await query;
 
       if (error) throw error;
 
@@ -53,7 +70,7 @@ export function useRecentTransactions() {
 
       return transactions;
     },
-    enabled: !!user?.id, // Only run query when user is authenticated
+    enabled: !!user?.id && isClient,
     staleTime: 2 * 60 * 1000, // 2 minutes
   });
 }

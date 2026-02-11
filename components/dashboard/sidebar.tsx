@@ -19,7 +19,8 @@ import {
   ChevronDown,
   ChevronRight,
   StickyNote,
-  Wallet
+  Wallet,
+  AlertTriangle
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { LucideIcon } from 'lucide-react';
@@ -35,6 +36,7 @@ interface NavigationItem {
 const navigation: NavigationItem[] = [
   { name: 'Dashboard', href: '/dashboard', icon: BarChart3 },
   { name: 'Transactions', href: '/transactions', icon: List },
+  { name: 'Uncategorized', href: '/uncategorized', icon: AlertTriangle },
   { name: 'Transaction Notes', href: '/transaction-notes', icon: StickyNote },
   { name: 'Reports', href: '/reports', icon: FileText },
   {

@@ -23,9 +23,10 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-const dateFilterLabels = {
+const dateFilterLabels: Record<string, string> = {
   'all-time': 'All Time',
-  'this-year': 'This Year',
+  'year-to-date': 'Year to Date',
+  'this-year': 'This Financial Year',
   'this-month': 'This Month',
   'last-month': 'Last Month',
   'last-3-months': 'Last 3 Months',
@@ -62,11 +63,12 @@ export function DashboardHeader() {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all-time">All Time</SelectItem>
-            <SelectItem value="this-year">This Year</SelectItem>
+            <SelectItem value="year-to-date">Year to Date</SelectItem>
+            <SelectItem value="this-year">This Financial Year</SelectItem>
             <SelectItem value="this-month">This Month</SelectItem>
             <SelectItem value="last-month">Last Month</SelectItem>
             <SelectItem value="last-3-months">Last 3 Months</SelectItem>
+            <SelectItem value="all-time">All Time</SelectItem>
           </SelectContent>
         </Select>
 
