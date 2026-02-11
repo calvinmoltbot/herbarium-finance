@@ -10,11 +10,13 @@ import {
   TrendingDown,
   Tags,
   FileText,
+  FileSpreadsheet,
   List,
   CreditCard,
   Settings,
   Plus,
   RotateCcw,
+  Scale,
   ShoppingCart,
   ChevronDown,
   ChevronRight,
@@ -39,6 +41,7 @@ const navigation: NavigationItem[] = [
   { name: 'Uncategorized', href: '/uncategorized', icon: AlertTriangle },
   { name: 'Transaction Notes', href: '/transaction-notes', icon: StickyNote },
   { name: 'Reports', href: '/reports', icon: FileText },
+  { name: 'Self Assessment', href: '/reports/tax/self-assessment', icon: FileSpreadsheet },
   {
     name: 'Bank Import',
     icon: Database,
@@ -61,6 +64,7 @@ const navigation: NavigationItem[] = [
     name: 'Admin',
     icon: Settings,
     children: [
+      { name: 'Bank Reconciliation', href: '/bank-reconciliation', icon: Scale },
       { name: 'Data Reset', href: '/import/reset', icon: RotateCcw },
     ]
   },

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus, FileText, BarChart3, Download, Settings, TrendingUp, Star, ArrowRight } from 'lucide-react';
+import { Plus, FileText, FileSpreadsheet, BarChart3, Download, Settings, TrendingUp, Star, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { PageLayout, PageSection, PageCard, PageEmptyState } from '@/components/ui/page-layout';
@@ -174,6 +174,32 @@ export default function ReportsPage() {
                   </div>
                   <p className="text-sm text-muted-foreground mb-3">
                     Daily cash flow analysis showing income, expenditure, and running balance over time
+                  </p>
+                  <div className="flex items-center text-sm text-primary font-medium">
+                    <span>View Report</span>
+                    <ArrowRight className="w-4 h-4 ml-1" />
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </PageCard>
+
+          <PageCard className="hover:shadow-md transition-shadow cursor-pointer">
+            <Link href="/reports/tax/self-assessment" className="block">
+              <div className="flex items-start gap-4">
+                <div className="p-3 bg-amber-50 dark:bg-amber-950/30 rounded-lg">
+                  <FileSpreadsheet className="h-6 w-6 text-amber-600 dark:text-amber-400" />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="font-semibold text-foreground">Self Assessment</h3>
+                    <Badge variant="secondary" className="text-xs">
+                      <Star className="w-3 h-3 mr-1" />
+                      New
+                    </Badge>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    UK Self Assessment (SA103) tax summary with income, expenses, net profit, and estimated tax liability
                   </p>
                   <div className="flex items-center text-sm text-primary font-medium">
                     <span>View Report</span>

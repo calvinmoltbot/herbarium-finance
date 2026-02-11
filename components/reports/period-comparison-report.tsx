@@ -254,7 +254,8 @@ export function PeriodComparisonReport({
   };
 
   return (
-    <Card className={cn('p-6', className)}>
+    <Card className={cn('p-6 overflow-x-auto', className)}>
+      <div className="min-w-[600px]">
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-2">
@@ -350,6 +351,7 @@ export function PeriodComparisonReport({
             trend={netProfitVariance > 0 ? 'up' : netProfitVariance < 0 ? 'down' : 'flat'}
           />
         </div>
+      </div>
       </div>
     </Card>
   );

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   TrendingUp,
   TrendingDown,
@@ -11,8 +11,9 @@ import {
   PoundSterling,
 } from 'lucide-react';
 import {
-  AreaChart,
   Area,
+  Line,
+  ComposedChart,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -115,7 +116,7 @@ function CashFlowSkeleton() {
       </Card>
 
       {/* Summary cards skeleton */}
-      <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-6">
+      <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
         {[...Array(6)].map((_, i) => (
           <Card key={i}>
             <CardContent className="pt-6">
@@ -152,8 +153,26 @@ export function CashFlowReport({ className }: CashFlowReportProps) {
   const [data, setData] = useState<CashFlowData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [openingBalance, setOpeningBalance] = useState<number>(0);
-  const [openingBalanceInput, setOpeningBalanceInput] = useState<string>('0');
+  const [openingBalance, setOpeningBalance] = useState<number>(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('herbarium-opening-balance');
+      if (stored !== null) {
+        const parsed = parseFloat(stored);
+        if (!isNaN(parsed)) return parsed;
+      }
+    }
+    return 0;
+  });
+  const [openingBalanceInput, setOpeningBalanceInput] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('herbarium-opening-balance');
+      if (stored !== null) {
+        const parsed = parseFloat(stored);
+        if (!isNaN(parsed)) return parsed.toFixed(2);
+      }
+    }
+    return '0';
+  });
 
   const fetchData = useCallback(async () => {
     setIsLoading(true);
@@ -200,10 +219,11 @@ export function CashFlowReport({ className }: CashFlowReportProps) {
     const parsed = parseFloat(openingBalanceInput);
     if (!isNaN(parsed)) {
       setOpeningBalance(parsed);
-      // Normalize the display to 2 decimal places
       setOpeningBalanceInput(parsed.toFixed(2));
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('herbarium-opening-balance', parsed.toString());
+      }
     } else {
-      // Reset to the current valid value
       setOpeningBalanceInput(openingBalance.toFixed(2));
     }
   };
@@ -228,6 +248,16 @@ export function CashFlowReport({ className }: CashFlowReportProps) {
   const totalOutflows = totalExpenditure + totalCapitalOut;
   const netCashFlow = totalInflows - totalOutflows;
   const endBalance = data.length > 0 ? data[data.length - 1].running_balance : openingBalance;
+
+  // Simplified chart data: combine income+capital_in as inflows, expenditure+capital_out as outflows
+  const chartData = useMemo(() => {
+    return data.map((d) => ({
+      date: d.date,
+      total_inflows: d.income + d.capital_in,
+      total_outflows: d.expenditure + d.capital_out,
+      running_balance: d.running_balance,
+    }));
+  }, [data]);
 
   // Export to CSV
   const handleExport = () => {
@@ -321,7 +351,7 @@ export function CashFlowReport({ className }: CashFlowReportProps) {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-6">
+      <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
@@ -448,7 +478,7 @@ export function CashFlowReport({ className }: CashFlowReportProps) {
         <CardHeader>
           <CardTitle>Cash Flow Over Time</CardTitle>
           <CardDescription>
-            Daily income, expenditure, and running balance for the selected period
+            Total inflows, outflows, and running balance for the selected period
             {openingBalance !== 0 && (
               <span className="ml-1">
                 (opening balance: {formatCurrency(openingBalance)})
@@ -463,30 +493,18 @@ export function CashFlowReport({ className }: CashFlowReportProps) {
             </div>
           ) : (
             <ResponsiveContainer width="100%" height={350}>
-              <AreaChart
-                data={data}
+              <ComposedChart
+                data={chartData}
                 margin={{ top: 10, right: 30, left: 20, bottom: 0 }}
               >
                 <defs>
-                  <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient id="colorInflows" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
                     <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
                   </linearGradient>
-                  <linearGradient id="colorCapitalIn" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
-                  </linearGradient>
-                  <linearGradient id="colorExpenditure" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient id="colorOutflows" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#f43f5e" stopOpacity={0.3} />
                     <stop offset="95%" stopColor="#f43f5e" stopOpacity={0} />
-                  </linearGradient>
-                  <linearGradient id="colorCapitalOut" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#a78bfa" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#a78bfa" stopOpacity={0} />
-                  </linearGradient>
-                  <linearGradient id="colorBalance" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid
@@ -515,50 +533,31 @@ export function CashFlowReport({ className }: CashFlowReportProps) {
                 <Legend />
                 <Area
                   type="monotone"
-                  dataKey="income"
-                  name="Income"
+                  dataKey="total_inflows"
+                  name="Total Inflows"
                   stroke="#10b981"
                   fillOpacity={1}
-                  fill="url(#colorIncome)"
+                  fill="url(#colorInflows)"
                   strokeWidth={2}
                 />
                 <Area
                   type="monotone"
-                  dataKey="capital_in"
-                  name="Capital In"
-                  stroke="#8b5cf6"
-                  fillOpacity={1}
-                  fill="url(#colorCapitalIn)"
-                  strokeWidth={2}
-                />
-                <Area
-                  type="monotone"
-                  dataKey="expenditure"
-                  name="Expenditure"
+                  dataKey="total_outflows"
+                  name="Total Outflows"
                   stroke="#f43f5e"
                   fillOpacity={1}
-                  fill="url(#colorExpenditure)"
+                  fill="url(#colorOutflows)"
                   strokeWidth={2}
                 />
-                <Area
-                  type="monotone"
-                  dataKey="capital_out"
-                  name="Capital Out"
-                  stroke="#a78bfa"
-                  fillOpacity={1}
-                  fill="url(#colorCapitalOut)"
-                  strokeWidth={2}
-                />
-                <Area
+                <Line
                   type="monotone"
                   dataKey="running_balance"
                   name="Running Balance"
                   stroke="#3b82f6"
-                  fillOpacity={1}
-                  fill="url(#colorBalance)"
                   strokeWidth={2}
+                  dot={false}
                 />
-              </AreaChart>
+              </ComposedChart>
             </ResponsiveContainer>
           )}
         </CardContent>
@@ -584,7 +583,7 @@ export function CashFlowReport({ className }: CashFlowReportProps) {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+              <table className="w-full text-sm min-w-[700px]">
                 <thead>
                   <tr className="border-b border-border">
                     <th className="text-left py-3 px-4 font-medium text-muted-foreground">

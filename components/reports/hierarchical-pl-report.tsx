@@ -346,7 +346,7 @@ export function HierarchicalPLReport({ className }: HierarchicalPLReportProps) {
     <Card className={className}>
       <CardHeader>
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <CardTitle className="flex items-center space-x-2">
                 <TrendingUp className="h-5 w-5 text-blue-600" />
@@ -356,7 +356,7 @@ export function HierarchicalPLReport({ className }: HierarchicalPLReportProps) {
                 Professional P&L with collapsible hierarchies • {plData.dateRange.label}
               </CardDescription>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex flex-wrap items-center gap-2">
               <DateRangePicker
                 value={dateRange}
                 onChange={setDateRange}
@@ -508,7 +508,7 @@ export function HierarchicalPLReport({ className }: HierarchicalPLReportProps) {
             </div>
 
             {/* ═══════════════ NET OPERATING PROFIT/LOSS ═══════════════ */}
-            <div className={`flex items-center justify-between p-5 rounded-xl border-2 ${
+            <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 p-5 rounded-xl border-2 ${
               totals.net_operating_profit >= 0
                 ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-700'
                 : 'bg-rose-50 dark:bg-rose-950/40 border-rose-300 dark:border-rose-700'
@@ -519,7 +519,7 @@ export function HierarchicalPLReport({ className }: HierarchicalPLReportProps) {
                 ) : (
                   <TrendingDown className="h-6 w-6 text-rose-600 dark:text-rose-400" />
                 )}
-                <span className={`font-bold text-xl ${
+                <span className={`font-bold text-lg sm:text-xl ${
                   totals.net_operating_profit >= 0
                     ? 'text-emerald-800 dark:text-emerald-200'
                     : 'text-rose-800 dark:text-rose-200'
@@ -527,7 +527,7 @@ export function HierarchicalPLReport({ className }: HierarchicalPLReportProps) {
                   {totals.net_operating_profit >= 0 ? 'NET OPERATING PROFIT' : 'NET OPERATING LOSS'}
                 </span>
               </div>
-              <span className={`font-bold text-2xl tabular-nums ${
+              <span className={`font-bold text-xl sm:text-2xl tabular-nums ${
                 totals.net_operating_profit >= 0
                   ? 'text-emerald-800 dark:text-emerald-200'
                   : 'text-rose-800 dark:text-rose-200'
@@ -577,7 +577,7 @@ export function HierarchicalPLReport({ className }: HierarchicalPLReportProps) {
             )}
 
             {/* ═══════════════ NET BANK POSITION ═══════════════ */}
-            <div className={`flex items-center justify-between p-6 rounded-xl border-4 ${
+            <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 p-6 rounded-xl border-4 ${
               isProfit
                 ? 'bg-emerald-50 dark:bg-emerald-950/50 border-emerald-400 dark:border-emerald-600'
                 : 'bg-rose-50 dark:bg-rose-950/50 border-rose-400 dark:border-rose-600'
@@ -588,13 +588,13 @@ export function HierarchicalPLReport({ className }: HierarchicalPLReportProps) {
                 ) : (
                   <TrendingDown className="h-7 w-7 text-rose-600 dark:text-rose-400" />
                 )}
-                <span className={`font-bold text-2xl ${
+                <span className={`font-bold text-xl sm:text-2xl ${
                   isProfit ? 'text-emerald-800 dark:text-emerald-200' : 'text-rose-800 dark:text-rose-200'
                 }`}>
                   NET BANK POSITION
                 </span>
               </div>
-              <span className={`font-bold text-3xl tabular-nums ${
+              <span className={`font-bold text-2xl sm:text-3xl tabular-nums ${
                 isProfit ? 'text-emerald-800 dark:text-emerald-200' : 'text-rose-800 dark:text-rose-200'
               }`}>
                 {formatCurrency(Math.abs(totals.profit_after_capital_movements))}
