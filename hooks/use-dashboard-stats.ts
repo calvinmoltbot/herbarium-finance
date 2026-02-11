@@ -9,6 +9,9 @@ interface DashboardStats {
   totalIncome: number;
   totalExpenditure: number;
   netBalance: number;
+  totalCapitalIn: number;
+  totalCapitalOut: number;
+  bankBalance: number;
   currentMonthIncome: number;
   currentMonthExpenditure: number;
   previousMonthIncome: number;
@@ -45,6 +48,34 @@ async function getTypeTotals(
   return { income, expenditure };
 }
 
+/** Sum capital transactions by movement type for a given date range */
+async function getCapitalTotals(
+  supabase: ReturnType<typeof createClient>,
+  startDate: string,
+  endDate: string
+): Promise<{ injections: number; drawings: number }> {
+  const { data, error } = await supabase
+    .from('transactions')
+    .select('amount, categories:category_id(capital_movement_type)')
+    .eq('type', 'capital')
+    .gte('transaction_date', startDate)
+    .lte('transaction_date', endDate);
+
+  if (error) throw error;
+
+  let injections = 0;
+  let drawings = 0;
+  for (const row of data || []) {
+    const cat = Array.isArray(row.categories) ? row.categories[0] : row.categories;
+    const movementType = cat?.capital_movement_type;
+    const amount = Number(row.amount);
+    if (movementType === 'injection') injections += amount;
+    else if (movementType === 'drawing') drawings += amount;
+  }
+
+  return { injections, drawings };
+}
+
 function toDateString(date: Date): string {
   return date.toISOString().split('T')[0];
 }
@@ -70,23 +101,25 @@ export function useDashboardStats() {
       const previousMonthStart = toDateString(new Date(now.getFullYear(), now.getMonth() - 1, 1));
       const previousMonthEnd = toDateString(new Date(now.getFullYear(), now.getMonth(), 0));
 
+      // Determine the filtered date range (or all-time)
+      const filteredStart = filterStart && filterEnd
+        ? toDateString(filterStart)
+        : '2000-01-01';
+      const filteredEnd = filterStart && filterEnd
+        ? toDateString(filterEnd)
+        : toDateString(now);
+
       // Run queries in parallel — each fetches only what's needed
-      const queries: [
-        Promise<{ income: number; expenditure: number }>,
-        Promise<{ income: number; expenditure: number }>,
-        Promise<{ income: number; expenditure: number }>
-      ] = [
+      const [currentMonth, previousMonth, filtered, capital] = await Promise.all([
         // Current month totals
         getTypeTotals(supabase, currentMonthStart, currentMonthEnd),
         // Previous month totals
         getTypeTotals(supabase, previousMonthStart, previousMonthEnd),
         // Filtered period totals (or all-time)
-        filterStart && filterEnd
-          ? getTypeTotals(supabase, toDateString(filterStart), toDateString(filterEnd))
-          : getTypeTotals(supabase, '2000-01-01', toDateString(now)),
-      ];
-
-      const [currentMonth, previousMonth, filtered] = await Promise.all(queries);
+        getTypeTotals(supabase, filteredStart, filteredEnd),
+        // Capital totals for filtered period
+        getCapitalTotals(supabase, filteredStart, filteredEnd),
+      ]);
 
       // Calculate percentage changes
       const incomeChange = previousMonth.income > 0
@@ -107,6 +140,9 @@ export function useDashboardStats() {
         totalIncome: filtered.income,
         totalExpenditure: filtered.expenditure,
         netBalance: filtered.income - filtered.expenditure,
+        totalCapitalIn: capital.injections,
+        totalCapitalOut: capital.drawings,
+        bankBalance: filtered.income - filtered.expenditure + capital.injections - capital.drawings,
         currentMonthIncome: currentMonth.income,
         currentMonthExpenditure: currentMonth.expenditure,
         previousMonthIncome: previousMonth.income,

@@ -8,8 +8,8 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 function StatsCardsSkeleton() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {[...Array(3)].map((_, i) => (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {[...Array(4)].map((_, i) => (
         <Card key={i}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <div className="h-4 w-20 bg-muted rounded animate-pulse" />

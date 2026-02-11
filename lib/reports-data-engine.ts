@@ -60,6 +60,8 @@ export interface CashFlowData {
   date: string;
   income: number;
   expenditure: number;
+  capital_in: number;
+  capital_out: number;
   net_flow: number;
   running_balance: number;
 }
@@ -90,6 +92,7 @@ export interface CategoryInHierarchy {
   id: string;
   name: string;
   color?: string;
+  capital_movement_type?: 'injection' | 'drawing' | null;
   total_amount: number;
   transaction_count: number;
   transactions: TransactionInCategory[];
@@ -239,15 +242,18 @@ export class ReportDataEngine {
   }
 
   // Get Cash Flow Data
-  async getCashFlowData(config: FlexibleReportConfig): Promise<CashFlowData[]> {
+  async getCashFlowData(config: FlexibleReportConfig, openingBalance: number = 0): Promise<CashFlowData[]> {
     const { dateRange } = config;
-    
+
     const { data, error } = await this.supabase
       .from('transactions')
       .select(`
         amount,
         type,
-        transaction_date
+        transaction_date,
+        categories(
+          capital_movement_type
+        )
       `)
       .gte('transaction_date', dateRange.start.toISOString().split('T')[0])
       .lte('transaction_date', dateRange.end.toISOString().split('T')[0])
@@ -258,7 +264,7 @@ export class ReportDataEngine {
       throw error;
     }
 
-    return this.calculateCashFlow(data || []);
+    return this.calculateCashFlow(data || [], openingBalance);
   }
 
   // Get P&L Structure (Hierarchy-based)
@@ -314,6 +320,7 @@ export class ReportDataEngine {
               id,
               name,
               color,
+              capital_movement_type,
               transactions(
                 id,
                 amount,
@@ -514,14 +521,14 @@ export class ReportDataEngine {
     return Array.from(monthly.values()).sort((a, b) => a.month_year.localeCompare(b.month_year));
   }
 
-  private calculateCashFlow(transactions: { amount: string | number; type: string; transaction_date: string }[]): CashFlowData[] {
-    const daily = new Map<string, { income: number; expenditure: number }>();
+  private calculateCashFlow(transactions: { amount: string | number; type: string; transaction_date: string; categories?: { capital_movement_type: string | null } | { capital_movement_type: string | null }[] | null }[], openingBalance: number = 0): CashFlowData[] {
+    const daily = new Map<string, { income: number; expenditure: number; capital_in: number; capital_out: number }>();
 
     transactions.forEach(transaction => {
       const date = transaction.transaction_date;
-      
+
       if (!daily.has(date)) {
-        daily.set(date, { income: 0, expenditure: 0 });
+        daily.set(date, { income: 0, expenditure: 0, capital_in: 0, capital_out: 0 });
       }
 
       const item = daily.get(date)!;
@@ -529,25 +536,46 @@ export class ReportDataEngine {
 
       if (transaction.type === 'income') {
         item.income += amount;
-      } else {
+      } else if (transaction.type === 'expenditure') {
         item.expenditure += Math.abs(amount);
+      } else if (transaction.type === 'capital') {
+        // Supabase category joins return arrays — unwrap to single object
+        const rawCategory = transaction.categories;
+        const category = Array.isArray(rawCategory) ? rawCategory[0] : rawCategory;
+        const movementType = category?.capital_movement_type;
+
+        if (movementType === 'injection') {
+          item.capital_in += Math.abs(amount);
+        } else if (movementType === 'drawing') {
+          item.capital_out += Math.abs(amount);
+        } else {
+          // Fallback for capital transactions without a movement type:
+          // positive amounts treated as injections, negative as drawings
+          if (amount >= 0) {
+            item.capital_in += amount;
+          } else {
+            item.capital_out += Math.abs(amount);
+          }
+        }
       }
     });
 
     // Convert to array and calculate running balance
     const cashFlow: CashFlowData[] = [];
-    let runningBalance = 0;
+    let runningBalance = openingBalance;
 
     Array.from(daily.entries())
       .sort(([a], [b]) => a.localeCompare(b))
-      .forEach(([date, { income, expenditure }]) => {
-        const netFlow = income - expenditure;
+      .forEach(([date, { income, expenditure, capital_in, capital_out }]) => {
+        const netFlow = income + capital_in - expenditure - capital_out;
         runningBalance += netFlow;
 
         cashFlow.push({
           date,
           income,
           expenditure,
+          capital_in,
+          capital_out,
           net_flow: netFlow,
           running_balance: runningBalance,
         });
@@ -586,7 +614,7 @@ export class ReportDataEngine {
     });
   }
 
-  private processHierarchicalPLData(hierarchies: { id: string; name: string; type: string; display_order: number; category_hierarchy_assignments: { categories: { id: string; name: string; color?: string; transactions: { id: string; amount: string | number; transaction_date: string; description: string; type: string }[] } }[] }[], dateRange: { start: Date; end: Date }, uncategorizedTransactions: { id: string; amount: string | number; transaction_date: string; description: string; type: string }[] = []): HierarchicalPLData {
+  private processHierarchicalPLData(hierarchies: { id: string; name: string; type: string; display_order: number; category_hierarchy_assignments: { categories: { id: string; name: string; color?: string; capital_movement_type?: 'injection' | 'drawing' | null; transactions: { id: string; amount: string | number; transaction_date: string; description: string; type: string }[] } }[] }[], dateRange: { start: Date; end: Date }, uncategorizedTransactions: { id: string; amount: string | number; transaction_date: string; description: string; type: string }[] = []): HierarchicalPLData {
     const startDate = dateRange.start.toISOString().split('T')[0];
     const endDate = dateRange.end.toISOString().split('T')[0];
 
@@ -631,6 +659,7 @@ export class ReportDataEngine {
             id: category.id,
             name: category.name,
             color: category.color,
+            capital_movement_type: category.capital_movement_type,
             total_amount: categoryTotal,
             transaction_count: transactionCount,
             transactions: transactions,
@@ -786,12 +815,12 @@ export class ReportDataEngine {
       hierarchy.categories.forEach(category => {
         category.transactions.forEach(transaction => {
           const amount = transaction.amount;
-          // Check if this is a Director Drawings category by name
-          if (category.name.toLowerCase().includes('director') || category.name.toLowerCase().includes('drawing')) {
+          // Use capital_movement_type from the category to determine injection vs drawing
+          if (category.capital_movement_type === 'drawing') {
             // Director drawings should be subtracted from bank balance
             directorDrawings += Math.abs(amount);
           } else {
-            // Capital injections should be added to bank balance
+            // 'injection' or null defaults to injection
             capitalInjections += Math.abs(amount);
           }
         });

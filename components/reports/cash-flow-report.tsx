@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   TrendingUp,
   TrendingDown,
@@ -8,6 +8,7 @@ import {
   Wallet,
   RefreshCw,
   Download,
+  PoundSterling,
 } from 'lucide-react';
 import {
   AreaChart,
@@ -21,6 +22,8 @@ import {
 } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   reportDataEngine,
   FlexibleReportConfig,
@@ -112,8 +115,8 @@ function CashFlowSkeleton() {
       </Card>
 
       {/* Summary cards skeleton */}
-      <div className="grid gap-4 md:grid-cols-4">
-        {[...Array(4)].map((_, i) => (
+      <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-6">
+        {[...Array(6)].map((_, i) => (
           <Card key={i}>
             <CardContent className="pt-6">
               <div className="space-y-2">
@@ -149,8 +152,10 @@ export function CashFlowReport({ className }: CashFlowReportProps) {
   const [data, setData] = useState<CashFlowData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [openingBalance, setOpeningBalance] = useState<number>(0);
+  const [openingBalanceInput, setOpeningBalanceInput] = useState<string>('0');
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setIsLoading(true);
     setError(null);
 
@@ -167,7 +172,7 @@ export function CashFlowReport({ className }: CashFlowReportProps) {
         visualizations: ['table', 'line_chart'],
       };
 
-      const cashFlowData = await reportDataEngine.getCashFlowData(config);
+      const cashFlowData = await reportDataEngine.getCashFlowData(config, openingBalance);
       setData(cashFlowData);
     } catch (err) {
       console.error('Error fetching cash flow data:', err);
@@ -176,15 +181,37 @@ export function CashFlowReport({ className }: CashFlowReportProps) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [dateRange, openingBalance]);
 
   useEffect(() => {
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dateRange]);
+  }, [fetchData]);
 
   const handleDateRangeChange = (range: CustomDateRange) => {
     setDateRange(range);
+  };
+
+  const handleOpeningBalanceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setOpeningBalanceInput(value);
+  };
+
+  const handleOpeningBalanceBlur = () => {
+    const parsed = parseFloat(openingBalanceInput);
+    if (!isNaN(parsed)) {
+      setOpeningBalance(parsed);
+      // Normalize the display to 2 decimal places
+      setOpeningBalanceInput(parsed.toFixed(2));
+    } else {
+      // Reset to the current valid value
+      setOpeningBalanceInput(openingBalance.toFixed(2));
+    }
+  };
+
+  const handleOpeningBalanceKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      (e.target as HTMLInputElement).blur();
+    }
   };
 
   const handleRefresh = () => {
@@ -193,10 +220,14 @@ export function CashFlowReport({ className }: CashFlowReportProps) {
   };
 
   // Calculate summary values
-  const totalInflows = data.reduce((sum, d) => sum + d.income, 0);
-  const totalOutflows = data.reduce((sum, d) => sum + d.expenditure, 0);
+  const totalIncome = data.reduce((sum, d) => sum + d.income, 0);
+  const totalExpenditure = data.reduce((sum, d) => sum + d.expenditure, 0);
+  const totalCapitalIn = data.reduce((sum, d) => sum + d.capital_in, 0);
+  const totalCapitalOut = data.reduce((sum, d) => sum + d.capital_out, 0);
+  const totalInflows = totalIncome + totalCapitalIn;
+  const totalOutflows = totalExpenditure + totalCapitalOut;
   const netCashFlow = totalInflows - totalOutflows;
-  const endBalance = data.length > 0 ? data[data.length - 1].running_balance : 0;
+  const endBalance = data.length > 0 ? data[data.length - 1].running_balance : openingBalance;
 
   // Export to CSV
   const handleExport = () => {
@@ -205,16 +236,20 @@ export function CashFlowReport({ className }: CashFlowReportProps) {
       return;
     }
 
-    const headers = ['Date', 'Income', 'Expenditure', 'Net Flow', 'Running Balance'];
+    const headers = ['Date', 'Income', 'Capital In', 'Expenditure', 'Capital Out', 'Net Flow', 'Running Balance'];
     const rows = data.map((d) => [
       formatDateFull(d.date),
       d.income.toFixed(2),
+      d.capital_in.toFixed(2),
       d.expenditure.toFixed(2),
+      d.capital_out.toFixed(2),
       d.net_flow.toFixed(2),
       d.running_balance.toFixed(2),
     ]);
 
-    const csv = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+    // Add opening balance as context row
+    const openingRow = [`Opening Balance: ${openingBalance.toFixed(2)}`];
+    const csv = [openingRow.join(','), headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -252,7 +287,28 @@ export function CashFlowReport({ className }: CashFlowReportProps) {
         <div className="w-full sm:w-80">
           <DateRangePicker value={dateRange} onChange={handleDateRangeChange} />
         </div>
-        <div className="flex gap-2">
+        <div className="flex items-end gap-2">
+          <div className="space-y-1.5">
+            <Label htmlFor="opening-balance" className="text-sm font-medium text-muted-foreground">
+              Opening Balance
+            </Label>
+            <div className="relative">
+              <PoundSterling className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                id="opening-balance"
+                type="number"
+                step="0.01"
+                value={openingBalanceInput}
+                onChange={handleOpeningBalanceChange}
+                onBlur={handleOpeningBalanceBlur}
+                onKeyDown={handleOpeningBalanceKeyDown}
+                className="pl-9 w-40 tabular-nums"
+                placeholder="0.00"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="flex gap-2 sm:ml-auto">
           <Button variant="outline" size="sm" onClick={handleRefresh}>
             <RefreshCw className="w-4 h-4 mr-2" />
             Refresh
@@ -265,16 +321,16 @@ export function CashFlowReport({ className }: CashFlowReportProps) {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-6">
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">
-                  Total Inflows
+                  Income
                 </p>
                 <p className="text-2xl font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
-                  {formatCurrency(totalInflows)}
+                  {formatCurrency(totalIncome)}
                 </p>
               </div>
               <div className="p-3 bg-emerald-100 dark:bg-emerald-950/50 rounded-lg">
@@ -289,14 +345,50 @@ export function CashFlowReport({ className }: CashFlowReportProps) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">
-                  Total Outflows
+                  Capital In
+                </p>
+                <p className="text-2xl font-bold tabular-nums text-violet-600 dark:text-violet-400">
+                  {formatCurrency(totalCapitalIn)}
+                </p>
+              </div>
+              <div className="p-3 bg-violet-100 dark:bg-violet-950/50 rounded-lg">
+                <TrendingUp className="h-6 w-6 text-violet-600 dark:text-violet-400" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Expenditure
                 </p>
                 <p className="text-2xl font-bold tabular-nums text-rose-600 dark:text-rose-400">
-                  {formatCurrency(totalOutflows)}
+                  {formatCurrency(totalExpenditure)}
                 </p>
               </div>
               <div className="p-3 bg-rose-100 dark:bg-rose-950/50 rounded-lg">
                 <TrendingDown className="h-6 w-6 text-rose-600 dark:text-rose-400" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Capital Out
+                </p>
+                <p className="text-2xl font-bold tabular-nums text-violet-600 dark:text-violet-400">
+                  {formatCurrency(totalCapitalOut)}
+                </p>
+              </div>
+              <div className="p-3 bg-violet-100 dark:bg-violet-950/50 rounded-lg">
+                <TrendingDown className="h-6 w-6 text-violet-600 dark:text-violet-400" />
               </div>
             </div>
           </CardContent>
@@ -357,6 +449,11 @@ export function CashFlowReport({ className }: CashFlowReportProps) {
           <CardTitle>Cash Flow Over Time</CardTitle>
           <CardDescription>
             Daily income, expenditure, and running balance for the selected period
+            {openingBalance !== 0 && (
+              <span className="ml-1">
+                (opening balance: {formatCurrency(openingBalance)})
+              </span>
+            )}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -375,9 +472,17 @@ export function CashFlowReport({ className }: CashFlowReportProps) {
                     <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
                     <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
                   </linearGradient>
+                  <linearGradient id="colorCapitalIn" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
+                  </linearGradient>
                   <linearGradient id="colorExpenditure" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#f43f5e" stopOpacity={0.3} />
                     <stop offset="95%" stopColor="#f43f5e" stopOpacity={0} />
+                  </linearGradient>
+                  <linearGradient id="colorCapitalOut" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#a78bfa" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#a78bfa" stopOpacity={0} />
                   </linearGradient>
                   <linearGradient id="colorBalance" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
@@ -419,11 +524,29 @@ export function CashFlowReport({ className }: CashFlowReportProps) {
                 />
                 <Area
                   type="monotone"
+                  dataKey="capital_in"
+                  name="Capital In"
+                  stroke="#8b5cf6"
+                  fillOpacity={1}
+                  fill="url(#colorCapitalIn)"
+                  strokeWidth={2}
+                />
+                <Area
+                  type="monotone"
                   dataKey="expenditure"
                   name="Expenditure"
                   stroke="#f43f5e"
                   fillOpacity={1}
                   fill="url(#colorExpenditure)"
+                  strokeWidth={2}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="capital_out"
+                  name="Capital Out"
+                  stroke="#a78bfa"
+                  fillOpacity={1}
+                  fill="url(#colorCapitalOut)"
                   strokeWidth={2}
                 />
                 <Area
@@ -447,6 +570,11 @@ export function CashFlowReport({ className }: CashFlowReportProps) {
           <CardTitle>Daily Breakdown</CardTitle>
           <CardDescription>
             {data.length} day{data.length !== 1 ? 's' : ''} with transactions
+            {openingBalance !== 0 && (
+              <span className="ml-1">
+                — opening balance: {formatCurrency(openingBalance)}
+              </span>
+            )}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -466,7 +594,13 @@ export function CashFlowReport({ className }: CashFlowReportProps) {
                       Income
                     </th>
                     <th className="text-right py-3 px-4 font-medium text-muted-foreground">
+                      Capital In
+                    </th>
+                    <th className="text-right py-3 px-4 font-medium text-muted-foreground">
                       Expenditure
+                    </th>
+                    <th className="text-right py-3 px-4 font-medium text-muted-foreground">
+                      Capital Out
                     </th>
                     <th className="text-right py-3 px-4 font-medium text-muted-foreground">
                       Net Flow
@@ -490,10 +624,16 @@ export function CashFlowReport({ className }: CashFlowReportProps) {
                       <td className="py-3 px-4 text-right tabular-nums text-emerald-600 dark:text-emerald-400">
                         {row.income > 0 ? formatCurrency(row.income) : '-'}
                       </td>
+                      <td className="py-3 px-4 text-right tabular-nums text-violet-600 dark:text-violet-400">
+                        {row.capital_in > 0 ? formatCurrency(row.capital_in) : '-'}
+                      </td>
                       <td className="py-3 px-4 text-right tabular-nums text-rose-600 dark:text-rose-400">
                         {row.expenditure > 0
                           ? formatCurrency(row.expenditure)
                           : '-'}
+                      </td>
+                      <td className="py-3 px-4 text-right tabular-nums text-violet-600 dark:text-violet-400">
+                        {row.capital_out > 0 ? formatCurrency(row.capital_out) : '-'}
                       </td>
                       <td
                         className={`py-3 px-4 text-right tabular-nums font-medium ${
@@ -522,10 +662,16 @@ export function CashFlowReport({ className }: CashFlowReportProps) {
                       Total
                     </td>
                     <td className="py-3 px-4 text-right tabular-nums font-bold text-emerald-600 dark:text-emerald-400">
-                      {formatCurrency(totalInflows)}
+                      {formatCurrency(totalIncome)}
+                    </td>
+                    <td className="py-3 px-4 text-right tabular-nums font-bold text-violet-600 dark:text-violet-400">
+                      {formatCurrency(totalCapitalIn)}
                     </td>
                     <td className="py-3 px-4 text-right tabular-nums font-bold text-rose-600 dark:text-rose-400">
-                      {formatCurrency(totalOutflows)}
+                      {formatCurrency(totalExpenditure)}
+                    </td>
+                    <td className="py-3 px-4 text-right tabular-nums font-bold text-violet-600 dark:text-violet-400">
+                      {formatCurrency(totalCapitalOut)}
                     </td>
                     <td
                       className={`py-3 px-4 text-right tabular-nums font-bold ${
