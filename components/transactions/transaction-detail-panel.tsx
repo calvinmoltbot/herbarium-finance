@@ -190,6 +190,7 @@ export function TransactionDetailPanel({
       await updateCategory({
         transactionId: transaction.id,
         categoryId: categoryId,
+        description: transaction.description,
       });
 
       // Wait a brief moment for cache to refresh

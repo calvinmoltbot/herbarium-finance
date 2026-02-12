@@ -249,6 +249,7 @@ export function useCategorySuggestions() {
     mutationFn: async (data: {
       transactionId: string;
       categoryId: string | null;
+      description?: string;
     }): Promise<void> => {
       if (!user?.id) throw new Error('User not authenticated');
 
@@ -260,6 +261,16 @@ export function useCategorySuggestions() {
         .eq('user_id', user.id);
 
       if (updateError) throw updateError;
+
+      // Fire-and-forget: learn pattern from manual categorization
+      if (data.categoryId && data.description) {
+        PatternMatcher.learnFromCategorization(
+          data.description,
+          data.categoryId,
+          user.id,
+          supabase
+        ).catch((err) => console.error('Pattern learning failed:', err));
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({

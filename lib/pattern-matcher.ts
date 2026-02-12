@@ -1,6 +1,17 @@
 // Pattern Matcher Utility
 // Handles pattern matching, extraction, and learning from categorization decisions
 
+// Common words that should never be used as patterns — they cause false positives
+const STOPWORDS = new Set([
+  'main', 'plus', 'good', 'user', 'from', 'with', 'your', 'have', 'been',
+  'this', 'that', 'will', 'more', 'some', 'than', 'them', 'very', 'when',
+  'what', 'make', 'like', 'time', 'just', 'know', 'take', 'come', 'could',
+  'over', 'such', 'after', 'also', 'back', 'into', 'year', 'only', 'other',
+  'then', 'first', 'last', 'long', 'great', 'little', 'right', 'still',
+  'find', 'here', 'thing', 'many', 'well', 'transfer', 'verified', 'payment',
+  'reference', 'completed',
+]);
+
 export interface Pattern {
   id: string;
   pattern: string;
@@ -36,7 +47,8 @@ export class PatternMatcher {
 
     for (const pattern of patterns) {
       try {
-        const patternRegex = new RegExp(pattern.pattern, 'i');
+        const effectivePattern = this.enforceWordBoundaries(pattern.pattern);
+        const patternRegex = new RegExp(effectivePattern, 'i');
         if (patternRegex.test(normalizedDescription)) {
           matches.push({
             category_id: pattern.category_id,
@@ -61,15 +73,17 @@ export class PatternMatcher {
     const normalized = this.normalizeText(description);
     const patterns: string[] = [];
 
-    // Extract key terms (words with 4+ characters)
-    const words = normalized.split(/\s+/).filter(word => word.length >= 4);
-    
-    // Create patterns from individual words
+    // Extract key terms (words with 5+ characters, excluding stopwords)
+    const words = normalized.split(/\s+/).filter(
+      word => word.length >= 5 && !STOPWORDS.has(word)
+    );
+
+    // Create patterns from individual words with word boundaries
     words.forEach(word => {
-      patterns.push(word);
+      patterns.push(`\\b${word}\\b`);
     });
 
-    // Create patterns from word pairs
+    // Create patterns from word pairs (multi-word patterns are inherently more specific)
     for (let i = 0; i < words.length - 1; i++) {
       patterns.push(`${words[i]}\\s+${words[i+1]}`);
     }
@@ -174,11 +188,25 @@ export class PatternMatcher {
   }
 
   /**
+   * Enforce word boundaries on single-word patterns that don't already
+   * contain regex operators. This prevents "post" from matching "postage".
+   */
+  static enforceWordBoundaries(pattern: string): string {
+    // If the pattern already contains regex operators, leave it as-is
+    if (/[\\.*+?^${}()|[\]\s]/.test(pattern)) {
+      return pattern;
+    }
+    // Single plain word — wrap with word boundaries
+    return `\\b${pattern}\\b`;
+  }
+
+  /**
    * Test if a pattern matches a description
    */
   static testPattern(pattern: string, description: string): boolean {
     try {
-      const regex = new RegExp(pattern, 'i');
+      const effectivePattern = this.enforceWordBoundaries(pattern);
+      const regex = new RegExp(effectivePattern, 'i');
       const normalizedDescription = this.normalizeText(description);
       return regex.test(normalizedDescription);
     } catch (error) {

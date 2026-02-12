@@ -34,6 +34,8 @@ yarn-error.log*
 .env
 .env.local
 .env.local.*
+.env.local.dev
+.env.production
 .env.development.local
 .env.test.local
 .env.production.local
@@ -69,6 +71,7 @@ pids
 next-env.d.ts
 
 # Sensitive data - NEVER commit these!
+Data/
 Data Input/
 backups/
 *.csv

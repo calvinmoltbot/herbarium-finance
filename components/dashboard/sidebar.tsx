@@ -42,6 +42,7 @@ const navigation: NavigationItem[] = [
   { name: 'Transaction Notes', href: '/transaction-notes', icon: StickyNote },
   { name: 'Reports', href: '/reports', icon: FileText },
   { name: 'Self Assessment', href: '/reports/tax/self-assessment', icon: FileSpreadsheet },
+  { name: 'Bank Reconciliation', href: '/bank-reconciliation', icon: Scale },
   {
     name: 'Bank Import',
     icon: Database,
@@ -64,7 +65,6 @@ const navigation: NavigationItem[] = [
     name: 'Admin',
     icon: Settings,
     children: [
-      { name: 'Bank Reconciliation', href: '/bank-reconciliation', icon: Scale },
       { name: 'Data Reset', href: '/import/reset', icon: RotateCcw },
     ]
   },

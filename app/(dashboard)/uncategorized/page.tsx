@@ -25,6 +25,7 @@ import {
   List,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { PatternMatcher } from '@/lib/pattern-matcher';
 
 const PAGE_SIZES = [25, 50, 100] as const;
 
@@ -95,7 +96,7 @@ export default function UncategorizedPage() {
     onMutate: ({ txId }) => {
       setAssigningId(txId);
     },
-    onSuccess: (_data, { txId }) => {
+    onSuccess: (_data, { txId, categoryId }) => {
       // Find the transaction to show a nice toast
       const tx = transactions.find(t => t.id === txId);
       toast.success(
@@ -103,6 +104,17 @@ export default function UncategorizedPage() {
           ? `Categorized "${tx.description.slice(0, 40)}${tx.description.length > 40 ? '...' : ''}"`
           : 'Transaction categorized'
       );
+
+      // Fire-and-forget: learn pattern from this manual categorization
+      if (tx?.description && user?.id) {
+        const supabase = createClient();
+        PatternMatcher.learnFromCategorization(
+          tx.description,
+          categoryId,
+          user.id,
+          supabase
+        ).catch((err) => console.error('Pattern learning failed:', err));
+      }
       // Invalidate relevant queries
       queryClient.invalidateQueries({ queryKey: ['uncategorized-transactions'] });
       queryClient.invalidateQueries({ queryKey: ['transactions-paginated'] });
