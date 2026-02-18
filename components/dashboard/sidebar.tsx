@@ -1,97 +1,94 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   BarChart3,
-  Database,
+  CreditCard,
   TrendingUp,
   TrendingDown,
   Tags,
   FileText,
   FileSpreadsheet,
   List,
-  CreditCard,
   Settings,
-  Plus,
-  RotateCcw,
   Scale,
-  ShoppingCart,
-  ChevronDown,
-  ChevronRight,
   StickyNote,
   Wallet,
-  AlertTriangle
+  AlertTriangle,
+  LogOut,
+  User,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { LucideIcon } from 'lucide-react';
 import { ThemeToggle } from '@/components/layout/theme-toggle';
+import { useAuth } from '@/lib/auth-context';
+import { logOut } from '@/app/(auth)/actions';
+import { toast } from 'sonner';
 
 interface NavigationItem {
   name: string;
-  href?: string;
+  href: string;
   icon: LucideIcon;
-  children?: NavigationItem[];
 }
 
-const navigation: NavigationItem[] = [
-  { name: 'Dashboard', href: '/dashboard', icon: BarChart3 },
-  { name: 'Transactions', href: '/transactions', icon: List },
-  { name: 'Uncategorized', href: '/uncategorized', icon: AlertTriangle },
-  { name: 'Transaction Notes', href: '/transaction-notes', icon: StickyNote },
-  { name: 'Reports', href: '/reports', icon: FileText },
-  { name: 'Self Assessment', href: '/reports/tax/self-assessment', icon: FileSpreadsheet },
-  { name: 'Bank Reconciliation', href: '/bank-reconciliation', icon: Scale },
+interface NavigationSection {
+  label: string;
+  items: NavigationItem[];
+}
+
+const navigationSections: NavigationSection[] = [
   {
-    name: 'Bank Import',
-    icon: Database,
-    children: [
+    label: 'Overview',
+    items: [
+      { name: 'Dashboard', href: '/dashboard', icon: BarChart3 },
+    ],
+  },
+  {
+    label: 'Transactions',
+    items: [
+      { name: 'All Transactions', href: '/transactions', icon: List },
+      { name: 'Uncategorized', href: '/uncategorized', icon: AlertTriangle },
+      { name: 'Transaction Notes', href: '/transaction-notes', icon: StickyNote },
+    ],
+  },
+  {
+    label: 'Reports',
+    items: [
+      { name: 'Reports', href: '/reports', icon: FileText },
+      { name: 'Self Assessment', href: '/reports/tax/self-assessment', icon: FileSpreadsheet },
+      { name: 'Bank Reconciliation', href: '/bank-reconciliation', icon: Scale },
+    ],
+  },
+  {
+    label: 'Data Management',
+    items: [
       { name: 'Revolut Import', href: '/import/bank', icon: CreditCard },
       { name: 'Pattern Management', href: '/patterns', icon: Settings },
       { name: 'Category Management', href: '/categories', icon: Tags },
-    ]
-  },
-  {
-    name: 'Manual Transactions',
-    icon: Plus,
-    children: [
       { name: 'Add Income', href: '/add-income', icon: TrendingUp },
       { name: 'Add Expenditure', href: '/add-expenditure', icon: TrendingDown },
       { name: 'Add Capital', href: '/add-capital', icon: Wallet },
-    ]
-  },
-  {
-    name: 'Admin',
-    icon: Settings,
-    children: [
-      { name: 'Data Reset', href: '/import/reset', icon: RotateCcw },
-    ]
-  },
-  {
-    name: 'Coming Soon',
-    icon: ShoppingCart,
-    children: [
-      { name: 'Shopify', href: '/import/shopify', icon: ShoppingCart },
-    ]
+    ],
   },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
-  const [expandedSections, setExpandedSections] = useState<string[]>(['Bank Import', 'Manual Transactions']);
-
-  const toggleSection = (sectionName: string) => {
-    setExpandedSections(prev =>
-      prev.includes(sectionName)
-        ? prev.filter(name => name !== sectionName)
-        : [...prev, sectionName]
-    );
-  };
+  const router = useRouter();
+  const { user } = useAuth();
 
   const isActive = (href: string) => pathname === href;
-  const isSectionActive = (children: NavigationItem[]) =>
-    children.some(child => child.href && pathname === child.href);
+
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      toast.success('Logged out successfully');
+      router.push('/login');
+    } catch {
+      toast.error('Failed to log out');
+    }
+  };
 
   return (
     <div className="hidden lg:flex flex-col w-64 glass-sidebar">
@@ -103,84 +100,53 @@ export function Sidebar() {
         <ThemeToggle />
       </div>
 
-      <nav className="flex-1 px-4 py-6 space-y-1">
-        {navigation.map((item) => {
-          if (item.children) {
-            const isExpanded = expandedSections.includes(item.name);
-            const hasActiveChild = isSectionActive(item.children);
-
-            return (
-              <div key={item.name} className="space-y-1">
-                <button
-                  onClick={() => toggleSection(item.name)}
+      <nav className="flex-1 px-4 py-4 space-y-6 overflow-y-auto">
+        {navigationSections.map((section) => (
+          <div key={section.label}>
+            <div className="px-4 pb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">
+              {section.label}
+            </div>
+            <div className="space-y-1">
+              {section.items.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
                   className={cn(
-                    'flex items-center justify-between w-full px-4 py-3 text-sm font-medium rounded-lg transition-colors',
-                    hasActiveChild
-                      ? 'bg-primary/15 text-primary'
+                    'flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors',
+                    isActive(item.href)
+                      ? 'bg-primary text-primary-foreground'
                       : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                   )}
                 >
-                  <div className="flex items-center">
-                    <item.icon className="w-5 h-5 mr-3" />
-                    {item.name}
-                  </div>
-                  {isExpanded ? (
-                    <ChevronDown className="w-4 h-4" />
-                  ) : (
-                    <ChevronRight className="w-4 h-4" />
-                  )}
-                </button>
-
-                {isExpanded && (
-                  <div className="ml-4 space-y-1">
-                    {item.children.map((child) => (
-                      <Link
-                        key={child.name}
-                        href={child.href || '#'}
-                        className={cn(
-                          'flex items-center px-4 py-2 text-sm rounded-lg transition-colors',
-                          child.href && isActive(child.href)
-                            ? 'bg-primary text-primary-foreground'
-                            : child.href
-                            ? 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                            : 'text-muted-foreground/50 cursor-not-allowed'
-                        )}
-                      >
-                        <child.icon className="w-4 h-4 mr-3" />
-                        {child.name}
-                        {!child.href && (
-                          <span className="ml-auto text-xs text-muted-foreground/50">Soon</span>
-                        )}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            );
-          }
-
-          return (
-            <Link
-              key={item.name}
-              href={item.href || '#'}
-              className={cn(
-                'flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors',
-                item.href && isActive(item.href)
-                  ? 'bg-primary text-primary-foreground'
-                  : item.href
-                  ? 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                  : 'text-muted-foreground/50 cursor-not-allowed'
-              )}
-            >
-              <item.icon className="w-5 h-5 mr-3" />
-              {item.name}
-            </Link>
-          );
-        })}
+                  <item.icon className="w-5 h-5 mr-3 shrink-0" />
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+        ))}
       </nav>
+
+      <div className="border-t border-border/50 p-4">
+        <div className="flex items-center gap-3 px-2 mb-3">
+          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/15 text-primary shrink-0">
+            <User className="w-4 h-4" />
+          </div>
+          <span className="text-sm text-foreground truncate">
+            {user?.email || 'User'}
+          </span>
+        </div>
+        <button
+          onClick={handleLogout}
+          className="flex items-center w-full px-4 py-2.5 text-sm font-medium rounded-lg text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
+        >
+          <LogOut className="w-5 h-5 mr-3 shrink-0" />
+          Sign out
+        </button>
+      </div>
     </div>
   );
 }
 
-export { navigation };
-export type { NavigationItem };
+export { navigationSections };
+export type { NavigationItem, NavigationSection };
