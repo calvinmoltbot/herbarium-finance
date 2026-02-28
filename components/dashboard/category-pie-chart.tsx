@@ -12,7 +12,7 @@ function CustomTooltip({ active, payload }: { active?: boolean; payload?: Array<
   if (!active || !payload?.[0]) return null;
   const entry = payload[0];
   return (
-    <div className="bg-popover border border-border rounded-lg p-3 shadow-lg">
+    <div className="rounded-lg p-3 shadow-lg" style={{ backgroundColor: '#1e1c27', border: '1px solid #2a2835' }}>
       <p className="text-sm font-medium" style={{ color: entry.payload.fill }}>
         {entry.name}: {formatGBP(entry.value)}
       </p>
@@ -77,9 +77,9 @@ export function IncomeExpenditurePieChart() {
   ];
 
   return (
-    <Card>
+    <Card style={{ backgroundColor: '#1e1c27', borderColor: 'transparent' }} className="ring-1 ring-white/5">
       <CardHeader>
-        <CardTitle>Income vs Expenditure</CardTitle>
+        <CardTitle style={{ color: '#e8e6e3' }}>Income vs Expenditure</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-6">
@@ -89,11 +89,11 @@ export function IncomeExpenditurePieChart() {
                 data={data}
                 cx="50%"
                 cy="50%"
-                innerRadius={45}
-                outerRadius={80}
-                paddingAngle={3}
+                innerRadius={50}
+                outerRadius={85}
+                paddingAngle={4}
                 dataKey="value"
-                stroke="hsl(var(--background))"
+                stroke="#17151e"
                 strokeWidth={3}
               >
                 {data.map((entry, index) => (

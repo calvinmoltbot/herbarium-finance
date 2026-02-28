@@ -25,8 +25,8 @@ export function DashboardHeader() {
   return (
     <div className="flex items-center justify-between">
       <div>
-        <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
-        <p className="text-muted-foreground mt-1">
+        <h1 className="text-3xl font-bold" style={{ color: '#e8e6e3' }}>Dashboard</h1>
+        <p className="mt-1" style={{ color: '#9794a8' }}>
           Track your income and expenditure - {dateFilterLabels[dateFilter]}
         </p>
       </div>

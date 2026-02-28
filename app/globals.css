@@ -99,6 +99,20 @@ body {
   }
 }
 
+/* Hardcoded dark-mode utility classes — sidesteps Tailwind v4 token resolution */
+.dark .hb-bg-page   { background-color: #17151e; }
+.dark .hb-bg-card   { background-color: #1e1c27; }
+.dark .hb-bg-card-alt { background-color: #222030; }
+.dark .hb-border     { border-color: #2a2835; }
+.dark .hb-ring       { --tw-ring-color: rgba(255,255,255,0.05); }
+.dark .hb-text       { color: #e8e6e3; }
+.dark .hb-text-muted { color: #9794a8; }
+.dark .hb-text-income   { color: #10b981; }
+.dark .hb-text-expense  { color: #f43f5e; }
+.dark .hb-text-accent   { color: #f59e0b; }
+.dark .hb-text-capital  { color: #7c3aed; }
+.dark .hb-text-blue     { color: #3b82f6; }
+
 /* Print Styles for Transaction Drill-Down */
 @media print {
   @page {

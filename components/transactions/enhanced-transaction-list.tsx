@@ -133,9 +133,9 @@ export function EnhancedTransactionList({
   return (
     <div className="space-y-4">
       {/* Filters */}
-      <Card>
+      <Card style={{ backgroundColor: '#1e1c27', borderColor: 'transparent' }} className="ring-1 ring-white/5">
         <CardHeader>
-          <CardTitle>Transaction Filters</CardTitle>
+          <CardTitle style={{ color: '#e8e6e3' }}>Transaction Filters</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
@@ -264,9 +264,9 @@ export function EnhancedTransactionList({
       </Card>
 
       {/* Transaction List */}
-      <Card>
+      <Card style={{ backgroundColor: '#1e1c27', borderColor: 'transparent' }} className="ring-1 ring-white/5">
         <CardHeader>
-          <CardTitle>
+          <CardTitle style={{ color: '#e8e6e3' }}>
             Transactions ({filteredTransactions.length})
           </CardTitle>
         </CardHeader>
@@ -277,11 +277,17 @@ export function EnhancedTransactionList({
                 No transactions match your filters.
               </p>
             ) : (
-              filteredTransactions.map(transaction => (
+              filteredTransactions.map((transaction, index) => (
                 <div
                   key={transaction.id}
-                  className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted cursor-pointer"
+                  className="flex items-center justify-between p-4 rounded-lg cursor-pointer transition-colors"
+                  style={{
+                    backgroundColor: index % 2 === 0 ? '#1e1c27' : '#222030',
+                    borderLeft: selectedTransaction?.id === transaction.id ? '3px solid #f59e0b' : '3px solid transparent',
+                  }}
                   onClick={() => setSelectedTransaction(transaction)}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#2a2835'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = index % 2 === 0 ? '#1e1c27' : '#222030'; }}
                 >
                   <div className="flex-1">
                     <div className="flex items-center space-x-3">
@@ -321,7 +327,9 @@ export function EnhancedTransactionList({
                     )}
                     
                     <div className="text-right">
-                      <p className="font-medium">
+                      <p className="font-medium" style={{
+                        color: transaction.type === 'income' ? '#10b981' : transaction.type === 'capital' ? '#7c3aed' : '#f43f5e'
+                      }}>
                         {formatAmount(transaction.amount, transaction.type)}
                       </p>
                     </div>

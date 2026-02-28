@@ -21,15 +21,15 @@ export function PageLayout({
   className = ""
 }: PageLayoutProps) {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen" style={{ backgroundColor: '#17151e' }}>
       <div className={`max-w-6xl mx-auto py-12 px-6 space-y-8 ${className}`}>
         {/* Professional Header - Following Transaction Notes Pattern */}
         <div className="text-center space-y-4">
           <div className="flex items-center justify-center space-x-3">
-            <Icon className="h-12 w-12 text-primary" />
-            <h1 className="text-4xl font-bold tracking-tight text-foreground">{title}</h1>
+            <Icon className="h-12 w-12" style={{ color: '#7c3aed' }} />
+            <h1 className="text-4xl font-bold tracking-tight" style={{ color: '#e8e6e3' }}>{title}</h1>
           </div>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl max-w-2xl mx-auto leading-relaxed" style={{ color: '#9794a8' }}>
             {description}
           </p>
 
@@ -68,8 +68,8 @@ export function PageSection({
   className = ""
 }: PageSectionProps) {
   return (
-    <div className={`bg-card rounded-lg border border-border shadow-sm ${className}`}>
-      <div className="px-6 py-4 border-b border-border">
+    <div className={`rounded-lg shadow-sm ring-1 ring-white/5 ${className}`} style={{ backgroundColor: '#1e1c27' }}>
+      <div className="px-6 py-4" style={{ borderBottom: '1px solid #2a2835' }}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             {Icon && <Icon className="h-5 w-5 text-muted-foreground" />}
@@ -109,7 +109,7 @@ export function PageCard({ children, className = "", padding = 'md' }: PageCardP
   };
 
   return (
-    <div className={`bg-card rounded-lg border border-border shadow-sm ${paddingClasses[padding]} ${className}`}>
+    <div className={`rounded-lg shadow-sm ring-1 ring-white/5 ${paddingClasses[padding]} ${className}`} style={{ backgroundColor: '#1e1c27' }}>
       {children}
     </div>
   );

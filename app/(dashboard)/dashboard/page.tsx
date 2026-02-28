@@ -71,7 +71,7 @@ function TransactionsSkeleton() {
 
 export default function DashboardPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen" style={{ backgroundColor: '#17151e' }}>
       <div className="flex-1 space-y-8 p-8 max-w-7xl mx-auto">
         <DashboardHeader />
 

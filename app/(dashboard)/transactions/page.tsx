@@ -261,15 +261,15 @@ export default function TransactionsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen" style={{ backgroundColor: '#17151e' }}>
       <div className="max-w-6xl mx-auto py-12 px-6 space-y-8">
         {/* Header */}
         <div className="text-center space-y-4">
           <div className="flex items-center justify-center space-x-3">
-            <List className="h-12 w-12 text-primary" />
-            <h1 className="text-4xl font-bold tracking-tight text-foreground">Transaction Management</h1>
+            <List className="h-12 w-12" style={{ color: '#7c3aed' }} />
+            <h1 className="text-4xl font-bold tracking-tight" style={{ color: '#e8e6e3' }}>Transaction Management</h1>
           </div>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl max-w-2xl mx-auto leading-relaxed" style={{ color: '#9794a8' }}>
             Manage and categorize your transactions with enhanced notes functionality
           </p>
           <div className="flex justify-center">

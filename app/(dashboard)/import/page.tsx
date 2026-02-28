@@ -71,29 +71,29 @@ const managementSections = [
 
 export default function DatabaseManagementPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen" style={{ backgroundColor: '#17151e' }}>
       <div className="max-w-4xl mx-auto py-12 px-6 space-y-8">
         {/* Professional Header */}
         <div className="text-center space-y-4">
           <div className="flex items-center justify-center space-x-3">
-            <Database className="h-12 w-12 text-primary" />
-            <h1 className="text-4xl font-bold tracking-tight text-foreground">Database Management</h1>
+            <Database className="h-12 w-12" style={{ color: '#7c3aed' }} />
+            <h1 className="text-4xl font-bold tracking-tight" style={{ color: '#e8e6e3' }}>Database Management</h1>
           </div>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl max-w-2xl mx-auto leading-relaxed" style={{ color: '#9794a8' }}>
             Comprehensive tools for managing your financial data, imports, and integrations
           </p>
         </div>
 
         {/* Management Sections Grid */}
-        <div className="grid gap-8 md:grid-cols-2">
+        <div className="grid gap-8 md:grid-cols-2 items-stretch">
           {managementSections.map((section) => {
             const Icon = section.icon;
             const isCompleted = section.status === 'Completed';
             const isAvailable = section.status === 'Available' || section.status === 'Completed';
             return (
-              <Card key={section.title} className={`relative transition-all duration-200 hover:shadow-lg ${
+              <Card key={section.title} className={`relative transition-all duration-200 hover:shadow-lg ring-1 ring-white/5 min-h-[220px] ${
                 !isAvailable ? 'opacity-75' : 'hover:scale-[1.02]'
-              }`}>
+              }`} style={{ backgroundColor: '#1e1c27', borderColor: 'transparent' }}>
                 <CardHeader className="pb-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center space-x-4">
@@ -164,10 +164,10 @@ export default function DatabaseManagementPage() {
         </div>
 
         {/* Quick Access Panel */}
-        <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+        <Card className="ring-1 ring-white/5" style={{ backgroundColor: '#1e1c27', borderColor: 'transparent' }}>
           <CardHeader>
-            <CardTitle className="text-xl text-blue-900">Quick Access</CardTitle>
-            <CardDescription className="text-blue-700">
+            <CardTitle className="text-xl" style={{ color: '#e8e6e3' }}>Quick Access</CardTitle>
+            <CardDescription style={{ color: '#9794a8' }}>
               Common database management tasks and shortcuts
             </CardDescription>
           </CardHeader>

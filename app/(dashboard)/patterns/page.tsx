@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 export default function PatternsPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen" style={{ backgroundColor: '#17151e' }}>
       <div className="max-w-6xl mx-auto py-12 px-6 space-y-8">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -19,12 +19,12 @@ export default function PatternsPage() {
               </Link>
             </Button>
           </div>
-          
+
           <div className="text-center">
-            <h1 className="text-4xl font-bold tracking-tight text-foreground">
+            <h1 className="text-4xl font-bold tracking-tight" style={{ color: '#e8e6e3' }}>
               Pattern Management
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl max-w-3xl mx-auto leading-relaxed" style={{ color: '#9794a8' }}>
               Create and manage categorization patterns for intelligent transaction processing
             </p>
           </div>

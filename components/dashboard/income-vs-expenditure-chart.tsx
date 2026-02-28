@@ -12,8 +12,8 @@ function formatGBP(value: number): string {
 function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: Array<{ value: number; dataKey: string; color: string }>; label?: string }) {
   if (!active || !payload) return null;
   return (
-    <div className="bg-popover border border-border rounded-lg p-3 shadow-lg">
-      <p className="text-sm font-medium text-foreground mb-1">{label}</p>
+    <div className="rounded-lg p-3 shadow-lg" style={{ backgroundColor: '#1e1c27', border: '1px solid #2a2835' }}>
+      <p className="text-sm font-medium mb-1" style={{ color: '#e8e6e3' }}>{label}</p>
       {payload.map((entry) => (
         <p key={entry.dataKey} className="text-sm" style={{ color: entry.color }}>
           {entry.dataKey === 'income' ? 'Income' : 'Expenditure'}: {formatGBP(entry.value)}
@@ -83,40 +83,40 @@ export function IncomeVsExpenditureChart() {
   }
 
   return (
-    <Card>
+    <Card style={{ backgroundColor: '#1e1c27', borderColor: 'transparent' }} className="ring-1 ring-white/5">
       <CardHeader>
-        <CardTitle>{chartTitle}</CardTitle>
+        <CardTitle style={{ color: '#e8e6e3' }}>{chartTitle}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           <div className="flex items-center space-x-6 text-sm">
             <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-emerald-500 rounded" />
-              <span className="text-muted-foreground">Income</span>
+              <div className="w-3 h-3 rounded" style={{ backgroundColor: '#10b981' }} />
+              <span style={{ color: '#9794a8' }}>Income</span>
             </div>
             <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-rose-500 rounded" />
-              <span className="text-muted-foreground">Expenditure</span>
+              <div className="w-3 h-3 rounded" style={{ backgroundColor: '#f43f5e' }} />
+              <span style={{ color: '#9794a8' }}>Expenditure</span>
             </div>
           </div>
 
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={monthlyData} barCategoryGap="20%">
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#3a3848" vertical={false} />
               <XAxis
                 dataKey="month"
-                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
-                axisLine={{ stroke: 'hsl(var(--border))' }}
+                tick={{ fill: '#9794a8', fontSize: 12 }}
+                axisLine={{ stroke: '#3a3848' }}
                 tickLine={false}
               />
               <YAxis
-                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
+                tick={{ fill: '#9794a8', fontSize: 12 }}
                 axisLine={false}
                 tickLine={false}
                 tickFormatter={(value) => `£${(value / 1000).toFixed(0)}k`}
                 width={50}
               />
-              <Tooltip content={<CustomTooltip />} cursor={{ fill: 'hsl(var(--muted))', opacity: 0.5 }} />
+              <Tooltip content={<CustomTooltip />} cursor={{ fill: '#2a2835', opacity: 0.5 }} />
               <Bar dataKey="income" fill="#10b981" radius={[4, 4, 0, 0]} />
               <Bar dataKey="expenditure" fill="#f43f5e" radius={[4, 4, 0, 0]} />
             </BarChart>

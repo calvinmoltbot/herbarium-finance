@@ -52,13 +52,13 @@ export function RecentTransactions() {
   }
 
   return (
-    <Card>
+    <Card style={{ backgroundColor: '#1e1c27', borderColor: 'transparent' }} className="ring-1 ring-white/5">
       <CardHeader>
-        <CardTitle className="flex items-center">
+        <CardTitle className="flex items-center" style={{ color: '#e8e6e3' }}>
           <Calendar className="h-5 w-5 mr-2" />
           Recent Transactions
         </CardTitle>
-        <CardDescription>Your latest financial activity</CardDescription>
+        <CardDescription style={{ color: '#9794a8' }}>Your latest financial activity</CardDescription>
       </CardHeader>
       <CardContent>
         {!transactions || transactions.length === 0 ? (
@@ -74,17 +74,16 @@ export function RecentTransactions() {
             {transactions.map((transaction) => (
               <div
                 key={transaction.id}
-                className="flex items-start justify-between p-3 rounded-lg border hover:bg-muted transition-colors"
+                className="flex items-start justify-between p-3 rounded-lg transition-colors"
+                style={{ borderBottom: '1px solid #2a2835' }}
               >
                 <div className="flex items-start space-x-3 flex-1 min-w-0">
                   <div
-                    className={`p-2 rounded-full flex-shrink-0 ${
-                      transaction.type === 'income'
-                        ? 'bg-green-100 text-green-600 dark:bg-green-950 dark:text-green-400'
-                        : transaction.type === 'capital'
-                        ? 'bg-purple-100 text-purple-600 dark:bg-purple-950 dark:text-purple-400'
-                        : 'bg-red-100 text-red-600 dark:bg-red-950 dark:text-red-400'
-                    }`}
+                    className="p-2 rounded-full flex-shrink-0"
+                    style={{
+                      backgroundColor: transaction.type === 'income' ? 'rgba(16,185,129,0.15)' : transaction.type === 'capital' ? 'rgba(124,58,237,0.15)' : 'rgba(244,63,94,0.15)',
+                      color: transaction.type === 'income' ? '#10b981' : transaction.type === 'capital' ? '#7c3aed' : '#f43f5e',
+                    }}
                   >
                     {transaction.type === 'income' ? (
                       <TrendingUp className="h-4 w-4" />

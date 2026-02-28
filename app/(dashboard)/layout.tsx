@@ -11,7 +11,7 @@ export default function DashboardLayout({
   return (
     <AuthProvider>
       <DateFilterProvider>
-        <div className="flex h-screen bg-background">
+        <div className="flex h-screen" style={{ backgroundColor: '#17151e' }}>
           <Sidebar />
           <div className="flex-1 flex flex-col overflow-hidden">
             <MobileSidebar />

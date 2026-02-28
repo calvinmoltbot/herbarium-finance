@@ -91,11 +91,11 @@ export function Sidebar() {
   };
 
   return (
-    <div className="hidden lg:flex flex-col w-64 glass-sidebar">
-      <div className="flex items-center justify-between h-16 px-6 border-b border-border/50">
+    <div className="hidden lg:flex flex-col w-64" style={{ backgroundColor: '#1a1825', borderRight: '1px solid #2a2835' }}>
+      <div className="flex items-center justify-between h-16 px-6" style={{ borderBottom: '1px solid #2a2835' }}>
         <div className="flex items-center">
-          <BarChart3 className="w-8 h-8 text-primary" />
-          <span className="ml-2 text-xl font-bold text-foreground">Herbarium</span>
+          <BarChart3 className="w-8 h-8" style={{ color: '#7c3aed' }} />
+          <span className="ml-2 text-xl font-bold" style={{ color: '#e8e6e3' }}>Herbarium</span>
         </div>
         <ThemeToggle />
       </div>
@@ -103,7 +103,7 @@ export function Sidebar() {
       <nav className="flex-1 px-4 py-4 space-y-6 overflow-y-auto">
         {navigationSections.map((section) => (
           <div key={section.label}>
-            <div className="px-4 pb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">
+            <div className="px-4 pb-2 text-xs font-semibold uppercase tracking-wider" style={{ color: '#6b6880' }}>
               {section.label}
             </div>
             <div className="space-y-1">
@@ -114,9 +114,25 @@ export function Sidebar() {
                   className={cn(
                     'flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors',
                     isActive(item.href)
-                      ? 'bg-primary text-primary-foreground'
-                      : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                      ? ''
+                      : ''
                   )}
+                  style={isActive(item.href)
+                    ? { backgroundColor: '#7c3aed', color: '#fff', borderLeft: '3px solid #f59e0b' }
+                    : { color: '#9794a8' }
+                  }
+                  onMouseEnter={(e) => {
+                    if (!isActive(item.href)) {
+                      e.currentTarget.style.backgroundColor = '#222030';
+                      e.currentTarget.style.color = '#e8e6e3';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive(item.href)) {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = '#9794a8';
+                    }
+                  }}
                 >
                   <item.icon className="w-5 h-5 mr-3 shrink-0" />
                   {item.name}
@@ -127,12 +143,12 @@ export function Sidebar() {
         ))}
       </nav>
 
-      <div className="border-t border-border/50 p-4">
+      <div className="p-4" style={{ borderTop: '1px solid #2a2835' }}>
         <div className="flex items-center gap-3 px-2 mb-3">
-          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/15 text-primary shrink-0">
+          <div className="flex items-center justify-center w-8 h-8 rounded-full shrink-0" style={{ backgroundColor: 'rgba(124,58,237,0.15)', color: '#7c3aed' }}>
             <User className="w-4 h-4" />
           </div>
-          <span className="text-sm text-foreground truncate">
+          <span className="text-sm truncate" style={{ color: '#e8e6e3' }}>
             {user?.email || 'User'}
           </span>
         </div>

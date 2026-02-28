@@ -58,9 +58,9 @@ export function CategoryBreakdown() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Income by Category */}
-        <Card>
+        <Card style={{ backgroundColor: '#1e1c27', borderColor: 'transparent' }} className="ring-1 ring-white/5">
           <CardHeader>
-            <CardTitle className="flex items-center justify-between">
+            <CardTitle className="flex items-center justify-between" style={{ color: '#e8e6e3' }}>
               <span>Income by Category</span>
               <span className="text-sm font-normal text-muted-foreground">
                 Total: £{totalIncome.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
@@ -78,7 +78,7 @@ export function CategoryBreakdown() {
                 </div>
                 <Progress
                   value={category.percentage}
-                  className="h-2"
+                  className="h-2.5"
                   style={{
                     '--progress-background': category.color,
                   } as React.CSSProperties}
@@ -96,9 +96,9 @@ export function CategoryBreakdown() {
         </Card>
 
         {/* Expenditure by Category */}
-        <Card>
+        <Card style={{ backgroundColor: '#1e1c27', borderColor: 'transparent' }} className="ring-1 ring-white/5">
           <CardHeader>
-            <CardTitle className="flex items-center justify-between">
+            <CardTitle className="flex items-center justify-between" style={{ color: '#e8e6e3' }}>
               <span>Expenditure by Category</span>
               <span className="text-sm font-normal text-muted-foreground">
                 Total: £{totalExpenditure.toLocaleString('en-GB', { minimumFractionDigits: 2 })}
@@ -116,7 +116,7 @@ export function CategoryBreakdown() {
                 </div>
                 <Progress
                   value={category.percentage}
-                  className="h-2"
+                  className="h-2.5"
                   style={{
                     '--progress-background': category.color,
                   } as React.CSSProperties}

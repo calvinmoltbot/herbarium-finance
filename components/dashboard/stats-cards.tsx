@@ -171,15 +171,15 @@ export function StatsCards() {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      <Card>
+      <Card style={{ backgroundColor: '#1e1c27', borderColor: 'transparent' }} className="ring-1 ring-white/5">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground">
+          <CardTitle className="text-sm font-medium" style={{ color: '#9794a8' }}>
             {labels.income}
           </CardTitle>
-          <TrendingUp className="h-4 w-4 text-green-600" />
+          <TrendingUp className="h-4 w-4" style={{ color: '#10b981' }} />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold tabular-nums text-foreground">
+          <div className="text-2xl font-bold tabular-nums" style={{ color: '#10b981' }}>
             {formatCurrency(displayIncome)}
           </div>
           <div className="flex items-center mt-2">
@@ -191,15 +191,15 @@ export function StatsCards() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card style={{ backgroundColor: '#1e1c27', borderColor: 'transparent' }} className="ring-1 ring-white/5">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground">
+          <CardTitle className="text-sm font-medium" style={{ color: '#9794a8' }}>
             {labels.expenditure}
           </CardTitle>
-          <TrendingDown className="h-4 w-4 text-red-600" />
+          <TrendingDown className="h-4 w-4" style={{ color: '#f43f5e' }} />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold tabular-nums text-foreground">
+          <div className="text-2xl font-bold tabular-nums" style={{ color: '#f43f5e' }}>
             {formatCurrency(displayExpenditure)}
           </div>
           <div className="flex items-center mt-2">
@@ -211,17 +211,15 @@ export function StatsCards() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card style={{ backgroundColor: '#1e1c27', borderColor: 'transparent' }} className="ring-1 ring-white/5">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground">
+          <CardTitle className="text-sm font-medium" style={{ color: '#9794a8' }}>
             {labels.balance}
           </CardTitle>
-          <PoundSterling className="h-4 w-4 text-primary" />
+          <PoundSterling className="h-4 w-4" style={{ color: '#f59e0b' }} />
         </CardHeader>
         <CardContent>
-          <div className={`text-2xl font-bold tabular-nums ${
-            displayBalance >= 0 ? 'text-green-600' : 'text-red-600'
-          }`}>
+          <div className="text-2xl font-bold tabular-nums" style={{ color: displayBalance >= 0 ? '#10b981' : '#f43f5e' }}>
             {formatCurrency(displayBalance)}
           </div>
           <div className="flex items-center mt-2">
@@ -233,17 +231,15 @@ export function StatsCards() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card style={{ backgroundColor: '#1e1c27', borderColor: 'transparent' }} className="ring-1 ring-white/5">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground">
+          <CardTitle className="text-sm font-medium" style={{ color: '#9794a8' }}>
             {labels.bankPosition}
           </CardTitle>
-          <Landmark className="h-4 w-4 text-blue-600" />
+          <Landmark className="h-4 w-4" style={{ color: '#3b82f6' }} />
         </CardHeader>
         <CardContent>
-          <div className={`text-2xl font-bold tabular-nums ${
-            displayBankBalance >= 0 ? 'text-blue-600' : 'text-red-600'
-          }`}>
+          <div className="text-2xl font-bold tabular-nums" style={{ color: displayBankBalance >= 0 ? '#3b82f6' : '#f43f5e' }}>
             {formatCurrency(displayBankBalance)}
           </div>
           <div className="flex items-center mt-2">
