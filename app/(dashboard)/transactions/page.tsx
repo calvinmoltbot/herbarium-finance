@@ -307,6 +307,13 @@ export default function TransactionsPage() {
             variant={showFilters ? 'default' : 'outline'}
             onClick={() => setShowFilters(!showFilters)}
             className="relative"
+            style={
+              showFilters
+                ? { backgroundColor: '#f59e0b', color: '#17151e' }
+                : activeFilterCount > 0
+                ? { boxShadow: '0 0 0 2px #f59e0b' }
+                : undefined
+            }
           >
             <SlidersHorizontal className="h-4 w-4 mr-2" />
             Filters
@@ -323,7 +330,7 @@ export default function TransactionsPage() {
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-sm text-muted-foreground">Active filters:</span>
             {debouncedSearch && (
-              <Badge variant="secondary" className="gap-1">
+              <Badge variant="secondary" className="gap-1" style={{ backgroundColor: '#2a2835', color: '#e8e6e3', border: '1px solid #3a3848' }}>
                 Search: &quot;{debouncedSearch}&quot;
                 <button onClick={() => updateFilter('search', '')} className="ml-1 hover:text-foreground">
                   <X className="h-3 w-3" />
@@ -333,13 +340,8 @@ export default function TransactionsPage() {
             {filters.type !== 'all' && (
               <Badge
                 variant="secondary"
-                className={`gap-1 ${
-                  filters.type === 'income'
-                    ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'
-                    : filters.type === 'expenditure'
-                    ? 'bg-rose-500/10 text-rose-500 border-rose-500/20'
-                    : 'bg-violet-500/10 text-violet-500 border-violet-500/20'
-                }`}
+                className="gap-1"
+                style={{ backgroundColor: '#2a2835', color: '#e8e6e3', border: '1px solid #3a3848' }}
               >
                 Type: {filters.type}
                 <button onClick={() => updateFilter('type', 'all')} className="ml-1 hover:opacity-70">
@@ -348,7 +350,7 @@ export default function TransactionsPage() {
               </Badge>
             )}
             {(debouncedAmountMin || debouncedAmountMax) && (
-              <Badge variant="secondary" className="gap-1">
+              <Badge variant="secondary" className="gap-1" style={{ backgroundColor: '#2a2835', color: '#e8e6e3', border: '1px solid #3a3848' }}>
                 Amount: {debouncedAmountMin ? `£${debouncedAmountMin}` : '£0'} - {debouncedAmountMax ? `£${debouncedAmountMax}` : 'any'}
                 <button onClick={() => { updateFilter('amountMin', ''); updateFilter('amountMax', ''); }} className="ml-1 hover:text-foreground">
                   <X className="h-3 w-3" />
@@ -356,7 +358,7 @@ export default function TransactionsPage() {
               </Badge>
             )}
             {(filters.dateRange.from || filters.dateRange.to) && (
-              <Badge variant="secondary" className="gap-1">
+              <Badge variant="secondary" className="gap-1" style={{ backgroundColor: '#2a2835', color: '#e8e6e3', border: '1px solid #3a3848' }}>
                 Date: {filters.dateRange.from ? format(filters.dateRange.from, 'dd/MM/yyyy') : 'start'} - {filters.dateRange.to ? format(filters.dateRange.to, 'dd/MM/yyyy') : 'end'}
                 <button onClick={() => updateFilter('dateRange', { from: null, to: null, preset: 'all' })} className="ml-1 hover:text-foreground">
                   <X className="h-3 w-3" />

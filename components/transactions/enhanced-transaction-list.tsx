@@ -10,9 +10,12 @@ import { TransactionDetailPanel } from './transaction-detail-panel';
 import { useTransactionMetadata } from '@/hooks/use-transaction-metadata';
 import { useCategorySuggestions } from '@/hooks/use-category-suggestions';
 import { useCategories } from '@/hooks/use-categories';
-import { StickyNote, Search, Download } from 'lucide-react';
+import { StickyNote, Search, Download, Tag } from 'lucide-react';
 import { CSVExporter } from '@/lib/csv-export';
 import { toast } from 'sonner';
+import { useCategorizationPatterns } from '@/hooks/use-categorization-patterns';
+import { useNicknameMode } from '@/hooks/use-nickname-mode';
+import { PatternMatcher } from '@/lib/pattern-matcher';
 
 interface Transaction {
   id: string;
@@ -46,6 +49,8 @@ export function EnhancedTransactionList({
   const { getMetadataForTransaction } = useTransactionMetadata();
   useCategorySuggestions();
   const { data: categories = [] } = useCategories();
+  const { patterns } = useCategorizationPatterns();
+  const { showNicknames, toggleNicknames } = useNicknameMode();
 
   // Enhanced search function that includes notes content
   const searchInTransaction = (transaction: Transaction, searchTerm: string): boolean => {
@@ -201,6 +206,7 @@ export function EnhancedTransactionList({
                 variant={showSuggestionsOnly ? "default" : "outline"}
                 onClick={() => setShowSuggestionsOnly(!showSuggestionsOnly)}
                 className="w-full"
+                style={showSuggestionsOnly ? { backgroundColor: '#f59e0b', color: '#17151e' } : undefined}
               >
                 {showSuggestionsOnly ? 'Show All' : 'Needs Categorization'}
               </Button>
@@ -215,6 +221,7 @@ export function EnhancedTransactionList({
                 size="sm"
                 onClick={() => setShowNotesOnly(!showNotesOnly)}
                 className="flex items-center gap-2"
+                style={showNotesOnly ? { backgroundColor: '#f59e0b', color: '#17151e' } : undefined}
               >
                 <StickyNote className="h-4 w-4" />
                 {showNotesOnly ? 'Show All' : 'With Notes Only'}
@@ -222,7 +229,7 @@ export function EnhancedTransactionList({
               
               {(showSuggestionsOnly || showNotesOnly || searchTerm || typeFilter !== 'all' || categoryFilter !== 'all') && (
                 <Button
-                  variant="ghost"
+                  variant="secondary"
                   size="sm"
                   onClick={() => {
                     setShowSuggestionsOnly(false);
@@ -266,9 +273,21 @@ export function EnhancedTransactionList({
       {/* Transaction List */}
       <Card style={{ backgroundColor: '#1e1c27', borderColor: 'transparent' }} className="ring-1 ring-white/5">
         <CardHeader>
-          <CardTitle style={{ color: '#e8e6e3' }}>
-            Transactions ({filteredTransactions.length})
-          </CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle style={{ color: '#e8e6e3' }}>
+              Transactions ({filteredTransactions.length})
+            </CardTitle>
+            <Button
+              variant={showNicknames ? 'default' : 'outline'}
+              size="sm"
+              onClick={toggleNicknames}
+              className="flex items-center gap-2"
+              style={showNicknames ? { backgroundColor: '#f59e0b', color: '#17151e' } : undefined}
+            >
+              <Tag className="h-4 w-4" />
+              {showNicknames ? 'Nicknames On' : 'Nicknames'}
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
@@ -292,7 +311,19 @@ export function EnhancedTransactionList({
                   <div className="flex-1">
                     <div className="flex items-center space-x-3">
                       <div>
-                        <p className="font-medium">{transaction.description}</p>
+                        {(() => {
+                          const displayName = showNicknames
+                            ? PatternMatcher.resolveDisplayName(transaction.description, patterns)
+                            : null;
+                          return displayName ? (
+                            <>
+                              <p className="font-bold">{displayName}</p>
+                              <p className="text-xs text-muted-foreground">{transaction.description}</p>
+                            </>
+                          ) : (
+                            <p className="font-medium">{transaction.description}</p>
+                          );
+                        })()}
                         <p className="text-sm text-muted-foreground">
                           {new Date(transaction.transaction_date).toLocaleDateString()}
                         </p>

@@ -59,6 +59,8 @@ export function PatternManagement() {
 
   const { data: categories = [] } = useCategories();
 
+  const [newDisplayName, setNewDisplayName] = useState('');
+
   const handleAddPattern = () => {
     if (!newPattern.trim() || !selectedCategoryId) {
       toast.error('Please enter a pattern and select a category');
@@ -77,10 +79,12 @@ export function PatternManagement() {
       pattern: newPattern.trim(),
       category_id: selectedCategoryId,
       confidence_score: 60, // Default confidence
+      display_name: newDisplayName.trim() || undefined,
     });
 
     setNewPattern('');
     setSelectedCategoryId('');
+    setNewDisplayName('');
   };
 
   const handleTestPattern = () => {
@@ -199,6 +203,7 @@ export function PatternManagement() {
       id: editingPattern.id,
       category_id: editingPattern.category_id,
       confidence_score: editingPattern.confidence_score,
+      display_name: editingPattern.display_name || null,
     });
 
     setEditingPattern(null);
@@ -317,6 +322,11 @@ export function PatternManagement() {
                         <code className="bg-muted px-2 py-1 rounded text-sm">
                           {pattern.pattern}
                         </code>
+                        {pattern.display_name && (
+                          <span className="font-bold text-sm text-foreground">
+                            {pattern.display_name}
+                          </span>
+                        )}
                         <Badge
                           style={{ backgroundColor: pattern.category?.color }}
                           className="text-white"
@@ -462,6 +472,19 @@ export function PatternManagement() {
                   className="mt-1 bg-muted"
                 />
                 <p className="text-xs text-muted-foreground mt-1">Pattern cannot be changed</p>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium">Display Name</label>
+                <Input
+                  value={editingPattern.display_name || ''}
+                  onChange={(e) =>
+                    setEditingPattern({ ...editingPattern, display_name: e.target.value })
+                  }
+                  placeholder="e.g. Amazon, Netflix, Tesco..."
+                  className="mt-1"
+                />
+                <p className="text-xs text-muted-foreground mt-1">Shown instead of raw bank description when nickname view is on</p>
               </div>
 
               <div>
@@ -617,6 +640,19 @@ export function PatternManagement() {
             />
             <p className="text-xs text-muted-foreground mt-1">
               Use regular expressions to match transaction descriptions. Case insensitive.
+            </p>
+          </div>
+
+          <div>
+            <label className="text-sm font-medium">Display Name (optional)</label>
+            <Input
+              value={newDisplayName}
+              onChange={(e) => setNewDisplayName(e.target.value)}
+              placeholder="e.g. Amazon, Netflix, Tesco..."
+              className="mt-1"
+            />
+            <p className="text-xs text-muted-foreground mt-1">
+              Friendly name shown instead of raw bank description when nickname view is on.
             </p>
           </div>
 

@@ -15,6 +15,7 @@ export interface CategorizationPattern {
   last_matched: string;
   created_at: string;
   updated_at: string;
+  display_name?: string | null;
   category?: {
     id: string;
     name: string;
@@ -63,6 +64,7 @@ export function useCategorizationPatterns() {
       pattern: string;
       category_id: string;
       confidence_score?: number;
+      display_name?: string;
     }): Promise<CategorizationPattern> => {
       if (!user?.id) throw new Error('User not authenticated');
 
@@ -81,6 +83,7 @@ export function useCategorizationPatterns() {
           pattern: data.pattern,
           category_id: data.category_id,
           confidence_score: data.confidence_score || 50,
+          display_name: data.display_name || null,
           last_matched: now,
           created_at: now,
           updated_at: now,
@@ -112,6 +115,7 @@ export function useCategorizationPatterns() {
       category_id?: string;
       confidence_score?: number;
       match_count?: number;
+      display_name?: string | null;
     }): Promise<CategorizationPattern> => {
       if (!user?.id) throw new Error('User not authenticated');
 

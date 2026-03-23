@@ -17,6 +17,7 @@ export interface Pattern {
   pattern: string;
   category_id: string;
   confidence_score: number;
+  display_name?: string | null;
   category?: {
     id: string;
     name: string;
@@ -29,6 +30,7 @@ export interface PatternMatch {
   category_id: string;
   confidence: number;
   pattern_id?: string;
+  display_name?: string | null;
   category: {
     id: string;
     name: string;
@@ -54,6 +56,7 @@ export class PatternMatcher {
             category_id: pattern.category_id,
             confidence: pattern.confidence_score / 100,
             pattern_id: pattern.id,
+            display_name: pattern.display_name,
             category: pattern.category!,
           });
         }
@@ -229,6 +232,14 @@ export class PatternMatcher {
     matches.sort((a, b) => b.confidence - a.confidence);
     
     return matches[0];
+  }
+
+  /**
+   * Resolve the display name for a description by finding the best matching pattern
+   */
+  static resolveDisplayName(description: string, patterns: Pattern[]): string | null {
+    const match = this.findBestMatch(description, patterns);
+    return match?.display_name || null;
   }
 
   /**

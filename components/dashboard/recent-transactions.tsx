@@ -2,10 +2,16 @@
 
 import { useRecentTransactions } from '@/hooks/use-recent-transactions';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { TrendingUp, TrendingDown, Calendar, PoundSterling, Wallet } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { TrendingUp, TrendingDown, Calendar, PoundSterling, Wallet, Tag } from 'lucide-react';
+import { useCategorizationPatterns } from '@/hooks/use-categorization-patterns';
+import { useNicknameMode } from '@/hooks/use-nickname-mode';
+import { PatternMatcher } from '@/lib/pattern-matcher';
 
 export function RecentTransactions() {
   const { data: transactions, isLoading, error } = useRecentTransactions();
+  const { patterns } = useCategorizationPatterns();
+  const { showNicknames, toggleNicknames } = useNicknameMode();
 
   if (isLoading) {
     return (
@@ -54,10 +60,22 @@ export function RecentTransactions() {
   return (
     <Card style={{ backgroundColor: '#1e1c27', borderColor: 'transparent' }} className="ring-1 ring-white/5">
       <CardHeader>
-        <CardTitle className="flex items-center" style={{ color: '#e8e6e3' }}>
-          <Calendar className="h-5 w-5 mr-2" />
-          Recent Transactions
-        </CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle className="flex items-center" style={{ color: '#e8e6e3' }}>
+            <Calendar className="h-5 w-5 mr-2" />
+            Recent Transactions
+          </CardTitle>
+          <Button
+            variant={showNicknames ? 'default' : 'outline'}
+            size="sm"
+            onClick={toggleNicknames}
+            className="flex items-center gap-2"
+            style={showNicknames ? { backgroundColor: '#f59e0b', color: '#17151e' } : undefined}
+          >
+            <Tag className="h-4 w-4" />
+            {showNicknames ? 'Nicknames On' : 'Nicknames'}
+          </Button>
+        </div>
         <CardDescription style={{ color: '#9794a8' }}>Your latest financial activity</CardDescription>
       </CardHeader>
       <CardContent>
@@ -95,9 +113,21 @@ export function RecentTransactions() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-col space-y-1">
-                      <p className="font-medium text-sm truncate">
-                        {transaction.description || 'No description'}
-                      </p>
+                      {(() => {
+                        const displayName = showNicknames
+                          ? PatternMatcher.resolveDisplayName(transaction.description || '', patterns)
+                          : null;
+                        return displayName ? (
+                          <>
+                            <p className="font-bold text-sm truncate">{displayName}</p>
+                            <p className="text-xs text-muted-foreground truncate">{transaction.description}</p>
+                          </>
+                        ) : (
+                          <p className="font-medium text-sm truncate">
+                            {transaction.description || 'No description'}
+                          </p>
+                        );
+                      })()}
                       <div className="flex items-center space-x-2">
                         <p className="text-xs text-muted-foreground">
                           {new Date(transaction.transaction_date).toLocaleDateString('en-GB')}
