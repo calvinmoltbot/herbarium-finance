@@ -412,7 +412,7 @@ export default function BankUploadPage() {
                       disabled={isCommitting}
                       className="bg-green-600 hover:bg-green-700"
                     >
-                      {isCommitting ? 'Committing...' : `Commit ${importedTransactions.length} Transactions to Database`}
+                      {isCommitting ? 'Committing...' : `Commit ${importedTransactions.length} Transactions (skips duplicates)`}
                     </Button>
                   </div>
                 </div>
@@ -453,10 +453,12 @@ export default function BankUploadPage() {
                 <div className="flex items-start space-x-3">
                   <AlertCircle className="h-5 w-5 text-blue-600 mt-0.5" />
                   <div>
-                    <h4 className="font-medium text-blue-800">Important: Two-Step Process</h4>
+                    <h4 className="font-medium text-blue-800">Two-step process — non-destructive</h4>
                     <p className="text-blue-700 mt-1">
-                      Your transactions have been analyzed but are not yet saved to the database.
-                      {`Click "Commit Transactions" above to permanently save them. This will replace your existing manual transactions.`}
+                      These rows have been parsed into the staging table but not yet saved.
+                      Click <strong>Commit</strong> to insert new transactions into your ledger.
+                      Existing transactions and their categories are never deleted —
+                      duplicates (matched by bank reference + date + amount) are skipped automatically.
                     </p>
                   </div>
                 </div>

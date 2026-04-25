@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Database, CreditCard, ShoppingCart, RotateCcw, CheckCircle } from 'lucide-react';
+import { Database, CreditCard, ShoppingCart, RotateCcw, CheckCircle, AlertTriangle } from 'lucide-react';
 import Link from 'next/link';
 
 const managementSections = [
@@ -191,6 +191,13 @@ export default function DatabaseManagementPage() {
                 <Link href="/import/reset" className="flex flex-col items-center space-y-2">
                   <RotateCcw className="h-5 w-5 text-primary" />
                   <span className="text-sm font-medium">Reset Options</span>
+                </Link>
+              </Button>
+
+              <Button asChild variant="outline" className="h-auto p-4 border-amber-400 hover:bg-amber-50">
+                <Link href="/import/staging" className="flex flex-col items-center space-y-2">
+                  <AlertTriangle className="h-5 w-5 text-amber-500" />
+                  <span className="text-sm font-medium">Import Staging &amp; Backup</span>
                 </Link>
               </Button>
             </div>
