@@ -73,7 +73,7 @@ next-env.d.ts
 # Sensitive data - NEVER commit these!
 Data/
 Data Input/
-backups/
+/backups/
 *.csv
 *.xlsx
 *.sql
