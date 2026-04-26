@@ -18,6 +18,7 @@ import {
   AlertTriangle,
   LogOut,
   User,
+  Database,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { LucideIcon } from 'lucide-react';
@@ -63,12 +64,19 @@ const navigationSections: NavigationSection[] = [
   {
     label: 'Data Management',
     items: [
+      { name: 'Database Hub', href: '/import', icon: Database },
       { name: 'Revolut Import', href: '/import/bank', icon: CreditCard },
       { name: 'Pattern Management', href: '/patterns', icon: Settings },
       { name: 'Category Management', href: '/categories', icon: Tags },
       { name: 'Add Income', href: '/add-income', icon: TrendingUp },
       { name: 'Add Expenditure', href: '/add-expenditure', icon: TrendingDown },
       { name: 'Add Capital', href: '/add-capital', icon: Wallet },
+    ],
+  },
+  {
+    label: 'Account',
+    items: [
+      { name: 'My Account', href: '/account', icon: User },
     ],
   },
 ];
