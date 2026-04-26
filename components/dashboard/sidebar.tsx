@@ -77,6 +77,7 @@ const navigationSections: NavigationSection[] = [
     label: 'Account',
     items: [
       { name: 'My Account', href: '/account', icon: User },
+      { name: 'Backups & Export', href: '/account/backups', icon: Database },
     ],
   },
 ];

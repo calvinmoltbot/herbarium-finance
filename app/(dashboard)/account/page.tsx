@@ -193,12 +193,9 @@ export default function AccountPage() {
             <Link href="/account/backups">
               <Button variant="outline" className="flex items-center gap-2">
                 <Database className="h-4 w-4" />
-                Backup Management
+                Backups & Export
               </Button>
             </Link>
-            <Button variant="outline" onClick={() => toast.info('Export functionality coming soon')}>
-              Export Data
-            </Button>
           </div>
         </PageCard>
       </PageSection>
