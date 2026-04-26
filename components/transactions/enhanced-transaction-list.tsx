@@ -34,18 +34,23 @@ interface Transaction {
 interface EnhancedTransactionListProps {
   transactions: Transaction[];
   onTransactionUpdate?: () => void;
+  uncategorisedOnly?: boolean;
+  onToggleUncategorisedOnly?: (next: boolean) => void;
 }
 
 export function EnhancedTransactionList({
   transactions,
   onTransactionUpdate,
+  uncategorisedOnly = false,
+  onToggleUncategorisedOnly,
 }: EnhancedTransactionListProps) {
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
   const [typeFilter, setTypeFilter] = useState<string>('all');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const [showSuggestionsOnly, setShowSuggestionsOnly] = useState(false);
   const [showNotesOnly, setShowNotesOnly] = useState(false);
+  const showSuggestionsOnly = uncategorisedOnly;
+  const setShowSuggestionsOnly = (next: boolean) => onToggleUncategorisedOnly?.(next);
   const { getMetadataForTransaction } = useTransactionMetadata();
   useCategorySuggestions();
   const { data: categories = [] } = useCategories();

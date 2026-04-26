@@ -63,6 +63,7 @@ export default function TransactionsPage() {
   const [pageSize, setPageSize] = useState<number>(50);
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
   const [showFilters, setShowFilters] = useState(false);
+  const [uncategorisedOnly, setUncategorisedOnly] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   // Debounce search and amount inputs to avoid excessive queries
@@ -95,7 +96,7 @@ export default function TransactionsPage() {
   }, [filterKey]);
 
   const { data, isLoading, isFetching, error, refetch } = useQuery({
-    queryKey: ['transactions-paginated', user?.id, page, pageSize, debouncedSearch, filters.type, debouncedAmountMin, debouncedAmountMax, filters.dateRange.from?.toISOString(), filters.dateRange.to?.toISOString()],
+    queryKey: ['transactions-paginated', user?.id, page, pageSize, debouncedSearch, filters.type, debouncedAmountMin, debouncedAmountMax, filters.dateRange.from?.toISOString(), filters.dateRange.to?.toISOString(), uncategorisedOnly],
     queryFn: async () => {
       const supabase = createClient();
       const start = (page - 1) * pageSize;
@@ -139,6 +140,11 @@ export default function TransactionsPage() {
         if (!isNaN(max)) {
           query = query.lte('amount', max);
         }
+      }
+
+      // Apply uncategorised filter
+      if (uncategorisedOnly) {
+        query = query.is('category_id', null);
       }
 
       // Apply date range filters
@@ -464,6 +470,11 @@ export default function TransactionsPage() {
         <EnhancedTransactionList
           transactions={transactions}
           onTransactionUpdate={() => refetch()}
+          uncategorisedOnly={uncategorisedOnly}
+          onToggleUncategorisedOnly={(next) => {
+            setUncategorisedOnly(next);
+            setPage(1);
+          }}
         />
 
         {/* Pagination Controls */}
