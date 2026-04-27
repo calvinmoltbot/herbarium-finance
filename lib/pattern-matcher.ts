@@ -10,6 +10,9 @@ const STOPWORDS = new Set([
   'then', 'first', 'last', 'long', 'great', 'little', 'right', 'still',
   'find', 'here', 'thing', 'many', 'well', 'transfer', 'verified', 'payment',
   'reference', 'completed',
+  // Verification-suffix words — patterns learned from these match every
+  // "Verified against manual entry: …" row, polluting categorisation.
+  'against', 'manual', 'entry',
 ]);
 
 export interface Pattern {
