@@ -108,14 +108,22 @@ export async function classifyEmail(input: {
     return { result: null, usage };
   }
 
-  let parsed: ClassificationResult;
+  let raw: unknown;
   try {
-    parsed = JSON.parse(content) as ClassificationResult;
+    raw = JSON.parse(content);
   } catch (e) {
     usage.error_message = `json parse: ${(e as Error).message}`;
     return { result: null, usage };
   }
 
+  // Gemini sometimes wraps a single result in an array despite json_object mode.
+  // Unwrap defensively.
+  const obj = Array.isArray(raw) ? raw[0] : raw;
+  if (!obj || typeof obj !== 'object') {
+    usage.error_message = `unexpected shape: ${typeof obj}`;
+    return { result: null, usage };
+  }
+
   usage.success = true;
-  return { result: parsed, usage };
+  return { result: obj as ClassificationResult, usage };
 }

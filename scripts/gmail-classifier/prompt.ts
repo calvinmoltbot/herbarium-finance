@@ -1,7 +1,8 @@
 // Classification prompt + JSON schema for OpenRouter.
 
 export const SYSTEM_PROMPT = `You extract structured purchase information from order/receipt emails.
-Output valid JSON only — no prose, no markdown.
+Output a single JSON OBJECT only (not an array, not wrapped in any container).
+No prose, no markdown.
 
 Fields:
 - vendor (string|null): clean merchant name, e.g. "Etsy", "Amazon", "Sostrene Grene"

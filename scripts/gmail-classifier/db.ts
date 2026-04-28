@@ -7,14 +7,29 @@ import type { ClassificationResult, UsageRecord } from './types';
 
 let _client: SupabaseClient | null = null;
 
+// Production Supabase URL. The cron always hits prod (where the real data
+// lives) regardless of whether the dev server is in local or prod mode.
+// Override with CRON_SUPABASE_URL only when targeting a different environment.
+const PROD_SUPABASE_URL = 'https://fqpsamtoqyuiwxqmewkw.supabase.co';
+
 export function getServiceClient(): SupabaseClient {
   if (_client) return _client;
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const url = process.env.CRON_SUPABASE_URL ?? PROD_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url) throw new Error('NEXT_PUBLIC_SUPABASE_URL not set');
   if (!key) throw new Error('SUPABASE_SERVICE_ROLE_KEY not set (cron jobs cannot use the anon key — RLS blocks inserts)');
   _client = createClient(url, key, { auth: { persistSession: false } });
   return _client;
+}
+
+/** Fetch the set of gmail_msg_ids already classified for the target user. */
+export async function getKnownMessageIds(): Promise<Set<string>> {
+  const supabase = getServiceClient();
+  const { data, error } = await supabase
+    .from('email_classifications')
+    .select('gmail_msg_id')
+    .eq('user_id', TARGET_USER_ID);
+  if (error) throw error;
+  return new Set((data ?? []).map((r) => r.gmail_msg_id));
 }
 
 export interface ClassificationRow {
