@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "learn-patterns": "tsx --env-file=.env.local scripts/learn-patterns-from-history.ts",
-    "classify-emails": "tsx --env-file=.env.local scripts/gmail-classifier/classify.ts"
+    "classify-emails": "tsx --env-file=.env.local scripts/gmail-classifier/classify.ts",
+    "match-emails": "tsx --env-file=.env.local scripts/gmail-classifier/matching.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

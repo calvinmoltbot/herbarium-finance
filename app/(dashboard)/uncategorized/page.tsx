@@ -5,6 +5,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { createClient } from '@/supabase/client';
 import { useAuth } from '@/lib/auth-context';
 import { useCategories, type Category } from '@/hooks/use-categories';
+import { useEmailSuggestions } from '@/hooks/use-email-suggestions';
 import { PageLayout, PageSection, PageEmptyState } from '@/components/ui/page-layout';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -23,6 +24,8 @@ import {
   RefreshCw,
   Loader2,
   List,
+  Mail,
+  Sparkles,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { PatternMatcher } from '@/lib/pattern-matcher';
@@ -146,6 +149,9 @@ export default function UncategorizedPage() {
   const transactions = data?.transactions || [];
   const totalCount = data?.totalCount || 0;
   const totalPages = data?.totalPages || 0;
+
+  // Fetch email-classification suggestions for the visible transactions.
+  const { data: suggestions } = useEmailSuggestions(transactions.map(t => t.id));
 
   // Helper: get categories matching a transaction type
   const categoriesForType = (type: string): Category[] =>
@@ -276,12 +282,14 @@ export default function UncategorizedPage() {
           {transactions.map((tx) => {
             const matchingCategories = categoriesForType(tx.type);
             const isAssigning = assigningId === tx.id;
+            const suggestion = suggestions?.get(tx.id);
 
             return (
               <div
                 key={tx.id}
-                className="flex flex-col sm:flex-row sm:items-center gap-3 py-4 first:pt-0 last:pb-0"
+                className="py-4 first:pt-0 last:pb-0"
               >
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                 {/* Left: description + date */}
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground truncate">
@@ -345,6 +353,59 @@ export default function UncategorizedPage() {
                     )}
                   </div>
                 </div>
+                </div>
+
+                {/* Email-classification evidence panel */}
+                {suggestion && (
+                  <div className="mt-3 ml-0 sm:ml-4 rounded-md border border-sky-500/25 bg-sky-500/5 p-3">
+                    <div className="flex items-start gap-3">
+                      <Mail className="w-4 h-4 mt-0.5 text-sky-500 flex-shrink-0" />
+                      <div className="flex-1 min-w-0 space-y-2">
+                        <div className="flex flex-wrap items-center gap-2 text-xs">
+                          <span className="font-medium text-foreground">
+                            {suggestion.vendor ?? 'Unknown vendor'}
+                          </span>
+                          {suggestion.email_date && (
+                            <span className="text-muted-foreground">
+                              · email {formatDate(suggestion.email_date)}
+                            </span>
+                          )}
+                          {suggestion.match_score != null && (
+                            <Badge variant="outline" className="bg-sky-500/15 text-sky-500 border-sky-500/25">
+                              match {Math.round(suggestion.match_score * 100)}%
+                            </Badge>
+                          )}
+                          {suggestion.sender && (
+                            <span className="text-muted-foreground truncate">
+                              · {suggestion.sender}
+                            </span>
+                          )}
+                        </div>
+                        {suggestion.raw_excerpt && (
+                          <p className="text-xs text-muted-foreground line-clamp-2">
+                            {suggestion.raw_excerpt}
+                          </p>
+                        )}
+                        {suggestion.suggested_category_id && suggestion.suggested_category_name && (
+                          <div className="flex items-center gap-2 pt-1">
+                            <Sparkles className="w-3.5 h-3.5 text-sky-500" />
+                            <span className="text-xs text-muted-foreground">Suggested:</span>
+                            <Badge variant="outline">{suggestion.suggested_category_name}</Badge>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="h-7 text-xs"
+                              disabled={isAssigning}
+                              onClick={() => handleAssign(tx.id, suggestion.suggested_category_id!)}
+                            >
+                              Apply suggestion
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             );
           })}
