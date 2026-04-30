@@ -52,7 +52,7 @@ export function ConfirmationDialog({
             )}
             {title}
           </DialogTitle>
-          <DialogDescription className="text-left">
+          <DialogDescription className="text-left whitespace-pre-line">
             {description}
           </DialogDescription>
         </DialogHeader>

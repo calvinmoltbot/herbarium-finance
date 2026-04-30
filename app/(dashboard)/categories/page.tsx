@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { PageLayout } from '@/components/ui/page-layout';
-import { useCategories, useCategoryMutations, useCategoryStats } from '@/hooks/use-categories';
+import { useCategories, useCategoryMutations, useCategoryStats, fetchCategoryDeleteImpact } from '@/hooks/use-categories';
 import { useCategoryHierarchiesWithCategories, useCreateCategoryHierarchy, useAssignCategoryToHierarchy, useRemoveCategoryFromHierarchy, useSetupDefaultHierarchies, useDeleteCategoryHierarchy, useReorderCategoryHierarchies } from '@/hooks/use-category-hierarchies';
 import { SortableHierarchyList } from '@/components/hierarchy/sortable-hierarchy-list';
 import { CollapsiblePLPreview } from '@/components/hierarchy/collapsible-pl-preview';
@@ -50,9 +50,28 @@ export default function CategoriesPage() {
   };
 
   const handleDeleteCategory = async (categoryId: string, categoryName: string) => {
+    let impactSummary = `Are you sure you want to delete the category "${categoryName}"? This action cannot be undone.`;
+    try {
+      const impact = await fetchCategoryDeleteImpact(categoryId);
+      const lines: string[] = [];
+      if (impact.transactions > 0) lines.push(`• ${impact.transactions} transaction${impact.transactions === 1 ? '' : 's'} will be detached (moved back to Uncategorised)`);
+      if (impact.patterns > 0) lines.push(`• ${impact.patterns} categorisation pattern${impact.patterns === 1 ? '' : 's'} will be deleted`);
+      if (impact.hierarchyAssignments > 0) lines.push(`• ${impact.hierarchyAssignments} hierarchy assignment${impact.hierarchyAssignments === 1 ? '' : 's'} will be removed`);
+      if (impact.usageStats > 0) lines.push(`• ${impact.usageStats} usage-stats row${impact.usageStats === 1 ? '' : 's'} will be deleted`);
+      if (impact.childCategories > 0) lines.push(`• ${impact.childCategories} child categor${impact.childCategories === 1 ? 'y' : 'ies'} will be detached from this parent`);
+      if (impact.importedTestRows > 0) lines.push(`• ${impact.importedTestRows} legacy import row${impact.importedTestRows === 1 ? '' : 's'} will be cleaned up`);
+      if (lines.length === 0) {
+        impactSummary = `Delete the category "${categoryName}"? Nothing references it — this is a clean delete.`;
+      } else {
+        impactSummary = `Deleting "${categoryName}" will:\n${lines.join('\n')}\n\nThis cannot be undone.`;
+      }
+    } catch (error) {
+      console.error('Failed to compute delete impact:', error);
+    }
+
     showConfirmation({
       title: 'Delete Category',
-      description: `Are you sure you want to delete the category "${categoryName}"? This action cannot be undone.`,
+      description: impactSummary,
       confirmText: 'Delete',
       variant: 'destructive',
       onConfirm: async () => {

@@ -55,6 +55,40 @@ export function useCategories(type?: 'income' | 'expenditure' | 'capital') {
   });
 }
 
+export interface CategoryDeleteImpact {
+  transactions: number;
+  patterns: number;
+  hierarchyAssignments: number;
+  usageStats: number;
+  importedTestRows: number;
+  childCategories: number;
+}
+
+/**
+ * Counts everything that will be detached/deleted when a category is removed.
+ * Used to populate the delete confirmation dialog.
+ */
+export async function fetchCategoryDeleteImpact(id: string): Promise<CategoryDeleteImpact> {
+  const supabase = createClient();
+  const cnt = (q: { count: number | null }) => q.count ?? 0;
+  const [tx, pat, hier, stats, imp, kids] = await Promise.all([
+    supabase.from('transactions').select('id', { count: 'exact', head: true }).eq('category_id', id),
+    supabase.from('categorization_patterns').select('id', { count: 'exact', head: true }).eq('category_id', id),
+    supabase.from('category_hierarchy_assignments').select('id', { count: 'exact', head: true }).eq('category_id', id),
+    supabase.from('category_usage_stats').select('id', { count: 'exact', head: true }).eq('category_id', id),
+    supabase.from('imported_transactions_test').select('id', { count: 'exact', head: true }).eq('suggested_category_id', id),
+    supabase.from('categories').select('id', { count: 'exact', head: true }).eq('parent_id', id),
+  ]);
+  return {
+    transactions: cnt(tx),
+    patterns: cnt(pat),
+    hierarchyAssignments: cnt(hier),
+    usageStats: cnt(stats),
+    importedTestRows: cnt(imp),
+    childCategories: cnt(kids),
+  };
+}
+
 export function useCategoryMutations() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
@@ -148,44 +182,46 @@ export function useCategoryMutations() {
     },
   });
 
+  // Cascading delete: removes blocking dependents (patterns, hierarchy
+  // assignments, usage stats, imported_transactions_test rows), nulls out
+  // child categories' parent_id, detaches transactions (sets category_id =
+  // null — surfaces them in the uncategorised triage), then deletes the
+  // category itself.
   const deleteCategory = useMutation({
     mutationFn: async (id: string): Promise<void> => {
       if (!user?.id) throw new Error('User not authenticated');
-
       const supabase = createClient();
-      
-      // First check if category is in use by transactions
-      const { data: transactions, error: checkError } = await supabase
-        .from('transactions')
-        .select('id')
-        .eq('category_id', id)
-        .limit(1);
 
-      if (checkError) throw checkError;
-
-      if (transactions && transactions.length > 0) {
-        throw new Error('Cannot delete category that is in use by transactions. Please reassign or delete the transactions first.');
-      }
-
-      // Check if category is assigned to any hierarchies
-      const { data: hierarchyAssignments, error: hierarchyCheckError } = await supabase
-        .from('category_hierarchy_assignments')
-        .select('id')
-        .eq('category_id', id)
-        .limit(1);
-
-      if (hierarchyCheckError) throw hierarchyCheckError;
-
-      if (hierarchyAssignments && hierarchyAssignments.length > 0) {
-        throw new Error('Cannot delete category that is assigned to hierarchies. Please remove from hierarchies first.');
-      }
-
-      // Now delete the category
-      const { error } = await supabase
+      // 1. Detach child categories
+      const { error: childErr } = await supabase
         .from('categories')
-        .delete()
-        .eq('id', id);
+        .update({ parent_id: null })
+        .eq('parent_id', id);
+      if (childErr) throw childErr;
 
+      // 2. Remove FK-blocking dependents
+      const dependents = [
+        supabase.from('categorization_patterns').delete().eq('category_id', id),
+        supabase.from('category_hierarchy_assignments').delete().eq('category_id', id),
+        supabase.from('category_usage_stats').delete().eq('category_id', id),
+        supabase.from('imported_transactions_test').delete().eq('suggested_category_id', id),
+      ];
+      const results = await Promise.all(dependents);
+      for (const r of results) {
+        if (r.error) throw r.error;
+      }
+
+      // 3. Detach transactions explicitly (FK is ON DELETE SET NULL but we
+      // run it ourselves so the rows show up in queries that filter on
+      // category_id IS NULL immediately, before the category row is gone).
+      const { error: txErr } = await supabase
+        .from('transactions')
+        .update({ category_id: null })
+        .eq('category_id', id);
+      if (txErr) throw txErr;
+
+      // 4. Delete the category
+      const { error } = await supabase.from('categories').delete().eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -194,15 +230,12 @@ export function useCategoryMutations() {
       queryClient.invalidateQueries({ queryKey: ['unallocated-categories'] });
       queryClient.invalidateQueries({ queryKey: ['unallocated-categories-stats'] });
       queryClient.invalidateQueries({ queryKey: ['category-hierarchies-with-categories'] });
+      queryClient.invalidateQueries({ queryKey: ['uncategorized-transactions'] });
       toast.success('Category deleted successfully!');
     },
     onError: (error: Error) => {
       console.error('Error deleting category:', error);
-      if (error.message.includes('in use')) {
-        toast.error('Cannot delete category that is in use by transactions');
-      } else {
-        toast.error('Failed to delete category. Please try again.');
-      }
+      toast.error(`Failed to delete category: ${error.message}`);
     },
   });
 
