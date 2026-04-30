@@ -5,7 +5,6 @@ import { IncomeVsExpenditureChart } from '@/components/dashboard/income-vs-expen
 import { RecentTransactions } from '@/components/dashboard/recent-transactions';
 import { IncomeExpenditurePieChart } from '@/components/dashboard/category-pie-chart';
 import { PersonalBalanceCard } from '@/components/dashboard/personal-balance-card';
-import { LlmCostCard } from '@/components/dashboard/llm-cost-card';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 function StatsCardsSkeleton() {
@@ -82,8 +81,6 @@ export default function DashboardPage() {
         </Suspense>
 
         <PersonalBalanceCard />
-
-        <LlmCostCard />
 
         {/* Main Content Grid - Professional Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
