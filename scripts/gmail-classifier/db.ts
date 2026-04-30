@@ -21,6 +21,38 @@ export function getServiceClient(): SupabaseClient {
   return _client;
 }
 
+export interface CronRunRecord {
+  job_name: string;
+  started_at: string; // ISO
+  success: boolean;
+  summary?: string | null;
+  error_message?: string | null;
+  classified?: number | null;
+  inserted?: number | null;
+  matched?: number | null;
+  cost_usd?: number | null;
+}
+
+/** Insert a row into cron_runs. Best-effort — caller doesn't await failure. */
+export async function recordCronRun(row: CronRunRecord): Promise<void> {
+  const supabase = getServiceClient();
+  const { error } = await supabase.from('cron_runs').insert({
+    job_name: row.job_name,
+    started_at: row.started_at,
+    success: row.success,
+    summary: row.summary ?? null,
+    error_message: row.error_message ?? null,
+    classified: row.classified ?? null,
+    inserted: row.inserted ?? null,
+    matched: row.matched ?? null,
+    cost_usd: row.cost_usd ?? null,
+  });
+  if (error) {
+    // Don't throw — we don't want to mask the original failure (if any).
+    console.error('failed to record cron_runs row:', error.message);
+  }
+}
+
 /** Fetch the set of gmail_msg_ids already classified for the target user. */
 export async function getKnownMessageIds(): Promise<Set<string>> {
   const supabase = getServiceClient();
