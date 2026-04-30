@@ -3,9 +3,12 @@
 export const GOG_ACCOUNT = 'herbariumdyeworks@gmail.com';
 export const GOG_CLIENT = 'herbarium';
 
-// Phase A: Debbie's user_id is hardcoded — single-tenant for now.
-// (Migration 011 has a user_id column for the multi-tenant future.)
-export const TARGET_USER_ID = 'bf0ad2c4-9183-409b-97a0-9bf170422fa8';
+// Cron-written rows (email_classifications, llm_usage) are stamped with a
+// dedicated "system" user_id so the audit trail honestly reflects automation
+// rather than masquerading as Debbie. The user has no human login surface
+// (random password generated on creation, never saved). RLS is shared since
+// migration 013 — both Calvin and Debbie can see and act on these rows.
+export const TARGET_USER_ID = 'e1e07ad5-e63d-4564-a312-73423a0863c6';
 
 // Vendors we know to look for. Each entry is a Gmail query fragment matching
 // the typical sender of purchase confirmations from that vendor. We expand this
