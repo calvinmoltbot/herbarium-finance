@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.calvin.herbarium.gmail-classifier</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/admin/Dev/Projects/herbarium-finance/scripts/cron/run-classifier.sh</string>
+    </array>
+
+    <!-- Nightly at 02:00 -->
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>2</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+
+    <!-- Run on plist load / Mini reboot so we catch up immediately -->
+    <key>RunAtLoad</key>
+    <true/>
+
+    <!-- launchd's own stdout/stderr capture as a backup; the wrapper writes
+         the human-friendly date-stamped logs. -->
+    <key>StandardOutPath</key>
+    <string>/Users/admin/Logs/herbarium/launchd-stdout.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/admin/Logs/herbarium/launchd-stderr.log</string>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/admin/Dev/Projects/herbarium-finance</string>
+</dict>
+</plist>

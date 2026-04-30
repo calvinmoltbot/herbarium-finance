@@ -16,9 +16,11 @@
 import { LOOKBACK_DAYS, MAX_PER_VENDOR, VENDORS, OPENROUTER_MODEL } from './config';
 import { searchThreads, getThreadMessages, getHeaders, getBodyText } from './gog';
 import { classifyEmail } from './openrouter';
-import { persistClassification, getKnownMessageIds } from './db';
+import { persistClassification, getKnownMessageIds, recordCronRun } from './db';
 import { runMatchingPass } from './matching';
 import type { GmailMessage } from './types';
+
+const JOB_NAME = 'gmail-classifier';
 
 const DRY_RUN = process.argv.includes('--dry-run');
 
@@ -113,47 +115,98 @@ async function processVendor(
 }
 
 async function main(): Promise<void> {
+  const startedAt = new Date().toISOString();
   console.log(`gmail-classifier ${DRY_RUN ? '(DRY-RUN)' : ''} — model=${OPENROUTER_MODEL}, lookback=${LOOKBACK_DAYS}d, max-per-vendor=${MAX_PER_VENDOR}`);
 
-  // Pre-flight: pull known message IDs once, share across vendors.
-  const knownIds = DRY_RUN ? new Set<string>() : await getKnownMessageIds();
-  if (knownIds.size > 0) console.log(`(${knownIds.size} already-classified messages will be skipped)`);
+  let totals = { fetched: 0, skipped: 0, classified: 0, inserted: 0, duplicates: 0, errors: 0, cost_usd: 0 };
+  let matchedCount = 0;
+  let summary = '';
+  let success = true;
+  let errorMessage: string | null = null;
 
-  const allStats: VendorStats[] = [];
-  for (const vendor of VENDORS) {
-    process.stdout.write(`→ ${vendor.name}: `);
-    try {
-      const stats = await processVendor(vendor, knownIds);
-      allStats.push(stats);
-      console.log(`${stats.fetched} fetched, ${stats.skipped} skipped, ${stats.classified} classified, ${stats.inserted} new, ${stats.errors} err, $${fmt(stats.cost_usd)}`);
-    } catch (e) {
-      console.log(`! ${(e as Error).message}`);
+  try {
+    // Pre-flight: pull known message IDs once, share across vendors.
+    const knownIds = DRY_RUN ? new Set<string>() : await getKnownMessageIds();
+    if (knownIds.size > 0) console.log(`(${knownIds.size} already-classified messages will be skipped)`);
+
+    const allStats: VendorStats[] = [];
+    const vendorErrors: string[] = [];
+    for (const vendor of VENDORS) {
+      process.stdout.write(`→ ${vendor.name}: `);
+      try {
+        const stats = await processVendor(vendor, knownIds);
+        allStats.push(stats);
+        console.log(`${stats.fetched} fetched, ${stats.skipped} skipped, ${stats.classified} classified, ${stats.inserted} new, ${stats.errors} err, $${fmt(stats.cost_usd)}`);
+      } catch (e) {
+        const msg = (e as Error).message;
+        vendorErrors.push(`${vendor.name}: ${msg}`);
+        console.log(`! ${msg}`);
+      }
     }
+
+    // Fail loud: if every vendor errored, the whole run failed (almost
+    // certainly an auth/connectivity issue, not a per-message hiccup).
+    if (vendorErrors.length > 0 && allStats.length === 0) {
+      throw new Error(`all vendors failed: ${vendorErrors.join(' | ')}`);
+    }
+
+    totals = allStats.reduce(
+      (acc, s) => ({
+        fetched: acc.fetched + s.fetched,
+        skipped: acc.skipped + s.skipped,
+        classified: acc.classified + s.classified,
+        inserted: acc.inserted + s.inserted,
+        duplicates: acc.duplicates + s.duplicates,
+        errors: acc.errors + s.errors,
+        cost_usd: acc.cost_usd + s.cost_usd,
+      }),
+      { fetched: 0, skipped: 0, classified: 0, inserted: 0, duplicates: 0, errors: 0, cost_usd: 0 },
+    );
+    console.log(`\nTotal: ${totals.fetched} fetched, ${totals.skipped} skipped, ${totals.classified} classified, ${totals.inserted} new, ${totals.errors} err, $${fmt(totals.cost_usd)}`);
+
+    if (!DRY_RUN) {
+      const m = await runMatchingPass();
+      matchedCount = m.matched;
+      console.log(`Matching: ${m.considered} considered, ${m.matched} matched, ${m.ambiguous} ambiguous, ${m.no_candidate} no candidate`);
+      summary = `${totals.inserted} new, ${m.matched}/${m.considered} matched, $${fmt(totals.cost_usd)}`;
+    } else {
+      summary = `(dry-run) ${totals.classified} classified, $${fmt(totals.cost_usd)}`;
+    }
+  } catch (e) {
+    success = false;
+    errorMessage = (e as Error).message;
+    console.error('run failed:', errorMessage);
   }
 
-  const total = allStats.reduce(
-    (acc, s) => ({
-      fetched: acc.fetched + s.fetched,
-      skipped: acc.skipped + s.skipped,
-      classified: acc.classified + s.classified,
-      inserted: acc.inserted + s.inserted,
-      duplicates: acc.duplicates + s.duplicates,
-      errors: acc.errors + s.errors,
-      cost_usd: acc.cost_usd + s.cost_usd,
-    }),
-    { fetched: 0, skipped: 0, classified: 0, inserted: 0, duplicates: 0, errors: 0, cost_usd: 0 },
-  );
-  console.log(`\nTotal: ${total.fetched} fetched, ${total.skipped} skipped, ${total.classified} classified, ${total.inserted} new, ${total.errors} err, $${fmt(total.cost_usd)}`);
-
-  // Matching pass — link unmatched classifications to bank transactions.
-  // Skipped on dry-run since nothing was inserted.
+  // Always record the run, success or failure, unless this is a dry-run.
   if (!DRY_RUN) {
-    const m = await runMatchingPass();
-    console.log(`Matching: ${m.considered} considered, ${m.matched} matched, ${m.ambiguous} ambiguous, ${m.no_candidate} no candidate`);
+    await recordCronRun({
+      job_name: JOB_NAME,
+      started_at: startedAt,
+      success,
+      summary,
+      error_message: errorMessage,
+      classified: totals.classified,
+      inserted: totals.inserted,
+      matched: matchedCount,
+      cost_usd: totals.cost_usd,
+    });
   }
+
+  if (!success) process.exit(1);
 }
 
-main().catch((e) => {
+main().catch(async (e) => {
   console.error('fatal:', e);
+  // Best-effort death notice. Started_at is approximate.
+  try {
+    await recordCronRun({
+      job_name: JOB_NAME,
+      started_at: new Date().toISOString(),
+      success: false,
+      summary: null,
+      error_message: `uncaught: ${(e as Error).message}`,
+    });
+  } catch { /* swallow — already exiting nonzero */ }
   process.exit(1);
 });
